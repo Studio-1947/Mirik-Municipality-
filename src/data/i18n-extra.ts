@@ -1,7 +1,7 @@
 // Extra strings for the home page, notices page and footer. [Nepali, Bengali]. AI-written: review before launch.
 export const extra: Record<string, [string, string]> = {
   'Welcome to Mirik Municipality': ['मिरिक नगरपालिकामा स्वागत छ', 'মিরিক পৌরসভায় স্বাগতম'],
-  'Serving the Heart of the Hills': ['पहाडको मुटुको सेवामा', 'পাহাড়ের হৃদয়ের সেবায়'],
+  'Serving the Heart of the Mirik Hills': ['मिरिक पहाडको मुटुको सेवामा', 'মিরিক পাহাড়ের হৃদয়ের সেবায়'],
   'Civic services, community development and a cleaner, greener Mirik for a brighter tomorrow, together with our people, in harmony with nature.': ['नागरिक सेवा, सामुदायिक विकास र उज्यालो भोलिका लागि सफा, हरियो मिरिक: जनतासँगै, प्रकृतिसँग मेलमा।', 'নাগরিক পরিষেবা, সম্প্রদায়ের উন্নয়ন এবং উজ্জ্বল আগামীর জন্য পরিচ্ছন্ন, সবুজ মিরিক: মানুষের সঙ্গে, প্রকৃতির সঙ্গে সামঞ্জস্য রেখে।'],
   'Citizen Services': ['नागरिक सेवा', 'নাগরিক পরিষেবা'],
   'Latest Notices': ['ताजा सूचनाहरू', 'সাম্প্রতিক বিজ্ঞপ্তি'],
