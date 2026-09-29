@@ -2,27 +2,39 @@
 import Layout from '../layouts/Layout.astro';
 import PageHead from '../components/PageHead.astro';
 import Avatar from '../components/Avatar.astro';
+import AppointmentDialog from '../components/AppointmentDialog.astro';
 import { meta, contact, administration, wards, offices } from '../data/site';
 ---
 <Layout title="Who runs the municipality | Mirik Municipality">
-  <PageHead slug="administration" title="Who runs the municipality" lead="Officers in charge, the nine wards and the offices around town." />
+  <PageHead slug="administration" title="Who runs the municipality" lead="Who is in charge, how the nine wards are set up, and the government offices in town." />
     <section id="administration">
       <div class="wrap">
+        <article class="featured" id="administrator">
+          <div class="f-photo"><img src={administration.administrator.photoLarge} alt={administration.administrator.name} width="900" height="900" /></div>
+          <div class="f-text">
+            <p class="eyebrow">Administrator</p>
+            <h2>{administration.administrator.name}</h2>
+            <p class="f-role">Sub-Divisional Officer, Mirik</p>
+            <p class="f-lead">{administration.administrator.name}, is the Sub-Divisional Officer (SDO) of Mirik and, since 19 May 2026, the Administrator of the Mirik Notified Area Authority, running the civic body until a new board is elected. The Sub-Divisional Office is near Mirik Police Station, Thana Line, and is open {contact.hours}.</p>
+            <h3 class="f-h">What the Administrator does</h3>
+            <ul class="f-list">
+              <li>Leads the authority while no elected board is in place</li>
+              <li>Oversees the work of the Executive Officer and the Finance Officer</li>
+              <li>Decides on works, budgets and civic services for the nine wards</li>
+              <li>Also heads the Sub-Divisional Office, Mirik, which became a subdivision on 30 March 2017</li>
+            </ul>
+            <div class="f-btns">
+              <a class="fbtn appt" data-open-apt href={`mailto:${contact.email}?subject=${encodeURIComponent('Appointment request: Administrator, Mirik')}&body=${encodeURIComponent('Name:\nPhone:\nPurpose of the meeting:\nPreferred date and time:\n')}`}>Book an appointment <svg class="fbtn-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9" /></svg></a>
+              <a class="fbtn" href={`mailto:${contact.email}?subject=${encodeURIComponent('For the Administrator, Mirik')}`}>Email</a>
+            </div>
+          </div>
+        </article>
+
         <div class="status">
           <span class="dot"></span>
           <div><strong>{administration.status}.</strong> {administration.statusNote}</div>
         </div>
         <div class="people" id="officers">
-          <div class="person">
-            <Avatar name={administration.administrator.name} tone="#6a4c93" />
-            <div class="role">{administration.administrator.role}</div>
-            <h3>{administration.administrator.name}</h3>
-            <p>Sub-Divisional Office, Mirik</p>
-            <div class="pbtns">
-              <a class="pbtn call" href={`tel:${contact.phones[0].tel}`}>Call</a>
-              <a class="pbtn mail" href={`mailto:${contact.email}?subject=${encodeURIComponent('For the Administrator, Mirik')}`}>Email</a>
-            </div>
-          </div>
           {administration.officers.map((o) => (
             <div class="person">
               <Avatar name={o.name} tone={o.role.startsWith('Finance') ? '#2f6f8f' : '#1f4d3a'} />
@@ -92,4 +104,5 @@ import { meta, contact, administration, wards, offices } from '../data/site';
         </div>
       </div>
     </section>
+  <AppointmentDialog />
 </Layout>

@@ -1,0 +1,88 @@
+---
+import { contact } from '../data/site';
+---
+<dialog id="apt-dialog" aria-labelledby="apt-title">
+  <div class="dlg-card">
+    <div class="dlg-head">
+      <h2 id="apt-title">Book an appointment</h2>
+      <button type="button" class="dlg-close" aria-label="Close">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" /></svg>
+      </button>
+    </div>
+    <p class="dlg-lead">Tell the Sub-Divisional Office who you are, why you want to meet, and when suits you. The office will confirm the time.</p>
+    <form class="grv apt" data-email={contact.email} novalidate>
+      <div><label for="apt-name">Full name</label><input id="apt-name" name="name" required autocomplete="name" /></div>
+      <div><label for="apt-phone">Phone number</label><input id="apt-phone" name="phone" required inputmode="numeric" pattern="[0-9]{10}" maxlength="10" autocomplete="tel" /><div class="hint">10 digits</div></div>
+      <div>
+        <label for="apt-reason">Reason for meeting</label>
+        <select id="apt-reason" name="reason" required>
+          <option value="">Select</option>
+          <option>Meet the Administrator</option>
+          <option>Follow up on a grievance</option>
+          <option>Certificate or document</option>
+          <option>Project or ward matter</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div><label for="apt-ward">Ward (if any)</label>
+        <select id="apt-ward" name="ward">
+          <option value="">Not applicable</option>
+          {['I','II','III','IV','V','VI','VII','VIII','IX'].map((w) => <option value={`Ward ${w}`}>Ward {w}</option>)}
+        </select>
+      </div>
+      <div><label for="apt-date">Preferred date</label><input id="apt-date" name="date" type="date" required /><div class="hint">Monday to Friday</div></div>
+      <div>
+        <label for="apt-time">Preferred time</label>
+        <select id="apt-time" name="time" required>
+          <option value="">Select</option>
+          {['10:00 AM','11:00 AM','12:00 PM','2:00 PM','3:00 PM','4:00 PM','5:00 PM'].map((t) => <option>{t}</option>)}
+        </select>
+        <div class="hint">10:00 AM to 5:30 PM</div>
+      </div>
+      <div class="full msgbox">
+        <div class="mb-row"><label for="apt-details">What would you like to discuss?</label><textarea id="apt-details" name="details" maxlength="300" required placeholder="A few lines are enough"></textarea></div>
+        <div class="hint">Up to 300 characters</div>
+      </div>
+      <div class="full grv-actions">
+        <button type="submit">Request appointment</button>
+      </div>
+      <p class="form-msg" role="status"></p>
+    </form>
+  </div>
+</dialog>
+<script>
+  const dlg = document.getElementById('apt-dialog') as HTMLDialogElement | null;
+  if (dlg && typeof dlg.showModal === 'function') {
+    const form = dlg.querySelector<HTMLFormElement>('form.apt')!;
+    const msg = form.querySelector<HTMLElement>('.form-msg')!;
+    const date = form.querySelector<HTMLInputElement>('input[name="date"]')!;
+    const iso = (d: Date) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+    date.min = iso(new Date());
+    const checkDate = () => {
+      const d = date.value ? new Date(date.value + 'T00:00:00') : null;
+      date.setCustomValidity(d && (d.getDay() === 0 || d.getDay() === 6) ? 'The office is closed on Saturday and Sunday. Please pick a weekday.' : '');
+    };
+    date.addEventListener('change', checkDate);
+    const open = () => { msg.textContent = ''; dlg.showModal(); document.body.classList.add('dlg-open'); document.getElementById('apt-name')?.focus(); };
+    document.querySelectorAll<HTMLElement>('[data-open-apt]').forEach((b) =>
+      b.addEventListener('click', (e) => { e.preventDefault(); open(); })
+    );
+    dlg.querySelector('.dlg-close')?.addEventListener('click', () => dlg.close());
+    dlg.addEventListener('click', (e) => { if (e.target === dlg) dlg.close(); });
+    dlg.addEventListener('close', () => document.body.classList.remove('dlg-open'));
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      checkDate();
+      if (!form.reportValidity()) return;
+      const d = new FormData(form);
+      const body = [
+        `Name: ${d.get('name')}`, `Phone: ${d.get('phone')}`, `Reason: ${d.get('reason')}`,
+        `Ward: ${d.get('ward') || 'Not applicable'}`, `Preferred date: ${d.get('date')}`, `Preferred time: ${d.get('time')}`, '',
+        String(d.get('details') ?? ''),
+      ].join('\n');
+      const subject = `Appointment request: Administrator, Mirik (${d.get('date')}, ${d.get('time')})`;
+      window.location.href = `mailto:${form.dataset.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+      msg.textContent = 'Your email app has opened with the request filled in. Please press send. The office will confirm the time.';
+    });
+  }
+</script>

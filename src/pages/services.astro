@@ -4,15 +4,7 @@ import PageHead from '../components/PageHead.astro';
 import { services, projects, schemes } from '../data/site';
 ---
 <Layout title="Services and Projects | Mirik Municipality">
-  <PageHead slug="services" title="Services and Projects" lead="Apply for municipal services online or at the office, and follow the projects being delivered in Mirik." />
-
-  <div class="subnav" aria-label="On this page">
-    <div class="wrap">
-      <a href="#services">Citizen services</a>
-      <a href="#projects">Projects under way</a>
-      <a href="#schemes">Special projects and schemes</a>
-    </div>
-  </div>
+  <PageHead slug="services" title="Services and Projects" lead="How to apply for municipal services, and the water, sanitation and housing projects under way in Mirik." />
 
   <section class="alt" id="services">
     <div class="wrap">
@@ -61,6 +53,25 @@ import { services, projects, schemes } from '../data/site';
             <div class="body"><p>{s.text}</p></div>
           </details>
         ))}
+      </div>
+    </div>
+  </section>
+  <section class="alt" id="faq">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">FAQ</p>
+        <h2>Common questions</h2>
+        <p class="lead">Quick answers about applying, paying and getting help.</p>
+      </div>
+      <div class="schemes faq">
+        <details><summary>How do I apply for a trade licence?</summary><div class="body"><p>Apply online on the state e-District portal. You register first with your mobile number and an OTP. Renewals are done there too.</p></div></details>
+        <details><summary>How do I register a birth or death?</summary><div class="body"><p>Use the state Janma-Mrityu Tathya portal. Once the record is registered, you can download the certificate online.</p></div></details>
+        <details><summary>Where do I submit a building plan?</summary><div class="body"><p>Building plans are submitted and tracked on the state Online Building Permission System (OBPS).</p></div></details>
+        <details><summary>How do I apply for a mutation?</summary><div class="body"><p>Apply at the Municipality Office. Take your holding number and the papers that show who owns the property.</p></div></details>
+        <details><summary>How do I pay holding tax?</summary><div class="body"><p>Holding tax is assessed and paid through the Municipality Office. Take your holding number with you.</p></div></details>
+        <details><summary>How do I report a problem in my ward?</summary><div class="body"><p>Use the Grievance button at the top of any page, or email or call the office. Give your ward and the exact location so the office can act quickly.</p></div></details>
+        <details><summary>When is the office open?</summary><div class="body"><p>Monday to Friday, 10:00 AM to 5:30 PM. The office is closed on government holidays.</p></div></details>
+        <details><summary>Who do I call in an emergency?</summary><div class="body"><p>Dial 112 for any emergency. Police is 100, fire is 101 and ambulance is 108. The Emergency page lists more numbers.</p></div></details>
       </div>
     </div>
   </section>

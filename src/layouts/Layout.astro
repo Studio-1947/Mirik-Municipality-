@@ -56,7 +56,7 @@ const year = new Date().getFullYear();
         <nav class="main" aria-label="Main">
           <ul>
             {navPages.map((n) => (
-              <li class={sections[n.slug] ? 'has-sub' : undefined}>
+              <li class={sections[n.slug] ? `has-sub nav-${n.slug}` : undefined}>
                 <a href={`/${n.slug}/`} aria-current={isCurrent(n.slug) ? 'page' : undefined}>{n.label}</a>
                 {sections[n.slug] && (
                   <>
@@ -75,9 +75,9 @@ const year = new Date().getFullYear();
         <div class="tools">
           <label class="lang"><span class="sr">Language</span>
             <select id="lang" aria-label="Language">
-              <option value="en">English</option>
-              <option value="ne">नेपाली</option>
-              <option value="bn">বাংলা</option>
+              <option value="en" title="English">EN</option>
+              <option value="ne" title="नेपाली">NE</option>
+              <option value="bn" title="বাংলা">BN</option>
             </select>
           </label>
           <a class="sos-btn" href={`tel:${emergency[0].number}`} aria-label={`Emergency Call ${emergency[0].number}`}>
@@ -93,7 +93,7 @@ const year = new Date().getFullYear();
           <summary aria-label="Open menu">Menu</summary>
           <ul>
             <li><a href="/">Home</a></li>
-            {pages.filter((n) => n.slug !== 'notices').map((n) => (
+            {pages.filter((n) => n.slug !== 'notices' && n.slug !== 'policies').map((n) => (
               <li class={sections[n.slug] ? 'm-has-sub' : undefined}>
                 <div class="mrow">
                   <a href={`/${n.slug}/`} aria-current={isCurrent(n.slug) ? 'page' : undefined}><span class="n">{n.num}</span>{n.label}</a>
@@ -111,6 +111,7 @@ const year = new Date().getFullYear();
               </li>
             ))}
             <li><a href="/notices/"><span class="n">08</span>Notices</a></li>
+            <li><a href="/policies/"><span class="n">09</span>Website policies</a></li>
           </ul>
         </details>
       </div>
@@ -141,55 +142,65 @@ const year = new Date().getFullYear();
     </nav>
 
     <footer class="site big">
-      <div class="wrap f-main">
-        <div class="f-col f-about">
+      <div class="wrap f-brandrow">
+        <div class="f-id">
           <a class="brand foot-brand" href="/"><strong>{meta.nameEn}</strong></a>
           <p>The civic body of the lake town of Mirik, in the Darjeeling hills of West Bengal.</p>
-          <p class="f-motto">Satyameva Jayate</p>
-          <h3>Follow us</h3>
-          <a class="f-social" href={contact.facebook} target="_blank" rel="noopener" aria-label="Facebook">
-            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13.5 22v-8.2h2.8l.5-3.3h-3.3V8.4c0-.9.4-1.7 1.8-1.7h1.6V3.8c-.3 0-1.3-.2-2.4-.2-2.5 0-4.1 1.5-4.1 4.2v2.7H7.6v3.3h2.8V22z" /></svg>
-            <span>Facebook</span>
-          </a>
-          <a class="f-square" href="/grievance/">
-            <h2>Report a problem in your ward</h2>
-            <span class="f-square-btn">Lodge a grievance <span aria-hidden="true">&rarr;</span></span>
-          </a>
         </div>
+        <ul class="f-links" aria-label="Quick links">
+          {pages.map((n) => <li><a href={`/${n.slug}/`}>{n.label}</a></li>)}
+        </ul>
+      </div>
 
-        <div class="f-col">
-          <h3>Quick links</h3>
-          <ul>
-            {pages.map((n) => <li><a href={`/${n.slug}/`}>{n.label}</a></li>)}
-          </ul>
-        </div>
-
-        <div class="f-col">
-          <h3>Citizen Services</h3>
-          <ul>
-            <li><a href="/services/#services">Trade Licence</a></li>
-            <li><a href="/services/#services">Birth and Death Registration</a></li>
-            <li><a href="/services/#services">Building Plan Sanction</a></li>
-            <li><a href="/grievance/">Grievance</a></li>
-            <li><a href="/clean-mirik/">Clean Mirik</a></li>
-          </ul>
+      <div class="wrap f-main">
+        <div class="f-col f-social-col">
+          <h3>Social Media</h3>
+          <div class="f-socials">
+            <a class="f-social" href={contact.facebook} target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13.5 22v-8.2h2.8l.5-3.3h-3.3V8.4c0-.9.4-1.7 1.8-1.7h1.6V3.8c-.3 0-1.3-.2-2.4-.2-2.5 0-4.1 1.5-4.1 4.2v2.7H7.6v3.3h2.8V22z" /></svg>
+              <span>Facebook</span>
+            </a>
+            {contact.instagram ? (
+              <a class="f-social" href={contact.instagram} target="_blank" rel="noopener">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" /><circle cx="12" cy="12" r="4" /><circle cx="17.3" cy="6.7" r=".6" fill="currentColor" /></svg>
+                <span>Instagram</span>
+              </a>
+            ) : (
+              <span class="f-social off" title="Link coming soon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" /><circle cx="12" cy="12" r="4" /><circle cx="17.3" cy="6.7" r=".6" fill="currentColor" /></svg>
+                <span>Instagram</span>
+              </span>
+            )}
+            {contact.youtube ? (
+              <a class="f-social" href={contact.youtube} target="_blank" rel="noopener">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="5.5" width="19" height="13" rx="4" /><path d="M10 9.2v5.6l5-2.8z" fill="currentColor" /></svg>
+                <span>YouTube</span>
+              </a>
+            ) : (
+              <span class="f-social off" title="Link coming soon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="5.5" width="19" height="13" rx="4" /><path d="M10 9.2v5.6l5-2.8z" fill="currentColor" /></svg>
+                <span>YouTube</span>
+              </span>
+            )}
+          </div>
         </div>
 
         <div class="f-col f-contact">
-          <h3>Reach us</h3>
-          <address>
-            {contact.address.map((l) => <span>{l}</span>)}
+          <h3>Address</h3>
+          <address class="fc-row">
+            <svg class="fic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21zM12 12a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z" /></svg>
+            <div>{contact.address.map((l) => <span>{l}</span>)}</div>
           </address>
-          <ul>
-            {contact.phones.map((p) => <li><a href={`tel:${p.tel}`}>{p.display}</a></li>)}
-            <li><a href={`mailto:${contact.email}`}>{contact.email}</a></li>
+          <ul class="fc-list">
+            {contact.phones.map((p) => <li class="fc-row"><svg class="fic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z" /></svg><a href={`tel:${p.tel}`}>{p.display}</a></li>)}
+            <li class="fc-row"><svg class="fic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18v12H3zM3 7l9 6 9-6" /></svg><a href={`mailto:${contact.email}`}>{contact.email}</a></li>
           </ul>
           <h3 class="f-sub">Office hours</h3>
           <p>{contact.hours}</p>
         </div>
 
         <div class="f-col f-help">
-          <h3>Emergency helplines</h3>
+          <h3>Emergency Helpline</h3>
           <ul class="f-sos-list">
           {emergency.map((e) => (
             <li>
@@ -202,6 +213,19 @@ const year = new Date().getFullYear();
             </li>
           ))}
         </ul>
+        </div>
+
+        <div class="f-col f-grv">
+          <a class="f-square" href="/grievance/">
+            <h2>Report a problem in your ward</h2>
+            <svg class="f-art" viewBox="0 0 140 80" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="34" cy="34" r="12" /><path d="M10 74c0-15 10-24 24-24s24 9 24 24" />
+              <path d="M74 14h50a5 5 0 0 1 5 5v24a5 5 0 0 1-5 5h-30l-14 12V48h-6a5 5 0 0 1-5-5V19a5 5 0 0 1 5-5z" />
+              <path d="M99 24v11M99 41v.01" />
+              <path d="M2 10l6 3M4 22h7M134 6l-3 6M138 30l6 0" opacity=".6" />
+            </svg>
+            <span class="f-square-btn">Lodge a grievance <span aria-hidden="true">&rarr;</span></span>
+          </a>
         </div>
       </div>
 
@@ -328,7 +352,7 @@ const year = new Date().getFullYear();
       document.querySelectorAll('.sub a').forEach((a) => a.addEventListener('click', () => closeAll()));
 
       // Grievance form (page and pop-up): posts to the configured endpoint, otherwise opens an email draft.
-      document.querySelectorAll<HTMLFormElement>('form.grv').forEach((form) => {
+      document.querySelectorAll<HTMLFormElement>('form.grv:not(.apt)').forEach((form) => {
         const msg = form.querySelector<HTMLElement>('.form-msg');
         form.addEventListener('submit', async (e) => {
           e.preventDefault();
@@ -346,11 +370,11 @@ const year = new Date().getFullYear();
             }
           } else {
             const body = [
-              `Name: ${data.get('name')}`, `Phone: ${data.get('phone')}`, `Email: ${data.get('email')}`,
+              `Name: ${data.get('name')}`, `Phone: ${data.get('phone')}`, `WhatsApp: ${({ same: 'same as phone', none: 'no WhatsApp' } as Record<string, string>)[String(data.get('wa_mode'))] ?? data.get('whatsapp')}`,
               `Ward: ${data.get('ward')}`, `Location / holding no.: ${data.get('location')}`, '',
               String(data.get('description') ?? ''), '', '(Please attach your photo to this email if you have one.)',
             ].join('\n');
-            const subject = `Grievance: ${data.get('subject')} (${data.get('ward')})`;
+            const subject = `Grievance: ${String(data.get('description') ?? '').trim().split('\n')[0]!.slice(0, 60)} (${data.get('ward')})`;
             window.location.href = `mailto:${form.dataset.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
             msg.textContent = 'Your email app has opened with the grievance filled in. Please press send.';
           }

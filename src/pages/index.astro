@@ -1,7 +1,8 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import blockMapRaw from '../assets/mirik-block-map.svg?raw';
 import Avatar from '../components/Avatar.astro';
-import { notices, facts, body } from '../data/site';
+import { notices, facts, body, contact, wards, demographics } from '../data/site';
 
 const quick = [
   { href: '/services/', title: 'Property (Holding) Tax', text: 'Assessment and payment', tone: 'blue', icon: 'home' },
@@ -28,16 +29,91 @@ const icons: Record<string, string> = {
   leaf: 'M5 21c0-9 5-15 15-16 0 10-6 15-15 16zM5 21 14 12',
   cam: 'M4 8h4l2-3h4l2 3h4v12H4zM12 17a3 3 0 1 0 0-6 3 3 0 0 0 0 6z',
 };
+const d11 = demographics.census2011, d01 = demographics.census2001;
+const fmt = (n: number) => n.toLocaleString('en-IN');
+const demo = [
+  { label: 'Population', value: fmt(d11.total), sub: 'Census 2011' },
+  { label: 'Men', value: fmt(d11.male), sub: `${Math.round((d11.male / d11.total) * 100)}%` },
+  { label: 'Women', value: fmt(d11.female), sub: `${Math.round((d11.female / d11.total) * 100)}%` },
+  { label: 'Sex ratio', value: fmt(Math.round((d11.female / d11.male) * 1000)), sub: 'females per 1,000 males' },
+  { label: 'Population in 2001', value: fmt(d01.total), sub: 'Census 2001' },
+  { label: 'Growth 2001 to 2011', value: `${(((d11.total - d01.total) / d01.total) * 100).toFixed(1)}%`, sub: 'in ten years' },
+  { label: 'Density', value: fmt(Math.round(d11.total / 6.5)), sub: 'people per km²' },
+  { label: 'Households', value: '2,800', sub: 'approx.' },
+];
+const lit = demographics.literacy;
+// Population growth curve: 1991 is worked out from the published 1991 to 2001 growth rate; 2001 and 2011 are census counts.
+const pop1991 = Math.round(d01.total / (1 + demographics.growth1991to2001 / 100));
+const gpts = [
+  { year: 1991, v: pop1991, x: 50 },
+  { year: 2001, v: d01.total, x: 320 },
+  { year: 2011, v: d11.total, x: 590 },
+].map((p) => ({ ...p, y: 108 - ((p.v - 8000) / 4500) * 80 }));
+const seg = (p: { x: number; y: number }, q: { x: number; y: number }) => `C ${(p.x + (q.x - p.x) / 2).toFixed(1)} ${p.y.toFixed(1)} ${(p.x + (q.x - p.x) / 2).toFixed(1)} ${q.y.toFixed(1)} ${q.x} ${q.y.toFixed(1)}`;
+const pathA = `M ${gpts[0].x} ${gpts[0].y.toFixed(1)} ${seg(gpts[0], gpts[1])}`;
+const pathB = `M ${gpts[1].x} ${gpts[1].y.toFixed(1)} ${seg(gpts[1], gpts[2])}`;
+const areaB = `${pathB} L ${gpts[2].x} 108 L ${gpts[1].x} 108 Z`;
+const growthDown = Math.abs(demographics.growth1991to2001).toFixed(1);
+const growthUp = (((d11.total - d01.total) / d01.total) * 100).toFixed(1);
+// Gender pictogram: a row of ten figures per gender, filled to that gender's share of the population.
+const maleShare = (d11.male / d11.total) * 100, femaleShare = (d11.female / d11.total) * 100;
+const figShapes = {
+  m: '<circle cx="12" cy="7" r="5" /><rect x="5" y="14" width="14" height="18" rx="5" /><rect x="7" y="29" width="4.2" height="17" rx="2.1" /><rect x="12.8" y="29" width="4.2" height="17" rx="2.1" />',
+  f: '<circle cx="12" cy="7" r="5" /><path d="M12 14c3 0 5 1.6 5.6 4.4L21 33H3l3.4-14.6C7 15.6 9 14 12 14z" /><rect x="8.4" y="31" width="3.2" height="15" rx="1.6" /><rect x="12.4" y="31" width="3.2" height="15" rx="1.6" />',
+};
+// Two rows of 20 figures (men, women): each row is filled to that gender's share of the population, 5% per figure.
+const figsRow = (share: number, shape: 'm' | 'f') => Array.from({ length: 20 }, (_, i) => {
+  const f = Math.max(0, Math.min(1, share / 5 - i));
+  return `<span class="fig" style="--f:${f.toFixed(3)}"><svg viewBox="0 0 24 48" aria-hidden="true">${figShapes[shape]}</svg><svg class="fill" viewBox="0 0 24 48" aria-hidden="true">${figShapes[shape]}</svg></span>`;
+}).join('');
+// The block map is inlined so ward pins can sit on it and the view can be zoomed.
+const pinLayer = '<g id="ward-pins">' + wards.filter((w) => w.pos).map((w) =>
+  `<g class="pin" data-no="${w.no}" data-x="${w.pos![0]}" data-y="${w.pos![1]}" transform="translate(${w.pos![0]} ${w.pos![1]})" tabindex="0" role="button" aria-label="Ward ${w.no}"><g class="pin-s"><circle class="pin-ring" r="16" /><circle class="pin-dot" r="10.5" /><text class="pin-t" y="3.6">${w.no}</text></g></g>`
+).join('') + '</g>';
+// Approximate ward areas: each is the part of the Mirik town outline that lies closest to that ward's pin.
+type Pt = [number, number];
+const urbanD = blockMapRaw.match(/<path class="urban" d="([^"]+)"/)![1];
+const urbanPts: Pt[] = [...urbanD.matchAll(/[ML]\s*([\d.]+),([\d.]+)/g)].map((m) => [Number(m[1]), Number(m[2])]);
+const clipHalf = (poly: Pt[], nx: number, ny: number, c: number): Pt[] => {
+  const out: Pt[] = [];
+  for (let i = 0; i < poly.length; i++) {
+    const a = poly[i], b = poly[(i + 1) % poly.length];
+    const da = nx * a[0] + ny * a[1] - c, db = nx * b[0] + ny * b[1] - c;
+    if (da <= 0) out.push(a);
+    if ((da < 0 && db > 0) || (da > 0 && db < 0)) { const t = da / (da - db); out.push([a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t]); }
+  }
+  return out;
+};
+const pinned = wards.filter((w) => w.pos);
+const areas = pinned.map((w) => {
+  let poly = urbanPts;
+  for (const o of pinned) {
+    if (o === w) continue;
+    const nx = o.pos![0] - w.pos![0], ny = o.pos![1] - w.pos![1];
+    poly = clipHalf(poly, nx, ny, (nx * (o.pos![0] + w.pos![0]) + ny * (o.pos![1] + w.pos![1])) / 2);
+  }
+  const xs = poly.map((q) => q[0]), ys = poly.map((q) => q[1]);
+  const bx = Math.min(...xs), by = Math.min(...ys), bw = Math.max(...xs) - bx, bh = Math.max(...ys) - by;
+  return { no: w.no, d: 'M ' + poly.map((q) => `${q[0].toFixed(1)} ${q[1].toFixed(1)}`).join(' L ') + ' Z', bx, by, bw, bh };
+});
+const areaLayer = '<g id="ward-areas">' + areas.map((a) => `<path class="warea" data-no="${a.no}" data-bx="${a.bx.toFixed(1)}" data-by="${a.by.toFixed(1)}" data-bw="${a.bw.toFixed(1)}" data-bh="${a.bh.toFixed(1)}" d="${a.d}" />`).join('') + '</g>';
+const MAP_ASPECT = 1.05;                       // frame height / width
+const HOME = { x: 142, y: 66, w: 400 };         // default view: Mirik town with all nine ward pins close up
+const blockMap = blockMapRaw
+  .replace(/<svg([^>]*?)\s+width="817"\s+height="1156"/, '<svg id="ward-svg" preserveAspectRatio="xMidYMid slice"$1')
+  .replace('viewBox="0 0 817 1156"', `viewBox="${HOME.x} ${HOME.y} ${HOME.w} ${Math.round(HOME.w * MAP_ASPECT)}"`)
+  .replace('</svg>', areaLayer + pinLayer + '</svg>');
 const explore = [
-  { img: 'lake.jpg', title: 'Sumendu Lake', text: 'Serene waters and scenic beauty' },
-  { img: 'tea.jpg', title: 'Tea gardens', text: 'Lush green landscapes' },
-  { img: 'monastery.jpg', title: 'Bokar Monastery', text: 'A place of peace and spirituality' },
-  { img: 'garden.jpg', pos: 'left center', title: 'Local culture', text: 'Vibrant hills and traditions' },
-  // No photos yet for these four: shown as illustrated tiles until real pictures are added to public/images/.
-  { art: 'helipad', title: 'Helipad', text: 'Photo coming soon', g: ['#2f6f8f', '#12303a'] },
-  { art: 'gate', title: 'Okatey Fatak', text: 'Photo coming soon', g: ['#2b7a5a', '#0f3a2a'] },
-  { art: 'hills', title: 'Rangabang', text: 'Photo coming soon', g: ['#b07d12', '#4a3308'] },
-  { art: 'cave', title: '26 Se Gufa Patal', text: 'Photo coming soon', g: ['#6a4c93', '#2a1c45'] },
+  { img: 'lake.jpg', title: 'Sumendu Lake', text: 'The lake at the heart of town' },
+  { img: 'tea-night.jpg', pos: 'center 62%', title: 'Moon Light Plucking', text: 'Tea pickers under a full moon' },
+  { img: 'monastery.jpg', title: 'Bokar Monastery', text: 'Buddhist monastery on the hill' },
+  { img: 'garden.jpg', pos: 'left center', title: 'Lakeside gardens', text: 'Flower beds along the lake' },
+  // The Helipad, Okayti, Rangbang and Gufa Patal pictures are web images supplied by the site owner: confirm you have the rights to publish them.
+  // The Gufa Patal picture is a small web image (about 335 px wide); replace it with a proper photo you have the rights to.
+  { img: 'helipad.jpg', pos: 'left center', title: 'Helipad', text: 'The helipad ground' },
+  { img: 'okayti.jpg', title: 'Okatey Fatak', text: 'Tea estate hills near Okayti' },
+  { img: 'rangbang.jpg', title: 'Rangabang', text: 'River and bridge near Tabakoshi' },
+  { img: 'gufapatal.jpg', pos: 'center 70%', title: '26 Se Gufa Patal', text: 'Viewpoint with a flower garden' },
 ];
 const artPaths: Record<string, string> = {
   helipad: 'M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18zM9 8v8M15 8v8M9 12h6',
@@ -53,7 +129,7 @@ const artPaths: Record<string, string> = {
     <div class="wrap herox-in">
       <p class="eyebrow-l">Welcome to Mirik Municipality</p>
       <h1>Serving the Heart of the Hills</h1>
-      <p class="herox-lead">Civic services, community development and a cleaner, greener Mirik for a brighter tomorrow, together with our people, in harmony with nature.</p>
+      <p class="herox-lead">Apply for services, report a problem in your ward, read the latest notices and find who to contact at the municipality.</p>
       <div class="btns">
         <a class="btn solid" href="/services/">Citizen Services <span aria-hidden="true">&rarr;</span></a>
         <a class="btn outline" href="/notices/">Latest Notices <span aria-hidden="true">&rarr;</span></a>
@@ -67,7 +143,7 @@ const artPaths: Record<string, string> = {
         <div class="row-head">
           <div>
             <p class="eyebrow-l dark">Quick services</p>
-            <h2>Access essential municipal services</h2>
+            <h2>Services you may need</h2>
           </div>
           <a class="more" href="/services/">View all services <span aria-hidden="true">&rarr;</span></a>
         </div>
@@ -86,26 +162,19 @@ const artPaths: Record<string, string> = {
   </section>
 
   <section class="glass-sec">
-    <video class="glass-video" autoplay muted loop playsinline preload="metadata" poster="/videos/clouds-poster.jpg" aria-hidden="true" tabindex="-1">
-      <source src="/videos/clouds.mp4" type="video/mp4" />
-    </video>
     <div class="wrap">
       <div class="glass-box">
     <div class="about-grid">
       <div class="about-text">
         <p class="eyebrow-l dark">About Mirik</p>
-        <h2>A Town of Natural Beauty and Stronger Communities</h2>
-        <p>Mirik Municipality is committed to transparent, people-centric civic services while preserving the town's unique natural beauty. Together, we work towards a cleaner, greener and more inclusive Mirik.</p>
+        <h2>The lake town of Mirik</h2>
+        <p>The municipality looks after drinking water, sanitation, waste collection, trade licences, building plans and birth and death records for the town around Sumendu Lake. Use this site to find who does what and how to reach them.</p>
         <a class="btn solid dark" href="/about/">Learn more about Mirik <span aria-hidden="true">&rarr;</span></a>
       </div>
-      <div class="about-img"><img src="/images/garden.jpg" alt="Sumendu Lake and the hills of Mirik" loading="lazy" /></div>
+      <div class="about-img"><img src="/images/garden.jpg" alt="Sumendu Lake and the hills of Mirik" /></div>
       <div class="about-notices">
-        <div class="row-head">
-          <p class="eyebrow-l dark">Latest notices</p>
-          <a class="more" href="/notices/">View all notices <span aria-hidden="true">&rarr;</span></a>
-        </div>
         <div class="nlist">
-          {notices.slice(0, 3).map((n, i) => (
+          {notices.slice(0, 4).map((n, i) => (
             <a class={i === 0 ? 'nrow urgent' : 'nrow'} href="/notices/">
               <span class="nic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2h9l5 5v15H6zM14 2v6h6M9 13h8M9 17h8" /></svg></span>
               <span class="nt"><strong>{n.title}</strong><small>{n.date}</small></span>
@@ -140,14 +209,158 @@ const artPaths: Record<string, string> = {
       <div class="bodygrid">
         {body.map((m) => (
           <article class="member" style={`--tone:${m.tone}`}>
-            <Avatar name={m.name || m.role} tone={m.tone} blank={!m.name} />
-            <h3>{m.name || 'Name to be added'}</h3>
-            <p class="role">{m.role}</p>
-            {m.note && <p class="mnote">{m.note}</p>}
+            <Avatar name={m.name || m.role} tone={m.tone} blank={!m.name} photo={m.photo} />
+            <div class="minfo">
+              <h3>{m.name || 'Name to be added'}</h3>
+              <p class="role">{m.role}</p>
+              {m.note && <p class="mnote">{m.note}</p>}
+            </div>
+            <div class="mbtns">
+              <a class="mbtn" href={`mailto:${contact.email}?subject=${encodeURIComponent('For ' + m.role + (m.name ? ' ' + m.name : ''))}`}>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v14H4zM4 7l8 6 8-6" /></svg>
+                <span>Email</span>
+              </a>
+              <a class="mbtn call" href={`tel:${m.tel ?? contact.phones[0].tel}`}>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z" /></svg>
+                <span>Call</span>
+              </a>
+            </div>
           </article>
         ))}
       </div>
     </div>
+  </section>
+
+  <script type="application/json" id="demo-data" set:html={JSON.stringify({ lit, pops: [pop1991, d01.total, d11.total], town: demo, wards: Object.fromEntries(wards.filter((w) => w.demo).map((w) => [w.no, w.demo])) })} />
+  <script type="application/json" id="ward-data" set:html={JSON.stringify(Object.fromEntries(wards.map((w) => [w.no, { loc: w.localities }])))} />
+  <section class="wardmap-sec" id="ward-map">
+    <video class="glass-video" autoplay muted loop playsinline preload="metadata" poster="/videos/wardmap-poster.jpg" aria-hidden="true" tabindex="-1">
+      <source src="/videos/wardmap.mp4" type="video/mp4" />
+    </video>
+    <div class="wrap"><div class="wm-glass">
+      <div class="row-head">
+        <div>
+          <p class="eyebrow-l dark">Ward map</p>
+          <h2>Mirik and its nine wards</h2>
+        </div>
+        <a class="more" href="/administration/#wards">Ward details <span aria-hidden="true">&rarr;</span></a>
+      </div>
+      <div class="wardmap">
+        <figure class="wm-map">
+          <div class="mapview" id="mapview">
+            <Fragment set:html={blockMap} />
+          </div>
+          <div class="mapctl" role="group" aria-label="Map zoom">
+              <button type="button" data-z="in" aria-label="Zoom in"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14" /></svg></button>
+              <button type="button" data-z="out" aria-label="Zoom out"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14" /></svg></button>
+              <button type="button" data-z="reset" aria-label="Reset map"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" /></svg></button>
+          </div>
+          <figcaption>Mirik Block, redrawn from the Disaster Mitigation Map of Mirik Block (NRDMS, Jalpaiguri). Not survey accurate. Ward pins and the coloured ward areas are approximate: each area is the part of Mirik town nearest its pin, until the office confirms real ward boundaries.</figcaption>
+        </figure>
+
+        <div class="wm-side">
+          <div class="wm-card">
+            <!-- 1. Ward selection -->
+            <div class="wc-sec">
+              <div class="wc-head has-ctrl">
+                <h3>Ward selection</h3>
+                <div class="wsel">
+                  <label class="wdrop" id="wdrop">
+                    <span class="sr">Select Wards</span>
+                    <select id="ward-select" aria-label="Select Wards">
+                      <option value="">All Wards</option>
+                      {wards.map((w) => <option value={w.no}>Ward {w.no}</option>)}
+                    </select>
+                  </label>
+                </div>
+              </div>
+              <div class="wm-detail" aria-live="polite">
+                <h4 id="wd-title"></h4>
+                <dl class="kv">
+                  <dt>Localities</dt><dd id="wd-loc">Choose a ward from the list</dd>
+                  <dt>Councillor</dt><dd id="wd-cllr">Election pending</dd>
+                </dl>
+              </div>
+            </div>
+
+            <!-- 2. Key numbers -->
+            <div class="wc-sec">
+              <div class="wc-head"><h3>Key numbers</h3><span id="demo-badge">Census 2011</span></div>
+              <div class="demo-grid">
+                {demo.map((x) => (
+                  <div class="dstat"><b>{x.value}</b><span>{x.label}</span><small>{x.sub}</small></div>
+                ))}
+              </div>
+              <p class="demo-note" id="demo-note" hidden>Dummy data: ward-wise Census figures are not published, so these numbers are not real.</p>
+            </div>
+
+            <!-- 3. Charts with a toggle -->
+            <div class="wc-sec wc-charts" id="charts">
+              <div class="wc-head has-ctrl">
+                <h3>Charts</h3>
+                <div class="tabs" role="tablist" aria-label="Choose a chart">
+                  <button type="button" role="tab" aria-selected="true" data-tab="gender">Gender</button>
+                  <button type="button" role="tab" aria-selected="false" data-tab="literacy">Literacy</button>
+                  <button type="button" role="tab" aria-selected="false" data-tab="growth">Population growth</button>
+                </div>
+              </div>
+
+              <div class="tabstack">
+              <div class="tabpanel" id="tab-gender" role="tabpanel">
+                <div class="gender" id="gender">
+                  <div class="grow2 male">
+                    <div class="gl male"><strong>Men</strong><span class="gnum" id="g-m-n">{fmt(d11.male)}</span><em id="g-m-p">{maleShare.toFixed(1)}%</em></div>
+                    <div class="gfigs one" id="g-figs-m" set:html={figsRow(maleShare, 'm')}></div>
+                  </div>
+                  <div class="grow2 female">
+                    <div class="gl female"><strong>Women</strong><span class="gnum" id="g-f-n">{fmt(d11.female)}</span><em id="g-f-p">{femaleShare.toFixed(1)}%</em></div>
+                    <div class="gfigs one" id="g-figs-f" set:html={figsRow(femaleShare, 'f')}></div>
+                  </div>
+                  <p class="gender-title">Each figure stands for 5 in every 100 people</p>
+                </div>
+              </div>
+
+              <div class="tabpanel" id="tab-literacy" role="tabpanel" hidden>
+                <p class="gender-title">Share of people aged 7 and over who can read and write</p>
+                <div class="litbars">
+                  <div class="litrow all" data-lit="all"><div class="litlabel"><strong>Everyone</strong><em>{lit.overall.toFixed(1)}%</em></div><div class="bar"><i style={`width:${lit.overall}%`}></i></div></div>
+                  <div class="litrow male" data-lit="male"><div class="litlabel"><strong>Men</strong><em>{lit.male.toFixed(1)}%</em></div><div class="bar"><i style={`width:${lit.male}%`}></i></div></div>
+                  <div class="litrow female" data-lit="female"><div class="litlabel"><strong>Women</strong><em>{lit.female.toFixed(1)}%</em></div><div class="bar"><i style={`width:${lit.female}%`}></i></div></div>
+                </div>
+              </div>
+
+              <div class="tabpanel" id="tab-growth" role="tabpanel" hidden>
+                <p class="gender-title">Population of the town at each census</p>
+                <svg class="growth" viewBox="0 0 640 146" role="img" aria-label="Population growth curve for 1991, 2001 and 2011">
+                  <defs><linearGradient id="gfill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2e8b3e" stop-opacity=".28" /><stop offset="1" stop-color="#2e8b3e" stop-opacity="0" /></linearGradient></defs>
+                  <line x1="10" y1="108" x2="630" y2="108" class="gaxis" />
+                  <path id="g-area" d={areaB} fill="url(#gfill)" />
+                  <path id="g-pa" d={pathA} class="gline dashed" />
+                  <path id="g-pb" d={pathB} class="gline" />
+                  {gpts.map((p, i) => (
+                    <g>
+                      <circle cx={p.x} cy={p.y} r="5" class={i === 0 ? 'gdot hollow' : 'gdot'} />
+                      <text x={p.x} y={p.y - 11} class="gval">{fmt(p.v)}{i === 0 ? '*' : ''}</text>
+                      <text x={p.x} y="126" class="gyear">{p.year}</text>
+                    </g>
+                  ))}
+                  <text id="g-c1" x="185" y="140" class="gchg down">Down {growthDown}%</text>
+                  <text id="g-c2" x="455" y="140" class="gchg up">Up {growthUp}%</text>
+                </svg>
+                <p class="chart-note" id="g-note">* The 1991 figure is worked out from the published 1991 to 2001 growth rate. The 2001 and 2011 figures are census counts.</p>
+              </div>
+
+              </div>
+              <p class="chart-off" hidden>Ward-wise figures are not published, so charts are not available for a single ward.</p>
+              <p class="chart-src" id="chart-src">Source: Census of India 2011</p>
+            </div>
+
+            <p class="demo-lang"><strong>Languages:</strong> {demographics.languages}</p>
+          </div>
+        </div>
+      </div>
+      <p class="wm-note">Use the plus and minus buttons or drag to move around the map. Ward boundaries are not drawn, and ward-wise population is not published, so the demography shown is for the whole town.</p>
+    </div></div>
   </section>
 
   <section class="explore-sec">
@@ -155,7 +368,7 @@ const artPaths: Record<string, string> = {
       <div class="row-head">
         <div>
           <p class="eyebrow-l dark">Explore Mirik</p>
-          <h2>Nature, Culture and Community</h2>
+          <h2>Places around Mirik</h2>
         </div>
         <a class="more" href="/about/#town-guide">Discover more <span aria-hidden="true">&rarr;</span></a>
       </div>
@@ -172,4 +385,262 @@ const artPaths: Record<string, string> = {
       </div>
     </div>
   </section>
+
+  <script>
+    // Ward selection (map pins, ward buttons, filter) drives the ward details, the demography figures and the map view.
+    const wardInfo: Record<string, { loc: string }> = JSON.parse(document.getElementById('ward-data')?.textContent || '{}');
+    const demoData = JSON.parse(document.getElementById('demo-data')?.textContent || '{}') as {
+      lit: { overall: number; male: number; female: number };
+      pops: number[];
+      town: { label: string; value: string; sub: string }[];
+      wards: Record<string, { total: number; male: number; female: number; households?: number }>;
+    };
+    const chips = document.querySelectorAll<HTMLButtonElement>('.wchip');
+    const pins = document.querySelectorAll<SVGGElement>('#ward-svg .pin');
+    const areas = document.querySelectorAll<SVGPathElement>('#ward-svg .warea');
+    const filter = null as HTMLSelectElement | null;   // the ward filter is now the button list above
+    const chartsEl = document.getElementById('charts');
+    const titleEl = document.getElementById('wd-title');
+    const locEl = document.getElementById('wd-loc');
+    const noteEl = document.getElementById('demo-note');
+    const tiles = document.querySelectorAll<HTMLElement>('.dstat');
+    const fmt = (n: number) => n.toLocaleString('en-IN');
+    const setTile = (i: number, value: string, sub: string) => {
+      const t = tiles[i]; if (!t) return;
+      t.querySelector('b')!.textContent = value;
+      t.querySelector('small')!.textContent = sub;
+    };
+    const gender = document.getElementById('gender');
+    const figsM = document.querySelectorAll<HTMLElement>('#g-figs-m .fig');
+    const figsF = document.querySelectorAll<HTMLElement>('#g-figs-f .fig');
+    const fill = (list: NodeListOf<HTMLElement>, share: number) => list.forEach((el, i) => el.style.setProperty('--f', String(Math.max(0, Math.min(1, share / 5 - i)))));
+    const setFigs = (mShare: number, fShare: number) => { fill(figsM, mShare); fill(figsF, fShare); };
+    const townGender = { m: [document.getElementById('g-m-n')!.textContent, document.getElementById('g-m-p')!.textContent], f: [document.getElementById('g-f-n')!.textContent, document.getElementById('g-f-p')!.textContent], mShare: parseFloat(document.getElementById('g-m-p')!.textContent || '0'), fShare: parseFloat(document.getElementById('g-f-p')!.textContent || '0') };
+    function setGender(state: { mN: string; mP: string; fN: string; fP: string; mShare: number; fShare: number } | null) {
+      gender?.classList.toggle('off', !state);
+      const t = (id: string, v: string) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+      if (!state) { t('g-m-n', 'Not published'); t('g-f-n', 'Not published'); t('g-m-p', '\u2014'); t('g-f-p', '\u2014'); setFigs(0, 0); return; }
+      t('g-m-n', state.mN); t('g-m-p', state.mP); t('g-f-n', state.fN); t('g-f-p', state.fP);
+      setFigs(state.mShare, state.fShare);
+    }
+    const townState = { mN: townGender.m[0]!, mP: townGender.m[1]!, fN: townGender.f[0]!, fP: townGender.f[1]!, mShare: townGender.mShare, fShare: townGender.fShare };
+    const chartOffEl = document.querySelector<HTMLElement>('.chart-off');
+    function renderDemo(no: string) {
+      const town = demoData.town;
+      chartsEl?.classList.remove('off');
+      if (no === 'all') {
+        town.forEach((x, i) => setTile(i, x.value, x.sub));
+        setGender(townState);
+        if (noteEl) noteEl.hidden = true;
+        const b0 = document.getElementById('demo-badge'); if (b0) b0.textContent = 'Census 2011';
+        const s0 = document.getElementById('chart-src'); if (s0) s0.textContent = 'Source: Census of India 2011';
+        chartsEl?.classList.remove('dummy');
+        drawLit(demoData.lit); drawGrowth(demoData.pops, 8000, 12500, false);
+        syncChartOff(false);
+        return;
+      }
+      const badge = document.getElementById('demo-badge');
+      const srcEl = document.getElementById('chart-src');
+      const w0 = demoData.wards[no];
+      const none = 'Not published';
+      // tiles: population, men, women, sex ratio, population in 2001, growth, density, households
+      if (w0) {
+        const w = w0;
+        if (badge) badge.textContent = 'Census 2011';
+        if (srcEl) srcEl.textContent = 'Source: Census of India 2011';
+        setTile(0, fmt(w.total), 'Census 2011');
+        setTile(1, fmt(w.male), `${Math.round((w.male / w.total) * 100)}%`);
+        setTile(2, fmt(w.female), `${Math.round((w.female / w.total) * 100)}%`);
+        setTile(3, fmt(Math.round((w.female / w.male) * 1000)), town[3].sub);
+        setTile(4, '\u2014', none); setTile(5, '\u2014', none); setTile(6, '\u2014', none);
+        setTile(7, w.households ? fmt(w.households) : '\u2014', w.households ? 'approx.' : none);
+        const mS = (w.male / w.total) * 100, fS = (w.female / w.total) * 100;
+        setGender({ mN: fmt(w.male), mP: mS.toFixed(1) + '%', fN: fmt(w.female), fP: fS.toFixed(1) + '%', mShare: mS, fShare: fS });
+        if (noteEl) noteEl.hidden = true;
+      } else {
+        // No published ward figures: show clearly labelled dummy numbers, worked out from the ward number so they stay the same each time.
+        const idx = Array.from((document.getElementById('ward-select') as HTMLSelectElement).options).findIndex((o) => o.value === no) + 1;
+        const seed = (k: number) => { const x = Math.sin(idx * 12.9898 + k * 78.233) * 43758.5453; return x - Math.floor(x); };
+        const townTotal = Number(town[0].value.replace(/,/g, ''));
+        const total = Math.round((townTotal / 9) * (0.55 + seed(1) * 0.95));
+        const mS = 43.5 + seed(2) * 11, male = Math.round((total * mS) / 100), female = total - male, fS = 100 - mS;
+        const growth = 4 + seed(3) * 42;
+        setTile(0, fmt(total), 'Dummy data');
+        setTile(1, fmt(male), `${Math.round(mS)}%`);
+        setTile(2, fmt(female), `${Math.round(fS)}%`);
+        setTile(3, fmt(Math.round((female / male) * 1000)), 'Dummy data');
+        setTile(4, fmt(Math.round(total / (1 + growth / 100))), 'Dummy data');
+        setTile(5, growth.toFixed(1) + '%', 'Dummy data');
+        setTile(6, fmt(Math.round(total / 0.72)), 'Dummy data');
+        setTile(7, fmt(Math.round(total / 4.1)), 'Dummy data');
+        setGender({ mN: fmt(male), mP: mS.toFixed(1) + '%', fN: fmt(female), fP: fS.toFixed(1) + '%', mShare: mS, fShare: fS });
+        const litAll = 78 + seed(4) * 18, gap = 2 + seed(5) * 6;
+        drawLit({ overall: litAll, male: Math.min(99, litAll + gap / 2), female: litAll - gap / 2 });
+        const p01 = total / (1 + growth / 100), p91 = p01 / (1 + (seed(6) * 30 - 10) / 100);
+        const all3 = [p91, p01, total];
+        drawGrowth(all3.map(Math.round), Math.min(...all3) * 0.7, Math.max(...all3) * 1.02, true);
+        if (badge) badge.textContent = 'Dummy data';
+        if (srcEl) srcEl.textContent = 'Dummy data, not from the Census';
+        if (noteEl) noteEl.hidden = false;
+      }
+      chartsEl?.classList.toggle('dummy', !w0);
+      syncChartOff(!w0);
+    }
+    const townNote = document.getElementById('g-note')?.textContent || '';
+    function drawLit(l: { overall: number; male: number; female: number }) {
+      document.querySelectorAll<HTMLElement>('.litrow').forEach((row) => {
+        const v = l[row.dataset.lit as 'overall' | 'male' | 'female'] ?? l.overall;
+        row.querySelector('em')!.textContent = v.toFixed(1) + '%';
+        (row.querySelector('.bar i') as HTMLElement).style.width = v + '%';
+      });
+    }
+    function drawGrowth(pops: number[], lo: number, hi: number, dummy: boolean) {
+      const xs = [50, 320, 590];
+      const pts = pops.map((v, i) => ({ v, x: xs[i]!, y: 108 - ((v - lo) / (hi - lo)) * 80 }));
+      const seg = (p: { x: number; y: number }, q: { x: number; y: number }) => { const m = (p.x + (q.x - p.x) / 2).toFixed(1); return `C ${m} ${p.y.toFixed(1)} ${m} ${q.y.toFixed(1)} ${q.x} ${q.y.toFixed(1)}`; };
+      const pB = `M ${pts[1]!.x} ${pts[1]!.y.toFixed(1)} ${seg(pts[1]!, pts[2]!)}`;
+      document.getElementById('g-pa')?.setAttribute('d', `M ${pts[0]!.x} ${pts[0]!.y.toFixed(1)} ${seg(pts[0]!, pts[1]!)}`);
+      document.getElementById('g-pb')?.setAttribute('d', pB);
+      document.getElementById('g-area')?.setAttribute('d', `${pB} L ${pts[2]!.x} 108 L ${pts[1]!.x} 108 Z`);
+      document.querySelectorAll<SVGGElement>('svg.growth g').forEach((g, i) => {
+        const p = pts[i]; if (!p) return;
+        g.querySelector('circle')?.setAttribute('cy', p.y.toFixed(1));
+        const t = g.querySelector('.gval'); if (t) { t.setAttribute('y', (p.y - 11).toFixed(1)); t.textContent = fmt(p.v) + (i === 0 ? '*' : ''); }
+      });
+      const ch = (id: string, a: number, b: number) => {
+        const el = document.getElementById(id); if (!el) return;
+        const c = ((b - a) / a) * 100;
+        el.textContent = `${c < 0 ? 'Down' : 'Up'} ${Math.abs(c).toFixed(1)}%`;
+        el.setAttribute('class', `gchg ${c < 0 ? 'down' : 'up'}`);
+      };
+      ch('g-c1', pops[0]!, pops[1]!); ch('g-c2', pops[1]!, pops[2]!);
+      const note = document.getElementById('g-note'); if (note) note.textContent = dummy ? 'Dummy data. These ward figures are made up to show how the chart will look.' : townNote;
+    }
+    // In a ward view only the gender chart has (dummy) figures; the other two charts stay unavailable.
+    const activeTab = () => document.querySelector<HTMLElement>('.tabs button[aria-selected="true"]')?.dataset.tab;
+    function syncChartOff(isWard = current !== 'all') {
+      if (chartOffEl) chartOffEl.hidden = true;
+      document.querySelectorAll<HTMLElement>('#tab-literacy, #tab-growth').forEach((p) => p.classList.remove('ward-off'));
+    }
+
+    // ---- map: zoom, pan, focus on a ward ----
+    const svg = document.getElementById('ward-svg') as SVGSVGElement | null;
+    const mapview = document.getElementById('mapview');
+    const FULL = { x: 0, y: 0, w: 817, h: 1156 };
+    const ASPECT = 1.05;                              // frame height / width
+    const HOME = { x: 142, y: 66, w: 400 };           // default view on the town and its nine pins
+    const view = { ...HOME, h: HOME.w * ASPECT };
+    let anim = 0;
+    function apply() {
+      if (!svg) return;
+      svg.setAttribute('viewBox', `${view.x} ${view.y} ${view.w} ${view.h}`);
+      svg.style.setProperty('--u', String(view.w / (svg.getBoundingClientRect().width || FULL.w)));
+    }
+    function clamp() {
+      view.w = Math.max(110, Math.min(FULL.w, view.w));
+      view.h = view.w * ASPECT;
+      view.x = Math.max(0, Math.min(FULL.w - view.w, view.x));
+      view.y = Math.max(0, Math.min(FULL.h - view.h, view.y));
+    }
+    function animateTo(t: { x: number; y: number; w: number }) {
+      cancelAnimationFrame(anim);
+      const from = { ...view }, start = performance.now(), dur = 380;
+      const tw = Math.max(110, Math.min(FULL.w, t.w));
+      const to = { x: t.x, y: t.y, w: tw };
+      // No animation when the tab is in the background or the visitor prefers reduced motion: jump straight there.
+      if (document.hidden || matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        view.w = to.w; view.x = to.x; view.y = to.y; clamp(); apply(); return;
+      }
+      const step = (now: number) => {
+        const k = Math.min(1, (now - start) / dur), e = 1 - Math.pow(1 - k, 3);
+        view.w = from.w + (to.w - from.w) * e;
+        view.x = from.x + (to.x - from.x) * e;
+        view.y = from.y + (to.y - from.y) * e;
+        clamp(); apply();
+        if (k < 1) anim = requestAnimationFrame(step);
+      };
+      anim = requestAnimationFrame(step);
+    }
+    function zoomBy(factor: number) {
+      const cx = view.x + view.w / 2, cy = view.y + view.h / 2;
+      const nw = Math.max(110, Math.min(FULL.w, view.w / factor)), nh = nw * ASPECT;
+      animateTo({ x: cx - nw / 2, y: cy - nh / 2, w: nw });
+    }
+    document.querySelectorAll<HTMLButtonElement>('.mapctl button').forEach((b) =>
+      b.addEventListener('click', () => {
+        if (b.dataset.z === 'in') zoomBy(1.6);
+        else if (b.dataset.z === 'out') zoomBy(1 / 1.6);
+        else animateTo({ ...HOME });
+      })
+    );
+    // drag to pan
+    let drag: { px: number; py: number; vx: number; vy: number } | null = null;
+    svg?.addEventListener('pointerdown', (e) => {
+      if (e.pointerType !== 'mouse' || (e.target as Element).closest('.pin')) return;   // touch keeps scrolling the page; use the zoom buttons
+      cancelAnimationFrame(anim);
+      drag = { px: e.clientX, py: e.clientY, vx: view.x, vy: view.y };
+      svg.setPointerCapture(e.pointerId);
+      svg.classList.add('grabbing');
+    });
+    svg?.addEventListener('pointermove', (e) => {
+      if (!drag || !svg) return;
+      const k = view.w / svg.getBoundingClientRect().width;
+      view.x = drag.vx - (e.clientX - drag.px) * k;
+      view.y = drag.vy - (e.clientY - drag.py) * k;
+      clamp(); apply();
+    });
+    const endDrag = () => { drag = null; svg?.classList.remove('grabbing'); };
+    svg?.addEventListener('pointerup', endDrag);
+    svg?.addEventListener('pointercancel', endDrag);
+    // ctrl or cmd + wheel zooms (a plain wheel keeps scrolling the page)
+    svg?.addEventListener('wheel', (e) => {
+      if (!(e.ctrlKey || e.metaKey)) return;
+      e.preventDefault();
+      zoomBy(e.deltaY < 0 ? 1.25 : 1 / 1.25);
+    }, { passive: false });
+    window.addEventListener('resize', apply);
+    apply();
+
+    function focusMap(no: string) {
+      pins.forEach((p) => p.classList.toggle('on', p.dataset.no === no));
+      areas.forEach((a) => a.classList.toggle('on', a.dataset.no === no));
+      if (no === 'all') { animateTo({ ...HOME }); return; }
+      const a = Array.from(areas).find((x) => x.dataset.no === no);
+      if (!a) return;
+      const bx = Number(a.dataset.bx), by = Number(a.dataset.by), bw = Number(a.dataset.bw), bh = Number(a.dataset.bh);
+      const w = Math.max(bw * 1.8, (bh * 1.8) / ASPECT, 170), h = w * ASPECT;
+      animateTo({ x: bx + bw / 2 - w / 2, y: by + bh / 2 - h / 2, w });
+    }
+
+    let current = 'all';
+    function pick(no: string) {
+      current = no;
+      chips.forEach((c) => c.classList.toggle('on', c.dataset.no === no));
+      if (filter) filter.value = no;
+      const wsel = document.getElementById('ward-select') as HTMLSelectElement | null;
+      if (wsel) wsel.value = no === 'all' ? '' : no;
+      document.getElementById('wdrop')?.classList.toggle('on', no !== 'all');
+      if (titleEl) titleEl.textContent = no === 'all' ? '' : `Ward ${no}`;
+      if (locEl) locEl.textContent = no === 'all' ? 'Choose a ward from the list' : (wardInfo[no]?.loc || 'Location to be added');
+      renderDemo(no);
+      focusMap(no);
+    }
+    const toggle = (no: string) => pick(current === no ? 'all' : no);
+    chips.forEach((c) => c.addEventListener('click', () => (c.dataset.no === 'all' ? pick('all') : toggle(c.dataset.no!))));
+    // chart tabs
+    document.querySelectorAll<HTMLButtonElement>('.tabs button').forEach((t) =>
+      t.addEventListener('click', () => {
+        document.querySelectorAll<HTMLButtonElement>('.tabs button').forEach((x) => x.setAttribute('aria-selected', String(x === t)));
+        document.querySelectorAll<HTMLElement>('.tabpanel').forEach((p) => { p.hidden = p.id !== `tab-${t.dataset.tab}`; });
+        syncChartOff();
+      })
+    );
+    areas.forEach((a) => a.addEventListener('click', () => toggle(a.dataset.no!)));
+    pins.forEach((p) => {
+      p.addEventListener('click', () => toggle(p.dataset.no!));
+      p.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(p.dataset.no!); } });
+    });
+    filter?.addEventListener('change', () => pick(filter.value));
+    document.getElementById('ward-select')?.addEventListener('change', (e) => pick((e.target as HTMLSelectElement).value || 'all'));
+  </script>
 </Layout>

@@ -2,21 +2,51 @@
 import Layout from '../layouts/Layout.astro';
 import PageHead from '../components/PageHead.astro';
 import { meta, demographics, history, attractions, gettingHere, transportNote, health, education } from '../data/site';
+
+// Thumbnails: a photo where we have one, otherwise a coloured tile with an icon.
+const photoFor: Record<string, string> = {
+  'Sumendu Lake': '/images/lake.jpg',
+  'Indreni Pul and Savitri Pushpaudyan': '/images/garden.jpg',
+  'Bokar Monastery': '/images/monastery.jpg',
+  'Tea gardens': '/images/tea.jpg',
+};
+const kindFor: Record<string, string> = {
+  'Sumendu Lake': 'lake', 'Indreni Pul and Savitri Pushpaudyan': 'garden', 'Bokar Monastery': 'monastery', 'Rameetay Dara': 'view',
+  'Debisthan': 'temple', 'Tingling View Point': 'view', 'Tea gardens': 'tea', 'Orange orchards': 'orchard', 'Rai Dhap': 'water', 'Mirik Church (UCNI)': 'church',
+};
+const kinds: Record<string, { path: string; g: [string, string] }> = {
+  lake: { path: 'M3 9c2-2 4-2 6 0s4 2 6 0 4-2 6 0M3 14c2-2 4-2 6 0s4 2 6 0 4-2 6 0M3 19c2-2 4-2 6 0s4 2 6 0 4-2 6 0', g: ['#2f6f8f', '#12303a'] },
+  garden: { path: 'M12 21v-8M12 13c-4 0-6-3-6-6 4 0 6 2 6 6zM12 13c4 0 6-3 6-6-4 0-6 2-6 6z', g: ['#2b7a5a', '#0f3a2a'] },
+  monastery: { path: 'M12 3 3 9h18zM5 9v10h14V9M9 19v-5h6v5', g: ['#b07d12', '#4a3308'] },
+  temple: { path: 'M12 3 3 9h18zM5 9v10h14V9M9 19v-5h6v5', g: ['#b3471d', '#4a1c0a'] },
+  church: { path: 'M12 2v5M9.5 4.5h5M6 21V12l6-4 6 4v9zM10 21v-5h4v5', g: ['#6a4c93', '#2a1c45'] },
+  view: { path: 'M3 20l6-10 4 6 3-4 5 8zM17 5.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z', g: ['#2f6f8f', '#1c3a4a'] },
+  tea: { path: 'M5 21c0-9 5-15 15-16 0 10-6 15-15 16zM5 21 14 12', g: ['#2e8b3e', '#0f3a1a'] },
+  orchard: { path: 'M12 21v-6M12 15a5 5 0 1 0 0-10 5 5 0 0 0 0 10zM12 5c0-1.5 1-2.5 2.5-2.5', g: ['#e0821b', '#5a2f08'] },
+  water: { path: 'M12 3c4 5 6 8 6 11a6 6 0 0 1-12 0c0-3 2-6 6-11z', g: ['#3a8fbf', '#12303a'] },
+  hospital: { path: 'M4 21V6l8-3 8 3v15zM12 9v6M9 12h6', g: ['#d33a3a', '#4a1414'] },
+  school: { path: 'M2 9l10-5 10 5-10 5zM6 11.5V16c0 1.5 3 3 6 3s6-1.5 6-3v-4.5', g: ['#5a4fcf', '#221d55'] },
+};
+const cleanName = (n: string) => n.replace(/\s*\(.*?\)\s*/g, ' ').trim();
+const destOverride: Record<string, string> = {
+  'Indreni Pul and Savitri Pushpaudyan': 'Indreni Pul, Mirik Lake',
+  'Mirik Church (UCNI)': 'Mirik Church UCNI, Deosay Dara',
+  'Tea gardens': 'Thurbo Tea Estate',
+  'Orange orchards': 'Soureni Busty',
+};
+const dirUrl = (n: string) => `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent((destOverride[n] ?? cleanName(n)) + ', Mirik, Darjeeling, West Bengal')}`;
+const fromUrl = (place: string) => `https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(cleanName(place))}&destination=${encodeURIComponent('Mirik, Darjeeling, West Bengal')}`;
+const places = attractions.map((a) => ({ name: a.name, text: a.text, note: (a as any).note as string | undefined, kind: kindFor[a.name] ?? 'view', photo: photoFor[a.name] }));
+const clinics = health.map((h) => ({ name: h.name, text: h.detail, kind: 'hospital' }));
+const schools = education.map((e) => ({ name: e, text: '', kind: 'school' }));
 ---
 <Layout title="A lake town built on a marsh | Mirik Municipality">
-  <PageHead slug="about" title="A lake town built on a marsh" lead="Where Mirik came from, who lives here, and what to see, how to get here and where to find health care and schools." />
-  <div class="subnav" aria-label="On this page">
-    <div class="wrap">
-      <a href="#about">About Mirik</a>
-      <a href="#town-guide">Town Guide</a>
-      <a href="#places">Places to see</a>
-      <a href="#getting-here">Getting here</a>
-    </div>
-  </div>
+  <PageHead slug="about" title="A lake town built on a marsh" lead="A short history of Mirik, who lives here, and a guide for visitors and residents." />
 
     <section class="alt" id="about">
-      <div class="wrap grid-2">
-        <div>
+      <div class="wrap grid-2 tl-grid">
+        <div class="tl-left">
+          <img class="tl-photo" src="/images/lake.jpg" alt="Sumendu Lake in Mirik, with the town and hills behind" loading="eager" />
           <p>
             Mirik takes its name from the Lepcha "Mir-Yok", a place burnt by fire. It grew as the market town for the
             villages and tea gardens around it, and became a planned tourist centre when Sumendu Lake was built in the 1970s.
@@ -30,11 +60,30 @@ import { meta, demographics, history, attractions, gettingHere, transportNote, h
           </p>
           <p class="lead" style="font-size:.95rem">{demographics.ruralBlock}</p>
         </div>
-        <div>
+        <div class="tl-right">
+         <div class="tl-runway" id="tl-runway" style={`--n:${history.length}`}>
+          <div class="tl-sticky" id="tl-sticky">
           <h3 id="timeline">Timeline</h3>
-          <ol class="timeline">
-            {history.map((h) => <li><b>{h.year}</b><p>{h.text}</p></li>)}
-          </ol>
+          <div class="tl" id="tl">
+            <ol class="tl-list">
+              {history.map((h, i) => (
+                <li class={i === 0 ? 'on' : ''} data-i={i}>
+                  <button type="button" class="tl-btn" aria-expanded={i === 0 ? 'true' : 'false'}>
+                    <span class="tl-dot" aria-hidden="true"></span>
+                    <b>{h.year}</b>
+                  </button>
+                  <div class="tl-body"><div><p>{h.text}</p></div></div>
+                </li>
+              ))}
+            </ol>
+            <div class="tl-ctrl">
+              <button type="button" class="tl-prev" aria-label="Earlier event">&larr;</button>
+              <span class="tl-count" id="tl-count">1 / {history.length}</span>
+              <button type="button" class="tl-next" aria-label="Later event">&rarr;</button>
+            </div>
+          </div>
+          </div>
+         </div>
         </div>
       </div>
     </section>
@@ -42,8 +91,9 @@ import { meta, demographics, history, attractions, gettingHere, transportNote, h
     <section class="photo-strip">
       <div class="wrap">
         <figure><img src="/images/lake.jpg" alt="Sumendu Lake" loading="lazy" /><figcaption>Sumendu Lake</figcaption></figure>
-        <figure><img src="/images/tea.jpg" alt="Tea gardens" loading="lazy" /><figcaption>Tea gardens</figcaption></figure>
+        <figure><img src="/images/tea-night.jpg" alt="Tea pickers with baskets on a tea hillside at night, under a full moon" loading="lazy" style="object-position:center 62%" /><figcaption>Moon Light Plucking</figcaption></figure>
         <figure><img src="/images/monastery.jpg" alt="Bokar Monastery" loading="lazy" /><figcaption>Bokar Monastery</figcaption></figure>
+        <figure><img src="/images/rangbang.jpg" alt="The River Rangbang and its steel bridge near Tabakoshi" loading="lazy" /><figcaption>River Rangbang</figcaption></figure>
       </div>
     </section>
     <section id="town-guide">
@@ -51,37 +101,118 @@ import { meta, demographics, history, attractions, gettingHere, transportNote, h
         <div class="section-head">
           <p class="eyebrow">Town Guide</p>
           <h2>Living in and visiting Mirik</h2>
-          <p class="lead">Places to see, how to get here, health care and schools.</p>
+          <p class="lead">Places to see, what is nearby, health care and schools.</p>
         </div>
-      </div>
-      <div class="wrap">
-        <div class="grid-2">
-          <div>
-            <h3 id="places">Places to see</h3>
-            <ul class="plain">
-              {attractions.map((a) => <li><strong>{a.name}</strong><small>{a.text}</small></li>)}
-            </ul>
-          </div>
-          <div>
-            <h3 id="getting-here">Getting here</h3>
-            <table>
-              <tbody>
-                {gettingHere.map((g) => <tr><td>{g.place}</td><td><strong>{g.distance}</strong></td></tr>)}
-              </tbody>
-            </table>
-            <p style="margin-top:12px;color:var(--muted);font-size:.93rem">{transportNote}</p>
 
-            <h3 id="health" style="margin-top:28px">Health care</h3>
-            <ul class="plain">
-              {health.map((h) => <li>{h.name}<small>{h.detail}</small></li>)}
-            </ul>
-
-            <h3 id="schools" style="margin-top:28px">Schools and college</h3>
-            <ul class="cols">
-              {education.map((e) => <li>{e}</li>)}
-            </ul>
-          </div>
+        <h3 id="places" class="tg-h">Places to see</h3>
+        <div class="pgrid">
+          {places.map((x) => (
+            <article class="pcard">
+              <div class="pthumb">
+                {x.photo
+                  ? <img src={x.photo} alt={x.name} loading="lazy" />
+                  : <span class="part" style={`background:linear-gradient(145deg, ${kinds[x.kind].g[0]}, ${kinds[x.kind].g[1]})`} aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d={kinds[x.kind].path} /></svg></span>}
+              </div>
+              <div class="pbody">
+                <h4>{x.name}</h4>
+                <p>{x.text}</p>
+                {x.note && <p class="pnote"><b>History</b>{x.note}</p>}
+                <a class="pdir" href={dirUrl(x.name)} target="_blank" rel="noopener">Get directions <span aria-hidden="true">&rarr;</span></a>
+              </div>
+            </article>
+          ))}
         </div>
+
+        <h3 id="nearby" class="tg-h">Nearby</h3>
+        <div class="nbgrid">
+          {gettingHere.map((g) => (
+            <article class="nbcard">
+              <h4>{g.place}</h4>
+              <div class="nbmodes">
+                <span class="nbmode"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 16V11l2-5h10l2 5v5M3 16h18v3H3zM7 13h.01M17 13h.01M5 11h14" /></svg><span><small>By car</small><strong>{g.distance}<em>{g.car}</em></strong></span></span>
+                <span class="nbmode"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="6" cy="16" r="3.5" /><circle cx="18" cy="16" r="3.5" /><path d="M6 16l3-6h5l4 6M9 10L8 7H6M14 10l-1-3h3" /></svg><span><small>By bike</small><strong>{g.distance}<em>{g.bike}</em></strong></span></span>
+              </div>
+              <a class="pdir" href={fromUrl(g.place)} target="_blank" rel="noopener">Get directions <span aria-hidden="true">&rarr;</span></a>
+            </article>
+          ))}
+        </div>
+        <p class="tg-note">Times are rough estimates for normal weather and traffic on the hill road. Landslides, rain and roadworks can add a lot, so check locally before you set out.</p>
+        <p class="tg-note">{transportNote}</p>
+
+        <h3 id="health" class="tg-h">Health care</h3>
+        <div class="pgrid small">
+          {clinics.map((x) => (
+            <article class="pcard compact">
+              <div class="pthumb"><span class="part" style={`background:linear-gradient(145deg, ${kinds.hospital.g[0]}, ${kinds.hospital.g[1]})`} aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d={kinds.hospital.path} /></svg></span></div>
+              <div class="pbody"><h4>{x.name}</h4><p>{x.text}</p><a class="pdir" href={dirUrl(x.name)} target="_blank" rel="noopener">Get directions <span aria-hidden="true">&rarr;</span></a></div>
+            </article>
+          ))}
+        </div>
+
+        <h3 id="schools" class="tg-h">Schools and college</h3>
+        <div class="pgrid small">
+          {schools.map((x) => (
+            <article class="pcard compact">
+              <div class="pthumb"><span class="part" style={`background:linear-gradient(145deg, ${kinds.school.g[0]}, ${kinds.school.g[1]})`} aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d={kinds.school.path} /></svg></span></div>
+              <div class="pbody"><h4>{x.name}</h4><a class="pdir" href={dirUrl(x.name)} target="_blank" rel="noopener">Get directions <span aria-hidden="true">&rarr;</span></a></div>
+            </article>
+          ))}
+        </div>
+        <p class="tg-note">History notes come from Wikipedia and public tourism sources. Directions open in Google Maps.</p>
       </div>
     </section>
+  <script>
+    // Timeline: scrolling the page moves through history; clicking, the arrows and the arrow keys jump to an event.
+    const items = Array.from(document.querySelectorAll<HTMLLIElement>('#tl .tl-list > li'));
+    const countEl = document.getElementById('tl-count');
+    const runway = document.getElementById('tl-runway');
+    const sticky = document.getElementById('tl-sticky');
+    const wide = matchMedia('(min-width: 901px)');
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)');
+    const STICKY_TOP = 108;
+    let cur = 0, lock = 0;
+    function targetTop(i: number) {
+      if (!runway || !sticky) return window.scrollY;
+      const rect = runway.getBoundingClientRect();
+      const total = rect.height - sticky.offsetHeight;
+      return window.scrollY + rect.top - STICKY_TOP + ((i + 0.5) / items.length) * total;
+    }
+    function show(i: number, opts: { focus?: boolean; scroll?: boolean } = {}) {
+      cur = Math.max(0, Math.min(items.length - 1, i));
+      items.forEach((li, k) => {
+        li.classList.toggle('on', k === cur);
+        li.classList.toggle('past', k < cur);
+        li.querySelector('.tl-btn')?.setAttribute('aria-expanded', String(k === cur));
+      });
+      if (countEl) countEl.textContent = `${cur + 1} / ${items.length}`;
+      if (opts.focus) items[cur].querySelector<HTMLButtonElement>('.tl-btn')?.focus({ preventScroll: true });
+      if (opts.scroll && wide.matches) {
+        lock = Date.now() + 800;   // ignore scroll updates while we move there
+        window.scrollTo({ top: targetTop(cur), behavior: reduce.matches ? 'auto' : 'smooth' });
+      }
+    }
+    function onScroll() {
+      if (!wide.matches || Date.now() < lock || !runway || !sticky) return;
+      const rect = runway.getBoundingClientRect();
+      const total = rect.height - sticky.offsetHeight;
+      const p = (STICKY_TOP - rect.top) / total;
+      const i = Math.max(0, Math.min(items.length - 1, Math.floor(p * items.length)));
+      if (i !== cur) show(i);
+    }
+    let ticking = false;
+    window.addEventListener('scroll', () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => { onScroll(); ticking = false; });
+    }, { passive: true });
+    items.forEach((li, k) => li.querySelector('.tl-btn')?.addEventListener('click', () => show(k, { scroll: true })));
+    document.querySelector('.tl-prev')?.addEventListener('click', () => show(cur - 1, { scroll: true }));
+    document.querySelector('.tl-next')?.addEventListener('click', () => show(cur + 1, { scroll: true }));
+    document.getElementById('tl')?.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowDown' || e.key === 'ArrowRight') { e.preventDefault(); show(cur + 1, { focus: true, scroll: true }); }
+      if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') { e.preventDefault(); show(cur - 1, { focus: true, scroll: true }); }
+    });
+    show(0);
+    onScroll();
+  </script>
 </Layout>

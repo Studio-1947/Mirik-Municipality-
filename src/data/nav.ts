@@ -8,6 +8,7 @@ export const pages = [
   { slug: 'grievance', num: '06', label: 'Grievance', blurb: 'Report a problem in your ward.' },
   { slug: 'contact', num: '07', label: 'Contact', blurb: 'Office address, phones and map.' },
   { slug: 'notices', num: '08', label: 'Notices', blurb: 'Official notices.' },
+  { slug: 'policies', num: '09', label: 'Website policies', blurb: 'Privacy, terms and accessibility.' },
 ] as const;
 
 export const accents: Record<string, [string, string]> = {
@@ -19,6 +20,7 @@ export const accents: Record<string, [string, string]> = {
   grievance: ['#a2416b', '#f6e6ee'],
   contact: ['#1f4d3a', '#e6eee8'],
   notices: ['#2f6f8f', '#e5f0f5'],
+  policies: ['#5a6b64', '#eef1ee'],
 };
 
 // Banner photo (and focal point) behind each sub-page header.
@@ -27,6 +29,7 @@ export const banners: Record<string, [string, string]> = {
   administration: ['monastery.jpg', 'center 40%'],
   services: ['tea.jpg', 'center 70%'],
   notices: ['garden.jpg', 'center 45%'],
+  policies: ['tea.jpg', 'center 60%'],
   'clean-mirik': ['tea.jpg', 'center 90%'],
   emergency: ['hero.jpg', 'center 25%'],
   grievance: ['monastery.jpg', 'center 85%'],
@@ -40,7 +43,7 @@ export const sections: Record<string, { href: string; label: string }[]> = {
     { href: '#timeline', label: 'Timeline' },
     { href: '#town-guide', label: 'Town Guide' },
     { href: '#places', label: 'Places to see' },
-    { href: '#getting-here', label: 'Getting here' },
+    { href: '#nearby', label: 'Nearby' },
     { href: '#health', label: 'Health care' },
     { href: '#schools', label: 'Schools and college' },
   ],
@@ -54,6 +57,7 @@ export const sections: Record<string, { href: string; label: string }[]> = {
     { href: '#services', label: 'Citizen services' },
     { href: '#projects', label: 'Projects under way' },
     { href: '#schemes', label: 'Special projects and schemes' },
+    { href: '#faq', label: 'Common questions' },
   ],
   'clean-mirik': [
     { href: '#fines', label: 'Fines' },
@@ -61,6 +65,7 @@ export const sections: Record<string, { href: string; label: string }[]> = {
   ],
   contact: [
     { href: '#details', label: 'Contact details' },
+    { href: '#rti', label: 'Right to Information' },
     { href: '#links', label: 'Useful links' },
     { href: '#map', label: 'Map' },
   ],

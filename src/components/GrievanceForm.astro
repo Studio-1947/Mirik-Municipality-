@@ -6,7 +6,15 @@ const { prefix = 'g' } = Astro.props;
 <form class="grv" data-endpoint={contact.grievanceEndpoint} data-email={contact.email} method="post" enctype="multipart/form-data" action={contact.grievanceEndpoint || undefined}>
   <div><label for={`${prefix}-name`}>Full name</label><input id={`${prefix}-name`} name="name" required autocomplete="name" /></div>
   <div><label for={`${prefix}-phone`}>Phone number</label><input id={`${prefix}-phone`} name="phone" required inputmode="numeric" pattern="[0-9]{10}" maxlength="10" autocomplete="tel" /><div class="hint">10 digits</div></div>
-  <div><label for={`${prefix}-email`}>Email</label><input id={`${prefix}-email`} name="email" type="email" autocomplete="email" /></div>
+  <fieldset class="full wa">
+    <legend>WhatsApp</legend>
+    <div class="wa-opts">
+      <label><input type="radio" name="wa_mode" value="same" checked /> <span>Same as phone number</span></label>
+      <label><input type="radio" name="wa_mode" value="other" /> <span>Different number</span></label>
+      <label><input type="radio" name="wa_mode" value="none" /> <span>I don't have WhatsApp</span></label>
+    </div>
+    <div class="wa-num" hidden><label for={`${prefix}-wa`}>WhatsApp number</label><input id={`${prefix}-wa`} name="whatsapp" inputmode="numeric" pattern="[0-9]{10}" maxlength="10" autocomplete="off" /><div class="hint">10 digits</div></div>
+  </fieldset>
   <div>
     <label for={`${prefix}-ward`}>Ward</label>
     <select id={`${prefix}-ward`} name="ward" required>
@@ -14,10 +22,28 @@ const { prefix = 'g' } = Astro.props;
       {wards.map((w) => <option value={`Ward ${w.no}`}>Ward {w.no}</option>)}
     </select>
   </div>
-  <div class="full"><label for={`${prefix}-loc`}>Location or holding number</label><input id={`${prefix}-loc`} name="location" required /></div>
-  <div class="full"><label for={`${prefix}-sub`}>Subject</label><input id={`${prefix}-sub`} name="subject" required /></div>
-  <div class="full"><label for={`${prefix}-desc`}>Describe the problem</label><textarea id={`${prefix}-desc`} name="description" maxlength="300" required></textarea><div class="hint">Up to 300 characters</div></div>
+  <div><label for={`${prefix}-loc`}>Location or holding number</label><input id={`${prefix}-loc`} name="location" required /></div>
+  <div class="full msgbox">
+    <div class="mb-row"><label for={`${prefix}-desc`}>Issue / Subject / Problem</label><textarea id={`${prefix}-desc`} name="description" maxlength="300" required placeholder="Start with a short title, then describe the problem"></textarea></div>
+    <div class="hint">Up to 300 characters</div>
+  </div>
   <div class="full"><label for={`${prefix}-file`}>Photo (optional)</label><input id={`${prefix}-file`} name="attachment" type="file" accept="image/*,.pdf" /></div>
-  <button type="submit">Submit grievance</button>
+  <div class="full grv-actions">
+    <button type="submit">Submit grievance</button>
+  </div>
   <p class="form-msg" role="status"></p>
 </form>
+<script>
+  document.querySelectorAll<HTMLFormElement>('form.grv').forEach((f) => {
+    const modes = f.querySelectorAll<HTMLInputElement>('input[name="wa_mode"]');
+    const wrap = f.querySelector<HTMLElement>('.wa-num');
+    const num = f.querySelector<HTMLInputElement>('input[name="whatsapp"]');
+    if (!modes.length || !wrap || !num) return;
+    const sync = () => {
+      const mode = f.querySelector<HTMLInputElement>('input[name="wa_mode"]:checked')?.value;
+      wrap.hidden = mode !== 'other'; num.required = mode === 'other'; if (mode !== 'other') num.value = '';
+    };
+    modes.forEach((m) => m.addEventListener('change', () => { sync(); if (m.checked && m.value === 'other') num.focus(); }));
+    sync();
+  });
+</script>
