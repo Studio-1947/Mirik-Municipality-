@@ -1,0 +1,15 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageHead from '../components/PageHead.astro';
+import { emergency } from '../data/site';
+---
+<Layout title="Helplines | Mirik Municipality">
+  <PageHead slug="emergency" title="Helplines" lead="During heavy rain and landslide alerts, follow instructions from the Sub-Divisional Office and avoid unnecessary travel on hill roads." />
+    <section class="alt" id="emergency">
+      <div class="wrap">
+        <div class="sos">
+          {emergency.map((e) => <a href={`tel:${e.number}`}><b>{e.number}</b><span>{e.label}</span></a>)}
+        </div>
+      </div>
+    </section>
+</Layout>

@@ -1,0 +1,29 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageHead from '../components/PageHead.astro';
+import { fines, bins } from '../data/site';
+---
+<Layout title="Clean Mirik | Mirik Municipality">
+  <PageHead slug="clean-mirik" title="Cleanliness rules from 1 September 2026" lead="New state rules apply in every municipality and notified area of West Bengal. Violations attract a fine." />
+    <section class="clean" id="clean-mirik">
+      <div class="wrap grid-2">
+        <div>
+          <table class="fines" id="fines">
+            <tbody>
+              {fines.map((f) => <tr><td>{f.offence}</td><td>{f.amount}</td></tr>)}
+            </tbody>
+          </table>
+          <p class="motto">Clean city, healthy life: our shared responsibility.</p>
+        </div>
+        <div>
+          <h3 id="segregation">Sort your waste at home</h3>
+          <p class="lead" style="font-size:.95rem">Under the Mirik Solid Waste Management Bye-Laws, 2023, every household must separate waste at source and use the right bin. Never throw waste into drains, the lake or public spaces.</p>
+          <ul class="bins">
+            {bins.map((b) => (
+              <li><span class="sw" style={`background:${b.hex}`}></span><span><b>{b.colour}</b>{b.use}</span></li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </section>
+</Layout>

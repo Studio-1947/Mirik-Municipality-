@@ -1,0 +1,23 @@
+---
+import { pages, accents, banners } from '../data/nav';
+interface Props { slug: string; title: string; lead?: string; eyebrow?: string; }
+const { slug, title, lead, eyebrow } = Astro.props;
+const page = pages.find((p) => p.slug === slug)!;
+const [accent, soft] = accents[slug];
+const [img, pos] = banners[slug];
+---
+<div class="pagehead banner" style={`--accent:${accent};--accent-soft:${soft}`}>
+  <img class="ph-bg" src={`/images/${img}`} alt="" style={`object-position:${pos}`} />
+  <div class="ph-shade"></div>
+  <div class="wrap ph-in">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a> <span>/</span> {page.label}</nav>
+    <div class="ph-row">
+      <span class="ph-num" aria-hidden="true">{page.num}</span>
+      <div>
+        <p class="eyebrow">{eyebrow ?? page.label}</p>
+        <h1>{title}</h1>
+        {lead && <p class="lead">{lead}</p>}
+      </div>
+    </div>
+  </div>
+</div>

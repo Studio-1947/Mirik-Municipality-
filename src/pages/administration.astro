@@ -1,0 +1,95 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageHead from '../components/PageHead.astro';
+import Avatar from '../components/Avatar.astro';
+import { meta, contact, administration, wards, offices } from '../data/site';
+---
+<Layout title="Who runs the municipality | Mirik Municipality">
+  <PageHead slug="administration" title="Who runs the municipality" lead="Officers in charge, the nine wards and the offices around town." />
+    <section id="administration">
+      <div class="wrap">
+        <div class="status">
+          <span class="dot"></span>
+          <div><strong>{administration.status}.</strong> {administration.statusNote}</div>
+        </div>
+        <div class="people" id="officers">
+          <div class="person">
+            <Avatar name={administration.administrator.name} tone="#6a4c93" />
+            <div class="role">{administration.administrator.role}</div>
+            <h3>{administration.administrator.name}</h3>
+            <p>Sub-Divisional Office, Mirik</p>
+            <div class="pbtns">
+              <a class="pbtn call" href={`tel:${contact.phones[0].tel}`}>Call</a>
+              <a class="pbtn mail" href={`mailto:${contact.email}?subject=${encodeURIComponent('For the Administrator, Mirik')}`}>Email</a>
+            </div>
+          </div>
+          {administration.officers.map((o) => (
+            <div class="person">
+              <Avatar name={o.name} tone={o.role.startsWith('Finance') ? '#2f6f8f' : '#1f4d3a'} />
+              <div class="role">{o.role}</div>
+              <h3>{o.name}</h3>
+              {o.note && <p>{o.note}</p>}
+              <p><a href={`tel:${o.tel}`}>{o.phone}</a></p>
+              <div class="pbtns">
+                <a class="pbtn call" href={`tel:${o.tel}`}>Call</a>
+                <a class="pbtn mail" href={`mailto:${contact.email}?subject=${encodeURIComponent('For ' + o.role + ' ' + o.name)}`}>Email</a>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div class="grid-2" style="margin-top:40px">
+          <div>
+            <h3 id="wards">Wards</h3>
+            <table>
+              <thead><tr><th>Ward</th><th>Localities</th><th>Councillor</th></tr></thead>
+              <tbody>
+                {wards.map((w) => (
+                  <tr>
+                    <td><strong>Ward {w.no}</strong></td>
+                    <td class={w.localities ? '' : 'muted'}>{w.localities || 'To be listed'}</td>
+                    <td class="muted">Election pending</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <aside class="mapcard">
+              <h4>Detailed map of Mirik</h4>
+              <p>Block map of Mirik, Darjeeling showing tea gardens, forests, rivers and administrative boundaries. It does not mark the nine municipal ward boundaries.</p>
+              <a class="btn solid dark" href="https://www.scribd.com/doc/142758278/MIRIK-Darjeeling" target="_blank" rel="noopener">Open detailed map <span aria-hidden="true">&rarr;</span></a>
+            </aside>
+          </div>
+          <div>
+            <h3 id="jurisdiction">Jurisdiction</h3>
+            <dl class="kv">
+              <dt>Body</dt><dd>{meta.legalName}</dd>
+              <dt>Wards</dt><dd>{administration.wards}</dd>
+              <dt>Last election</dt><dd>{administration.lastElection}</dd>
+              <dt>Subdivision</dt><dd>{administration.subdivision}</dd>
+              <dt>District</dt><dd>{meta.district}, {meta.state}</dd>
+              <dt>Assembly seat</dt><dd>{administration.assembly}</dd>
+              <dt>Lok Sabha seat</dt><dd>{administration.loksabha}</dd>
+            </dl>
+            <h3 id="offices" style="margin-top:28px">Other government offices in Mirik</h3>
+            <ul class="offices">
+              {offices.map((o) => (
+                <li>
+                  <div class="thumb">
+                    {o.photo
+                      ? <img src={o.photo} alt={`${o.name}`} loading="lazy" />
+                      : <iframe title={`Map: ${o.name}`} src={`https://www.google.com/maps?q=${encodeURIComponent(o.name + ', ' + o.address)}&z=16&output=embed`} loading="lazy" tabindex="-1" referrerpolicy="no-referrer-when-downgrade"></iframe>}
+                  </div>
+                  <div class="obody">
+                  <strong>{o.name}</strong>
+                  <small>{o.detail}</small>
+                  <address>{o.address}</address>
+                  <a class="dir" href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(o.name + ', ' + o.address)}`} target="_blank" rel="noopener">Get directions <span aria-hidden="true">&rarr;</span></a>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+</Layout>

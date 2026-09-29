@@ -1,0 +1,28 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageHead from '../components/PageHead.astro';
+import { contact, links } from '../data/site';
+const mapSrc = `https://www.google.com/maps?q=${encodeURIComponent(contact.mapQuery)}&output=embed`;
+---
+<Layout title="Get in touch | Mirik Municipality">
+  <PageHead slug="contact" title="Get in touch" lead="Visit the Municipality Office at Thana Line, call, or send an email." />
+    <section class="alt" id="contact">
+      <div class="wrap grid-2">
+        <div class="contact-card" id="details">
+          <h2>{contact.office}</h2>
+          <address>{contact.address.map((l) => <>{l}<br /></>)}</address>
+          <dl class="kv">
+            {contact.phones.map((p) => <><dt>{p.label}</dt><dd><a href={`tel:${p.tel}`}>{p.display}</a></dd></>)}
+            <dt>Email</dt><dd><a href={`mailto:${contact.email}`}>{contact.email}</a></dd>
+            <dt>Facebook</dt><dd><a href={contact.facebook} target="_blank" rel="noopener">facebook.com/municipalitymirik</a></dd>
+            <dt>Office hours</dt><dd>{contact.hours}</dd>
+          </dl>
+          <h3 id="links" style="margin-top:28px">Useful links</h3>
+          <ul class="plain">
+            {links.map((l) => <li><a href={l.url} target="_blank" rel="noopener">{l.label}</a></li>)}
+          </ul>
+        </div>
+        <iframe id="map" class="map" title="Map of Mirik Municipality office" src={mapSrc} loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+    </section>
+</Layout>

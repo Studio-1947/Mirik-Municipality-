@@ -1,0 +1,20 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageHead from '../components/PageHead.astro';
+import { notices } from '../data/site';
+---
+<Layout title="Notices | Mirik Municipality">
+  <PageHead slug="notices" title="Notice board" lead="Official announcements from the Municipality Office." />
+  <section id="notices" class="notices-page">
+    <div class="wrap">
+      <div class="notice-list">
+        {notices.map((n, i) => (
+          <article class={i === 0 ? 'notice-row urgent' : 'notice-row'}>
+            <time>{n.date}</time>
+            <div><h3>{n.title}</h3><p>{n.body}</p></div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+</Layout>

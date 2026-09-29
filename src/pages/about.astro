@@ -1,0 +1,87 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageHead from '../components/PageHead.astro';
+import { meta, demographics, history, attractions, gettingHere, transportNote, health, education } from '../data/site';
+---
+<Layout title="A lake town built on a marsh | Mirik Municipality">
+  <PageHead slug="about" title="A lake town built on a marsh" lead="Where Mirik came from, who lives here, and what to see, how to get here and where to find health care and schools." />
+  <div class="subnav" aria-label="On this page">
+    <div class="wrap">
+      <a href="#about">About Mirik</a>
+      <a href="#town-guide">Town Guide</a>
+      <a href="#places">Places to see</a>
+      <a href="#getting-here">Getting here</a>
+    </div>
+  </div>
+
+    <section class="alt" id="about">
+      <div class="wrap grid-2">
+        <div>
+          <p>
+            Mirik takes its name from the Lepcha "Mir-Yok", a place burnt by fire. It grew as the market town for the
+            villages and tea gardens around it, and became a planned tourist centre when Sumendu Lake was built in the 1970s.
+            Today it is the headquarters of Mirik Subdivision and is governed by the {meta.legalName}, with nine wards
+            covering 6.50 square kilometres.
+          </p>
+          <p>
+            The town recorded {demographics.census2011.total.toLocaleString('en-IN')} residents in the 2011 Census
+            ({demographics.census2011.male.toLocaleString('en-IN')} men and {demographics.census2011.female.toLocaleString('en-IN')} women),
+            up from {demographics.census2001.total.toLocaleString('en-IN')} in 2001. Official languages are {demographics.languages}.
+          </p>
+          <p class="lead" style="font-size:.95rem">{demographics.ruralBlock}</p>
+        </div>
+        <div>
+          <h3 id="timeline">Timeline</h3>
+          <ol class="timeline">
+            {history.map((h) => <li><b>{h.year}</b><p>{h.text}</p></li>)}
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <section class="photo-strip">
+      <div class="wrap">
+        <figure><img src="/images/lake.jpg" alt="Sumendu Lake" loading="lazy" /><figcaption>Sumendu Lake</figcaption></figure>
+        <figure><img src="/images/tea.jpg" alt="Tea gardens" loading="lazy" /><figcaption>Tea gardens</figcaption></figure>
+        <figure><img src="/images/monastery.jpg" alt="Bokar Monastery" loading="lazy" /><figcaption>Bokar Monastery</figcaption></figure>
+      </div>
+    </section>
+    <section id="town-guide">
+      <div class="wrap">
+        <div class="section-head">
+          <p class="eyebrow">Town Guide</p>
+          <h2>Living in and visiting Mirik</h2>
+          <p class="lead">Places to see, how to get here, health care and schools.</p>
+        </div>
+      </div>
+      <div class="wrap">
+        <div class="grid-2">
+          <div>
+            <h3 id="places">Places to see</h3>
+            <ul class="plain">
+              {attractions.map((a) => <li><strong>{a.name}</strong><small>{a.text}</small></li>)}
+            </ul>
+          </div>
+          <div>
+            <h3 id="getting-here">Getting here</h3>
+            <table>
+              <tbody>
+                {gettingHere.map((g) => <tr><td>{g.place}</td><td><strong>{g.distance}</strong></td></tr>)}
+              </tbody>
+            </table>
+            <p style="margin-top:12px;color:var(--muted);font-size:.93rem">{transportNote}</p>
+
+            <h3 id="health" style="margin-top:28px">Health care</h3>
+            <ul class="plain">
+              {health.map((h) => <li>{h.name}<small>{h.detail}</small></li>)}
+            </ul>
+
+            <h3 id="schools" style="margin-top:28px">Schools and college</h3>
+            <ul class="cols">
+              {education.map((e) => <li>{e}</li>)}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+</Layout>

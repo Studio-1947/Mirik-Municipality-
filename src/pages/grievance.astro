@@ -1,0 +1,17 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageHead from '../components/PageHead.astro';
+import GrievanceForm from '../components/GrievanceForm.astro';
+import { contact } from '../data/site';
+---
+<Layout title="Report a problem in your ward | Mirik Municipality">
+  <PageHead slug="grievance" title="Report a problem in your ward" lead="Broken drains, missed garbage collection, water supply, street lights, illegal dumping or anything else. Give your ward and holding number or location so the office can act quickly." />
+    <section id="grievance">
+      <div class="wrap grid-2">
+        <div>
+          <p style="color:var(--muted)">You can also write to <a href={`mailto:${contact.email}`}>{contact.email}</a> or message the municipality on <a href={contact.facebook} target="_blank" rel="noopener">Facebook</a>.</p>
+        </div>
+        <GrievanceForm prefix="g" />
+      </div>
+    </section>
+</Layout>

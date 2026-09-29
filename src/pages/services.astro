@@ -1,0 +1,67 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageHead from '../components/PageHead.astro';
+import { services, projects, schemes } from '../data/site';
+---
+<Layout title="Services and Projects | Mirik Municipality">
+  <PageHead slug="services" title="Services and Projects" lead="Apply for municipal services online or at the office, and follow the projects being delivered in Mirik." />
+
+  <div class="subnav" aria-label="On this page">
+    <div class="wrap">
+      <a href="#services">Citizen services</a>
+      <a href="#projects">Projects under way</a>
+      <a href="#schemes">Special projects and schemes</a>
+    </div>
+  </div>
+
+  <section class="alt" id="services">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">Citizen Services</p>
+        <h2>Apply online or at the office</h2>
+        <p class="lead">Most municipal services in West Bengal run on state portals. Use the links below from anywhere, or visit the office at Thana Line.</p>
+      </div>
+      <div class="cards">
+        {services.map((s) => (
+          <article class="card">
+            <span class={s.online ? 'tag' : 'tag office'}>{s.online ? 'Online' : 'At the office'}</span>
+            <h3>{s.title}</h3>
+            <p>{s.text}</p>
+            {s.link && (
+              <a class="go" href={s.link} target={s.link.startsWith('/') || s.link.startsWith('#') ? undefined : '_blank'} rel="noopener">{s.linkLabel}</a>
+            )}
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section id="projects">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">Projects</p>
+        <h2>Projects under way</h2>
+        <p class="lead">Water, sanitation, housing and health schemes being delivered in Mirik.</p>
+      </div>
+      <div class="grid-3">
+        {projects.map((p) => (
+          <article class="card project">
+            <div class="figure">{p.figure}</div>
+            <h3>{p.title}</h3>
+            <p>{p.text}</p>
+          </article>
+        ))}
+      </div>
+
+      <h3 id="schemes" style="margin-top:48px">Special projects and schemes</h3>
+      <div class="schemes">
+        {schemes.map((s, i) => (
+          <details id={s.id} open={i === 0}>
+            <summary>{s.short} <span>{s.name}</span></summary>
+            <div class="body"><p>{s.text}</p></div>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+</Layout>

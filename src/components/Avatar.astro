@@ -1,0 +1,12 @@
+---
+// Dummy portrait placeholder until real official photos are supplied.
+interface Props { name: string; tone?: string; blank?: boolean; }
+const { name, tone = '#1f4d3a', blank = false } = Astro.props;
+const initials = blank ? '' : name.replace(/^(Ms\.|Mr\.|Dr\.)\s*/, '').split(/\s+/).map((w) => w[0]).slice(0, 2).join('');
+---
+<svg class="avatar" viewBox="0 0 120 120" role="img" aria-label={name ? `Photo placeholder for ${name}` : 'Photo placeholder'}>
+  <rect width="120" height="120" rx="16" fill={tone} opacity=".14" />
+  <circle cx="60" cy="46" r="20" fill={tone} opacity=".55" />
+  <path d="M18 120 C18 84 40 72 60 72 C80 72 102 84 102 120Z" fill={tone} opacity=".55" />
+  <text x="60" y="112" text-anchor="middle" font-size="13" font-weight="700" fill="#fff" font-family="Google Sans Flex,sans-serif">{initials}</text>
+</svg>
