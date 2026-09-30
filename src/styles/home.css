@@ -204,38 +204,226 @@
   opacity: .78;
 }
 
-/* Wide landscape ticket: balances the home hero rather than competing with it. */
-.hero-ticket {
-  top: clamp(14.5rem, 29vh, 18rem);
-  width: min(31rem, calc(100vw - 3rem));
-  padding-right: 4.75rem;
+/* Edge-to-edge full size Grievance Status banner section after Quick Services */
+.grv-banner-sec {
+  position: relative;
+  z-index: 5;
+  margin-top: 1.75rem;
+  margin-bottom: 2.25rem;
 }
-.hero-ticket .grv-ticket-head {
+.grv-full-card {
+  position: relative;
+  border-radius: 1.5rem;
+  padding: 1.6rem 2rem 1.75rem;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.12), transparent 40%),
+    linear-gradient(155deg, rgba(11, 48, 57, 0.95), rgba(6, 26, 32, 0.92));
+  border: 1px solid rgba(255, 255, 255, 0.32);
+  box-shadow: 0 20px 48px rgba(3, 22, 30, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  -webkit-backdrop-filter: blur(20px) saturate(1.3);
+  backdrop-filter: blur(20px) saturate(1.3);
+  color: #ffffff;
+  overflow: hidden;
+}
+.grv-full-head {
+  display: flex;
+  justify-content: space-between;
   align-items: center;
-  padding: .85rem 1.15rem .7rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+  padding-bottom: 1.15rem;
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.26);
 }
-.hero-ticket .grv-ticket-eyebrow { margin-bottom: .15rem; font-size: .68rem; }
-.hero-ticket h2 { font-size: 1.16rem; white-space: nowrap; }
-.hero-ticket .grv-ticket-tag { padding: .28rem .5rem; font-size: .7rem; }
-.hero-ticket .grv-ticket-id { padding: .55rem 1.15rem; }
-.hero-ticket .grv-ticket-status { gap: .6rem; padding: .7rem 1.15rem; }
-.hero-ticket .grv-ticket-status p { margin-top: .12rem; font-size: .78rem; white-space: nowrap; }
-.hero-ticket .grv-ticket-steps { gap: .8rem; padding: .65rem 1.15rem .75rem; }
-.hero-ticket .grv-ticket-steps li { grid-template-columns: auto 1fr; align-items: center; column-gap: .35rem; row-gap: 0; font-size: .68rem; }
-.hero-ticket .grv-ticket-steps li::before { grid-row: 1 / span 2; }
-.hero-ticket-stub { top: .75rem; right: 1.15rem; bottom: .75rem; width: 2.35rem; }
-@media (max-width: 1000px) { .hero-ticket { display: none; } }
-@media (min-width: 1001px) and (max-width: 1240px) {
-  .hero-ticket {
-    display: block;
-    top: clamp(13.5rem, 27vh, 16rem);
-    right: 1rem;
-    width: min(24rem, calc(100vw - 37rem));
-    padding-right: 3.9rem;
-  }
-  .hero-ticket h2 { font-size: 1.05rem; }
-  .hero-ticket .grv-ticket-status p { font-size: .72rem; }
-  .hero-ticket-stub { right: .8rem; width: 1.85rem; }
+.grv-full-eyebrow {
+  display: block;
+  color: #7dd3fc;
+  font-size: .7rem;
+  font-weight: 800;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  margin-bottom: .2rem;
+}
+.grv-full-title h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: #ffffff;
+  font-weight: 700;
+  letter-spacing: -.02em;
+}
+.grv-full-tags {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: .55rem;
+}
+.grv-full-tag {
+  padding: .35rem .75rem;
+  border-radius: 999px;
+  font-size: .75rem;
+  font-weight: 700;
+  line-height: 1;
+}
+.grv-full-tag.ward {
+  background: rgba(255, 255, 255, 0.16);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+}
+.grv-full-tag.priority {
+  background: rgba(239, 68, 68, 0.22);
+  color: #fca5a5;
+  border: 1px solid rgba(252, 165, 165, 0.35);
+}
+.grv-full-tag.live {
+  background: rgba(16, 185, 129, 0.2);
+  color: #6ee7b7;
+  border: 1px solid rgba(110, 231, 183, 0.35);
+  display: inline-flex;
+  align-items: center;
+  gap: .45rem;
+}
+.grv-pulse {
+  width: .5rem;
+  height: .5rem;
+  border-radius: 50%;
+  background: #34d399;
+  box-shadow: 0 0 0 4px rgba(52, 211, 153, 0.25);
+  animation: pulseDot 2s infinite ease-in-out;
+}
+@keyframes pulseDot {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.25); opacity: .75; }
+}
+
+.grv-full-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 1.2rem;
+  padding: 1.25rem 0;
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.26);
+}
+.grv-full-item {
+  display: flex;
+  flex-direction: column;
+}
+.grv-label {
+  font-size: .65rem;
+  color: rgba(255, 255, 255, 0.65);
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  margin-bottom: .2rem;
+}
+.grv-val {
+  font-size: .88rem;
+  font-weight: 600;
+  color: #ffffff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.grv-val.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  letter-spacing: .04em;
+}
+.grv-val.sla {
+  color: #7dd3fc;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: .95rem;
+  font-weight: 700;
+}
+.grv-val.link {
+  color: #7dd3fc;
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+.grv-val.link:hover {
+  color: #bae6fd;
+  text-decoration: underline;
+}
+
+.grv-full-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  padding-top: 1.25rem;
+}
+.grv-status-badge {
+  display: flex;
+  align-items: center;
+  gap: .85rem;
+  background: rgba(255, 255, 255, 0.08);
+  padding: .7rem 1.2rem;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+}
+.grv-status-dot {
+  width: .7rem;
+  height: .7rem;
+  border-radius: 50%;
+  background: #34d399;
+  box-shadow: 0 0 0 4px rgba(52, 211, 153, 0.22);
+  flex-shrink: 0;
+}
+.grv-status-badge strong {
+  color: #ffffff;
+  font-size: .92rem;
+  display: block;
+}
+.grv-status-badge p {
+  margin: .12rem 0 0;
+  color: rgba(255, 255, 255, 0.76);
+  font-size: .8rem;
+}
+
+.grv-full-steps {
+  display: flex;
+  align-items: center;
+  gap: 2.2rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.grv-full-steps li {
+  display: flex;
+  align-items: center;
+  gap: .65rem;
+  position: relative;
+}
+.grv-full-steps li:not(:last-child)::after {
+  content: '';
+  width: 2.2rem;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.24);
+  margin-left: .6rem;
+}
+.s-num {
+  width: 1.85rem;
+  height: 1.85rem;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: .78rem;
+  font-weight: 700;
+  background: rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+}
+.step-done .s-num { background: #10b981; color: #fff; }
+.step-active .s-num { background: #0284c7; color: #fff; box-shadow: 0 0 0 4px rgba(2, 132, 199, 0.3); }
+.s-info strong { display: block; font-size: .84rem; color: #ffffff; }
+.s-info span { display: block; font-size: .74rem; color: rgba(255, 255, 255, 0.72); }
+
+@media (max-width: 1024px) {
+  .grv-full-grid { grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+  .grv-full-footer { flex-direction: column; align-items: stretch; gap: 1rem; }
+  .grv-full-steps { justify-content: space-between; gap: .5rem; }
+  .grv-full-steps li:not(:last-child)::after { width: 1.2rem; }
+}
+@media (max-width: 640px) {
+  .grv-full-grid { grid-template-columns: repeat(2, 1fr); gap: .85rem; }
+  .grv-full-card { padding: 1.25rem 1.15rem; border-radius: 1.15rem; }
+  .grv-full-title h2 { font-size: 1.25rem; }
+  .grv-full-steps li:not(:last-child)::after { display: none; }
 }
 
 /* Keep the quick-service panel in the first viewport on compact displays. */
