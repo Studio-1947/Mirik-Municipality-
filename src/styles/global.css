@@ -2041,23 +2041,42 @@ form.grv select:focus { background-image: linear-gradient(45deg, transparent 50%
   #grv-dialog form.grv .msgbox textarea { min-height: 132px; }
 }
 
-/* Header tools: one colour family for EN pill, Emergency Call and Grievance.
-   Emergency keeps the conventional alert rust (--alert) for urgency; grievance and the
-   language pill follow in deep green so the trio still reads as one set. */
-header.site .sos-btn { background: var(--alert); }
-header.site .sos-btn:hover { background: #8f3612; }
-header.site .cta-btn { background: var(--green-deep); }
-header.site .cta-btn:hover { background: var(--navy); }
-header.site .lang select { background-color: rgba(46,139,62,.32); border-color: rgba(255,255,255,.55); color: #fff; }
+/* Header tools: EN pill, Emergency Call and Grievance share one glass recipe —
+   translucent colour, diagonal white sheen, hairline border and blur, like the
+   glass cards elsewhere on the site. Emergency keeps the alert rust for urgency;
+   grievance and the language pill follow in green so the trio reads as one set. */
+header.site .sos-btn, header.site .cta-btn {
+  background-image: linear-gradient(160deg, rgba(255,255,255,.32), rgba(255,255,255,.06) 48%, rgba(0,0,0,.12));
+  border: 1px solid rgba(255,255,255,.35);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.35), 0 4px 14px rgba(10,40,30,.18);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  transition: background-color .15s ease, box-shadow .15s ease;
+}
+header.site .sos-btn { background-color: rgba(179,71,29,.82); }
+header.site .sos-btn:hover { background-color: #8f3612; box-shadow: inset 0 1px 0 rgba(255,255,255,.35), 0 6px 18px rgba(10,40,30,.24); }
+header.site .cta-btn { background-color: rgba(31,107,46,.85); }
+header.site .cta-btn:hover { background-color: var(--navy); box-shadow: inset 0 1px 0 rgba(255,255,255,.35), 0 6px 18px rgba(10,40,30,.24); }
+header.site .lang select { background-color: rgba(46,139,62,.32); border-color: rgba(255,255,255,.55); color: #fff; transition: background-color .15s ease; }
 header.site .lang select:hover { background-color: rgba(46,139,62,.5); }
 header.site.scrolled .lang select { background-color: rgba(46,139,62,.14); border-color: rgba(31,107,46,.45); color: var(--green-deep); }
 header.site.scrolled .lang select:hover { background-color: rgba(46,139,62,.24); }
 header.site.scrolled .lang select option { color: var(--ink); background: #fff; }
 
-/* Language pill: one inline SVG chevron pinned to the right edge, replacing the
-   two-gradient triangle whose position drifted across scroll/breakpoint states. */
-header.site .lang { position: relative; display: inline-flex; }
-header.site .lang::after { content: ''; position: absolute; right: 12px; top: 50%; width: 9px; height: 9px; pointer-events: none; transform: translateY(-64%) rotate(45deg); border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; opacity: .85; }
-header.site .lang select { appearance: none; -webkit-appearance: none; background-image: none; padding-right: 30px; }
-header.site.scrolled .lang select { padding: 6px 26px 6px 12px; font-size: .8rem; }
-header.site.scrolled .lang::after { right: 10px; width: 8px; height: 8px; }
+/* Language pill: SVG chevron as the ONLY background layer, pinned to the right edge —
+   identical position (right 12px, centred) and size (10px) in every header state and
+   breakpoint, so it can never drift or break on scroll. Green glass colour stays. */
+header.site .lang select {
+  appearance: none; -webkit-appearance: none;
+  padding-right: 32px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'%3E%3Cpath d='M2 3.5l3 3 3-3' fill='none' stroke='%23ffffff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 12px 12px;
+}
+header.site.scrolled .lang select {
+  padding: 6px 30px 6px 12px; font-size: .8rem;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'%3E%3Cpath d='M2 3.5l3 3 3-3' fill='none' stroke='%231f6b2e' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-size: 12px 12px;
+  background-position: right 12px center;
+}
