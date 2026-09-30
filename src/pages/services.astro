@@ -1,7 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import PageHead from '../components/PageHead.astro';
-import { services } from '../data/site';
+import { services, contact, emergency } from '../data/site';
 
 // Icon and colour tone for each service card, keyed by title in site.ts.
 // Icons: Hugeicons free set, Stroke Rounded (MIT licence, https://hugeicons.com). The SVG shapes are
@@ -32,6 +32,47 @@ const faqs = [
   { q: 'Who do I call in an emergency?', a: 'Dial 112 for any emergency. Police is 100, fire is 101 and ambulance is 108. The Emergency page lists more numbers.' },
 ];
 const chevron = '<path d="M18 9.00005C18 9.00005 13.5811 15 12 15C10.4188 15 6 9 6 9"/>'; // Hugeicons ArrowDown01Icon
+// Grievances section. Hugeicons free set (Stroke Rounded, MIT), inlined like the service card icons.
+const gi: Record<string, string> = {
+  pulse: '<path d="M2 12H6L7.5 8L9.5 15L13 6L15.5 18L18 12H22"/>', // Pulse01Icon
+  flash: '<path d="M5.22576 11.3294L12.224 2.34651C12.7713 1.64397 13.7972 2.08124 13.7972 3.01707V9.96994C13.7972 10.5305 14.1995 10.985 14.6958 10.985H18.0996C18.8729 10.985 19.2851 12.0149 18.7742 12.6706L11.776 21.6535C11.2287 22.356 10.2028 21.9188 10.2028 20.9829V14.0301C10.2028 13.4695 9.80048 13.015 9.3042 13.015H5.90035C5.12711 13.015 4.71494 11.9851 5.22576 11.3294Z"/>', // FlashIcon
+  siren: '<path d="M4.99219 17V10C4.99219 6.13401 8.12619 3 11.9922 3C15.8582 3 18.9922 6.13401 18.9922 10V17"/><path d="M11.4922 6.5C9.83533 6.5 8.49219 7.84315 8.49219 9.5"/><path d="M2.99219 19C2.99219 17.8954 3.88762 17 4.99219 17H18.9922C20.0968 17 20.9922 17.8954 20.9922 19C20.9922 20.1046 20.0968 21 18.9922 21H4.99219C3.88762 21 2.99219 20.1046 2.99219 19Z"/>', // SirenIcon
+  call: '<path d="M9.1585 5.71217L8.75584 4.80619C8.49256 4.21382 8.36092 3.91762 8.16405 3.69095C7.91732 3.40688 7.59571 3.19788 7.23592 3.08779C6.94883 2.99994 6.6247 2.99994 5.97645 2.99994C5.02815 2.99994 4.554 2.99994 4.15597 3.18223C3.68711 3.39696 3.26368 3.86322 3.09497 4.35054C2.95175 4.76423 2.99278 5.18937 3.07482 6.03964C3.94815 15.0901 8.91006 20.052 17.9605 20.9254C18.8108 21.0074 19.236 21.0484 19.6496 20.9052C20.137 20.7365 20.6032 20.3131 20.818 19.8442C21.0002 19.4462 21.0002 18.972 21.0002 18.0237C21.0002 17.3755 21.0002 17.0514 20.9124 16.7643C20.8023 16.4045 20.5933 16.0829 20.3092 15.8361C20.0826 15.6393 19.7864 15.5076 19.194 15.2443L18.288 14.8417C17.6465 14.5566 17.3257 14.414 16.9998 14.383C16.6878 14.3533 16.3733 14.3971 16.0813 14.5108C15.7762 14.6296 15.5066 14.8543 14.9672 15.3038C14.4304 15.7511 14.162 15.9748 13.834 16.0946C13.5432 16.2009 13.1588 16.2402 12.8526 16.1951C12.5071 16.1442 12.2426 16.0028 11.7135 15.7201C10.0675 14.8404 9.15977 13.9327 8.28011 12.2867C7.99738 11.7576 7.85602 11.4931 7.80511 11.1476C7.75998 10.8414 7.79932 10.457 7.90554 10.1662C8.02536 9.83822 8.24905 9.5698 8.69643 9.03294C9.14586 8.49362 9.37058 8.22396 9.48939 7.91885C9.60309 7.62688 9.64686 7.31234 9.61719 7.00042C9.58618 6.67446 9.44362 6.3537 9.1585 5.71217Z"/>', // Call02Icon
+  mail: '<path d="M2 6L8.91302 9.91697C11.4616 11.361 12.5384 11.361 15.087 9.91697L22 6"/><path d="M2.01577 13.4756C2.08114 16.5412 2.11383 18.0739 3.24496 19.2094C4.37608 20.3448 5.95033 20.3843 9.09883 20.4634C11.0393 20.5122 12.9607 20.5122 14.9012 20.4634C18.0497 20.3843 19.6239 20.3448 20.7551 19.2094C21.8862 18.0739 21.9189 16.5412 21.9842 13.4756C22.0053 12.4899 22.0053 11.5101 21.9842 10.5244C21.9189 7.45886 21.8862 5.92609 20.7551 4.79066C19.6239 3.65523 18.0497 3.61568 14.9012 3.53657C12.9607 3.48781 11.0393 3.48781 9.09882 3.53656C5.95033 3.61566 4.37608 3.65521 3.24495 4.79065C2.11382 5.92608 2.08114 7.45885 2.01576 10.5244C1.99474 11.5101 1.99475 12.4899 2.01577 13.4756Z"/>', // Mail01Icon
+  facebook: '<path d="M2.5 12C2.5 7.52166 2.5 5.28249 3.89124 3.89124C5.28249 2.5 7.52166 2.5 12 2.5C16.4783 2.5 18.7175 2.5 20.1088 3.89124C21.5 5.28249 21.5 7.52166 21.5 12C21.5 16.4783 21.5 18.7175 20.1088 20.1088C18.7175 21.5 16.4783 21.5 12 21.5C7.52166 21.5 5.28249 21.5 3.89124 20.1088C2.5 18.7175 2.5 16.4783 2.5 12Z"/><path d="M16.9265 8.02637H13.9816C12.9378 8.02637 12.0894 8.86847 12.0817 9.91229L11.9964 21.4268M10.082 14.0017H14.8847"/>', // Facebook01Icon
+  clock: '<circle cx="12" cy="12" r="10"/><path d="M12 8V12L14 14"/>', // Clock01Icon
+  task: '<path d="M13.5 2H8.5C7.67157 2 7 2.67157 7 3.5C7 4.32843 7.67157 5 8.5 5H13.5C14.3284 5 15 4.32843 15 3.5C15 2.67157 14.3284 2 13.5 2Z"/><path d="M7 15H10.4286M7 11H15"/><path d="M19 11.9995L19 9.48263C19 6.65424 19 5.24004 18.1213 4.36137C17.48 3.72007 16.5535 3.54681 15 3.5M11 21.9995L9 21.9995C6.17158 21.9995 4.75737 21.9995 3.87869 21.1208C3.00001 20.2421 3.00001 18.8279 3 15.9995L3.00001 9.48269C3.00001 6.65425 3 5.24004 3.87868 4.36136C4.51997 3.72007 5.44651 3.54681 6.9999 3.5"/><path d="M15.7367 21.6527L14 22L14.3473 20.2633C14.4179 19.9106 14.5913 19.5866 14.8456 19.3323L18.9111 15.2668C19.2668 14.9111 19.8437 14.9111 20.1995 15.2668L20.7332 15.8005C21.0889 16.1563 21.0889 16.7332 20.7332 17.0889L16.6677 21.1544C16.4134 21.4087 16.0894 21.5821 15.7367 21.6527Z"/>', // TaskEdit01Icon
+  drains: '<path d="M17.4776 9.00915C17.485 9.00911 17.4925 9.00909 17.5 9.00909C19.9853 9.00909 22 11.0269 22 13.5159C22 15.8512 20.2265 17.7716 17.9548 18M17.4776 9.00915C17.4924 8.8442 17.5 8.67716 17.5 8.50834C17.5 5.46617 15.0376 3 12 3C9.12324 3 6.76233 5.21197 6.52042 8.03032M17.4776 9.00915C17.3753 10.1453 16.9286 11.182 16.2428 12.0136M6.52042 8.03032C3.98398 8.27205 2 10.4116 2 13.0152C2 15.4378 3.71776 17.536 6 18M6.52042 8.03032C6.67826 8.01527 6.83823 8.00758 7 8.00758C8.12582 8.00758 9.16474 8.38023 10.0005 9.00909"/><path d="M9.5 18.5034C9.5 17.2482 10.5532 16.0077 11.2924 15.2917C11.6939 14.9028 12.3061 14.9028 12.7076 15.2917C13.4468 16.0077 14.5 17.2482 14.5 18.5034C14.5 19.7341 13.5533 21 12 21C10.4467 21 9.5 19.7341 9.5 18.5034Z"/>', // CloudBigRainIcon
+  garbage: '<circle cx="17" cy="18" r="2"/><circle cx="7" cy="18" r="2"/><path d="M11 9V12"/><path d="M7 10V12"/><path d="M17 4H15M15 4H9.48528C8.25903 4 7.6459 4 7.09459 4.22836C6.54328 4.45672 6.10973 4.89027 5.24264 5.75736L3.46446 7.53554C2.74189 8.25811 2.3806 8.6194 2.1903 9.07883C2 9.53825 2 10.0492 2 11.0711V13C2 15.357 2 16.5355 2.73223 17.2678C3.2191 17.7546 3.90328 17.9178 5 17.9724M15 4V8C15 9.88562 15 10.8284 15.5858 11.4142C16.1716 12 17.1144 12 19 12H22V13C22 15.357 22 16.5355 21.2678 17.2678C20.7809 17.7546 20.0967 17.9178 19 17.9724M9 18H15"/><path d="M15 7H16.6998C18.0581 7 18.7373 7 19.29 7.35371C19.8427 7.70742 20.1647 8.34811 20.8087 9.6295L22 12"/>', // GarbageTruckIcon
+  water: '<path d="M3.5 13.678C3.5 9.49387 7.08079 5.35907 9.59413 2.97222C10.9591 1.67593 13.0409 1.67593 14.4059 2.97222C16.9192 5.35907 20.5 9.49387 20.5 13.678C20.5 17.7804 17.2812 22 12 22C6.71878 22 3.5 17.7804 3.5 13.678Z"/><path d="M16 14C16 16.2091 14.2091 18 12 18"/>', // DropletIcon
+  lights: '<path d="M17.2916 16C18.9525 14.5341 20 12.3894 20 10C20 5.58173 16.4182 2 12 2C7.58173 2 4 5.58173 4 10C4 12.3894 5.04751 14.5341 6.70836 16"/><path d="M12 11V16"/><path d="M8.5 19H15.5"/><path d="M10 22H14"/>', // BulbIcon
+  dumping: '<path d="M3 5H8.42963C9.09834 5 9.7228 4.6658 10.0937 4.1094L10.9063 2.8906C11.2772 2.3342 11.9017 2 12.5704 2H17.0585C17.9193 2 18.6836 2.55086 18.9558 3.36754L19.5 5M21 5H8"/><path d="M19.5 5L18.8803 14.906C18.8588 15.2333 18.8387 15.5385 18.8185 15.8235M4.5 5L5.10461 14.8966C5.25945 17.3107 5.33688 18.5177 5.97868 19.3857C6.296 19.8149 6.7048 20.1771 7.17905 20.4493C8.1383 21 9.42312 21 11.9927 21H14.5"/><path d="M20 19C20 17.3431 18.6569 16 17 16C15.3431 16 14 17.3431 14 19C14 20.6569 15.3431 22 17 22C18.6569 22 20 20.6569 20 19Z"/>', // WasteIcon
+  other: '<path d="M21 12C21 11.1716 20.3284 10.5 19.5 10.5C18.6716 10.5 18 11.1716 18 12C18 12.8284 18.6716 13.5 19.5 13.5C20.3284 13.5 21 12.8284 21 12Z"/><path d="M13.5 12C13.5 11.1716 12.8284 10.5 12 10.5C11.1716 10.5 10.5 11.1716 10.5 12C10.5 12.8284 11.1716 13.5 12 13.5C12.8284 13.5 13.5 12.8284 13.5 12Z"/><path d="M6 12C6 11.1716 5.32843 10.5 4.5 10.5C3.67157 10.5 3 11.1716 3 12C3 12.8284 3.67157 13.5 4.5 13.5C5.32843 13.5 6 12.8284 6 12Z"/>', // MoreHorizontalCircle01Icon
+  phone: '<path d="M13.5 2H10.5C8.14298 2 6.96447 2 6.23223 2.73223C5.5 3.46447 5.5 4.64298 5.5 7V17C5.5 19.357 5.5 20.5355 6.23223 21.2678C6.96447 22 8.14298 22 10.5 22H13.5C15.857 22 17.0355 22 17.7678 21.2678C18.5 20.5355 18.5 19.357 18.5 17V7C18.5 4.64298 18.5 3.46447 17.7678 2.73223C17.0355 2 15.857 2 13.5 2Z"/><path d="M12.125 19H12M12.25 19C12.25 19.1381 12.1381 19.25 12 19.25C11.8619 19.25 11.75 19.1381 11.75 19C11.75 18.8619 11.8619 18.75 12 18.75C12.1381 18.75 12.25 18.8619 12.25 19Z"/>', // SmartPhone01Icon
+  ward: '<path d="M22 10V9.21749C22 7.27787 22 6.30807 21.4142 5.7055C20.8284 5.10294 19.8856 5.10294 18 5.10294H15.9214C15.004 5.10294 14.9964 5.10116 14.1715 4.68834L10.8399 3.02114C9.44884 2.32504 8.75332 1.97699 8.01238 2.00118C7.27143 2.02537 6.59877 2.41808 5.25345 3.20351L4.02558 3.92037C3.03739 4.49729 2.54329 4.78576 2.27164 5.26564C2 5.74553 2 6.32993 2 7.49873V15.7157C2 17.2514 2 18.0193 2.34226 18.4467C2.57001 18.731 2.88916 18.9222 3.242 18.9856C3.77226 19.0808 4.42148 18.7018 5.71987 17.9437C6.60156 17.429 7.45011 16.8944 8.50487 17.0394C9.38869 17.1608 10.21 17.7185 11 18.1138"/><path d="M8 2L8 17"/><path d="M15 5V9.5"/><path d="M18.3083 21.6835C18.0915 21.8865 17.8017 22 17.5001 22C17.1985 22 16.9087 21.8865 16.6919 21.6835C14.7063 19.813 12.0455 17.7235 13.3431 14.6898C14.0447 13.0496 15.7289 12 17.5001 12C19.2713 12 20.9555 13.0496 21.6571 14.6898C22.9531 17.7196 20.2988 19.8194 18.3083 21.6835Z"/><path d="M17.625 16.5H17.5M17.75 16.5C17.75 16.6381 17.6381 16.75 17.5 16.75C17.3619 16.75 17.25 16.6381 17.25 16.5C17.25 16.3619 17.3619 16.25 17.5 16.25C17.6381 16.25 17.75 16.3619 17.75 16.5Z"/>', // MapsLocation01Icon
+  location: '<path d="M13.6177 21.367C13.1841 21.773 12.6044 22 12.0011 22C11.3978 22 10.8182 21.773 10.3845 21.367C6.41302 17.626 1.09076 13.4469 3.68627 7.37966C5.08963 4.09916 8.45834 2 12.0011 2C15.5439 2 18.9126 4.09916 20.316 7.37966C22.9082 13.4393 17.599 17.6389 13.6177 21.367Z"/><path d="M15.5 11C15.5 12.933 13.933 14.5 12 14.5C10.067 14.5 8.5 12.933 8.5 11C8.5 9.067 10.067 7.5 12 7.5C13.933 7.5 15.5 9.067 15.5 11Z"/>', // Location01Icon
+  issue: '<path d="M16.5 2V5M7.5 2V5M12 2V5"/><path d="M13 3.5H11C7.70017 3.5 6.05025 3.5 5.02513 4.52513C4 5.55025 4 7.20017 4 10.5V15C4 18.2998 4 19.9497 5.02513 20.9749C6.05025 22 7.70017 22 11 22H13C16.2998 22 17.9497 22 18.9749 20.9749C20 19.9497 20 18.2998 20 15V10.5C20 7.20017 20 5.55025 18.9749 4.52512C17.9497 3.5 16.2998 3.5 13 3.5Z"/><path d="M8 15H12M8 11H16"/>', // Note01Icon
+  photo: '<path d="M12.6974 3.5H11.303C10.5884 3.5 10.2311 3.5 9.91067 3.612C9.71499 3.68039 9.53113 3.77879 9.36568 3.90367C9.09474 4.10816 8.89655 4.40544 8.50018 5L8.50017 5.00001C8.29717 5.30453 7.99794 5.75337 7.87867 5.87871C7.58314 6.18927 7.19563 6.39666 6.77329 6.47029C6.60284 6.5 6.41985 6.5 6.05387 6.5C5.07379 6.5 4.58376 6.5 4.18307 6.61342C3.18074 6.89716 2.39734 7.68055 2.1136 8.68289C2.00018 9.08357 2.00018 9.57361 2.00018 10.5537V14.5C2.00018 17.3284 2.00018 18.7426 2.87886 19.6213C3.75754 20.5 5.17176 20.5 8.00018 20.5H16.0002C18.8286 20.5 20.2428 20.5 21.1215 19.6213C22.0002 18.7426 22.0002 17.3284 22.0002 14.5V10.5537C22.0002 9.57361 22.0002 9.08357 21.8868 8.68289C21.603 7.68055 20.8196 6.89716 19.8173 6.61342C19.4166 6.5 18.9266 6.5 17.9465 6.5C17.5805 6.5 17.3975 6.5 17.2271 6.47029C16.8047 6.39666 16.4172 6.18927 16.1217 5.87871C16.0024 5.75336 15.7032 5.30451 15.5002 5C15.1038 4.40544 14.9056 4.10816 14.6347 3.90367C14.4692 3.77879 14.2854 3.68039 14.0897 3.612C13.7693 3.5 13.412 3.5 12.6974 3.5Z"/><path d="M16.0002 13C16.0002 15.2091 14.2093 17 12.0002 17C9.79104 17 8.00018 15.2091 8.00018 13C8.00018 10.7909 9.79104 9 12.0002 9C14.2093 9 16.0002 10.7909 16.0002 13Z"/><path d="M19.1252 9.5H19.0002M19.2502 9.5C19.2502 9.63807 19.1383 9.75 19.0002 9.75C18.8621 9.75 18.7502 9.63807 18.7502 9.5C18.7502 9.36193 18.8621 9.25 19.0002 9.25C19.1383 9.25 19.2502 9.36193 19.2502 9.5Z"/>', // Camera01Icon
+};
+// Problem types, as listed on the Grievance page.
+const grvTypes = [
+  { label: 'Broken drains', tone: 'lake', icon: gi.drains },
+  { label: 'Missed garbage collection', tone: 'green', icon: gi.garbage },
+  { label: 'Water supply', tone: 'blue', icon: gi.water },
+  { label: 'Street lights', tone: 'orange', icon: gi.lights },
+  { label: 'Illegal dumping', tone: 'rose', icon: gi.dumping },
+  { label: 'Anything else', tone: 'violet', icon: gi.other },
+];
+// Details the grievance form asks for (see GrievanceForm.astro). Labels match the form so they share translations.
+const grvFields = [
+  { label: 'Phone number', text: 'So the office can contact you. You can add a WhatsApp number too.', need: true, icon: gi.phone },
+  { label: 'Ward', text: 'Choose your ward from the list.', need: true, icon: gi.ward },
+  { label: 'Location or holding number', text: 'A road name, landmark or holding number, so the spot can be found.', need: true, icon: gi.location },
+  { label: 'Issue / Subject / Problem', text: 'A short title, then what is wrong. Up to 300 characters.', need: true, icon: gi.issue },
+  { label: 'Photo', text: 'A clear photo helps the office see the problem.', need: false, icon: gi.photo },
+];
+const sos = emergency[0];
+const fbLabel = contact.facebook.replace(/^https?:\/\/(www\.)?/, '');
 ---
 <Layout title="Services & Grievances | Mirik Municipality">
   <PageHead slug="services" title="Services & Grievances" lead="How to apply for municipal services, and how to report a problem in your ward." />
@@ -68,7 +109,76 @@ const chevron = '<path d="M18 9.00005C18 9.00005 13.5811 15 12 15C10.4188 15 6 9
     </div>
   </section>
 
-  <section id="faq">
+  <section id="grievances">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow grvx-eyebrow"><svg viewBox="0 0 24 24" aria-hidden="true" set:html={gi.pulse} />Grievances</p>
+        <h2>Report a problem in your ward</h2>
+        <p class="lead">Tell the Municipality Office what is wrong and where. A clear location and a photo help the office act quickly.</p>
+      </div>
+      <div class="grvx-grid">
+        <div class="grvx-main">
+          <div class="grvx-panel">
+            <div class="grvx-ph">
+              <span class="grvx-ph-ico"><svg viewBox="0 0 24 24" aria-hidden="true" set:html={gi.pulse} /></span>
+              <div><h3>What you can report</h3><p>Common problems the office can act on</p></div>
+            </div>
+            <ul class="grvx-types">
+              {grvTypes.map((t) => (
+                <li class={`grvx-type tone-${t.tone}`}>
+                  <span class="grvx-ti"><svg viewBox="0 0 24 24" aria-hidden="true" set:html={t.icon} /></span>
+                  <span>{t.label}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div class="grvx-panel">
+            <div class="grvx-ph">
+              <span class="grvx-ph-ico"><svg viewBox="0 0 24 24" aria-hidden="true" set:html={gi.task} /></span>
+              <div><h3>What to include</h3><p>The form asks for these details</p></div>
+            </div>
+            <ul class="grvx-fields">
+              {grvFields.map((f) => (
+                <li>
+                  <span class="grvx-fi"><svg viewBox="0 0 24 24" aria-hidden="true" set:html={f.icon} /></span>
+                  <div>
+                    <div class="grvx-frow"><strong>{f.label}</strong><span class={f.need ? 'grvx-chip req' : 'grvx-chip'}>{f.need ? 'Required' : 'Optional'}</span></div>
+                    <p>{f.text}</p>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+        <aside class="grvx-side">
+          <div class="grvx-cta">
+            <span class="grvx-cta-ico"><svg viewBox="0 0 24 24" aria-hidden="true" set:html={gi.flash} /></span>
+            <h3>Report a new issue</h3>
+            <p>Give your ward and the exact location, and attach a photo if you can.</p>
+            <a class="grvx-btn" href="/grievance/">Submit grievance</a>
+          </div>
+          <div class="grvx-panel grvx-reach">
+            <h3>Other ways to reach the office</h3>
+            <ul class="grvx-contacts">
+              {contact.phones.map((p) => (
+                <li><span class="grvx-ci"><svg viewBox="0 0 24 24" aria-hidden="true" set:html={gi.call} /></span><div><small>{p.label}</small><a href={`tel:${p.tel}`}>{p.display}</a></div></li>
+              ))}
+              <li><span class="grvx-ci"><svg viewBox="0 0 24 24" aria-hidden="true" set:html={gi.mail} /></span><div><small>Email</small><a href={`mailto:${contact.email}`}>{contact.email}</a></div></li>
+              <li><span class="grvx-ci"><svg viewBox="0 0 24 24" aria-hidden="true" set:html={gi.facebook} /></span><div><small>Facebook</small><a href={contact.facebook} target="_blank" rel="noopener">{fbLabel}</a></div></li>
+              <li><span class="grvx-ci"><svg viewBox="0 0 24 24" aria-hidden="true" set:html={gi.clock} /></span><div><small>Office hours</small><span>{contact.hours}</span></div></li>
+            </ul>
+          </div>
+          <a class="grvx-sos" href="/emergency/">
+            <span class="grvx-sos-ico"><svg viewBox="0 0 24 24" aria-hidden="true" set:html={gi.siren} /></span>
+            <span class="grvx-sos-t"><span>In an emergency, dial</span> <strong>{sos.number}</strong></span>
+            <svg class="grvx-sos-go" viewBox="0 0 24 24" aria-hidden="true" set:html={arrow.in} />
+          </a>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <section class="alt" id="faq">
     <div class="wrap faqx">
       <div class="faqx-main">
         <div class="section-head">

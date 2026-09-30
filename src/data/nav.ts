@@ -55,6 +55,7 @@ export const sections: Record<string, { href: string; label: string }[]> = {
   ],
   services: [
     { href: '#services', label: 'Citizen services' },
+    { href: '#grievances', label: 'Grievances' },
     { href: '#faq', label: 'Common questions' },
   ],
   notices: [
