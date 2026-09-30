@@ -1,7 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import PageHead from '../components/PageHead.astro';
-import { services, contact, emergency } from '../data/site';
+import { services, contact, emergency, wards } from '../data/site';
 
 // Icon and colour tone for each service card, keyed by title in site.ts.
 // Icons: Hugeicons free set, Stroke Rounded (MIT licence, https://hugeicons.com). The SVG shapes are
@@ -53,6 +53,16 @@ const gi: Record<string, string> = {
   location: '<path d="M13.6177 21.367C13.1841 21.773 12.6044 22 12.0011 22C11.3978 22 10.8182 21.773 10.3845 21.367C6.41302 17.626 1.09076 13.4469 3.68627 7.37966C5.08963 4.09916 8.45834 2 12.0011 2C15.5439 2 18.9126 4.09916 20.316 7.37966C22.9082 13.4393 17.599 17.6389 13.6177 21.367Z"/><path d="M15.5 11C15.5 12.933 13.933 14.5 12 14.5C10.067 14.5 8.5 12.933 8.5 11C8.5 9.067 10.067 7.5 12 7.5C13.933 7.5 15.5 9.067 15.5 11Z"/>', // Location01Icon
   issue: '<path d="M16.5 2V5M7.5 2V5M12 2V5"/><path d="M13 3.5H11C7.70017 3.5 6.05025 3.5 5.02513 4.52513C4 5.55025 4 7.20017 4 10.5V15C4 18.2998 4 19.9497 5.02513 20.9749C6.05025 22 7.70017 22 11 22H13C16.2998 22 17.9497 22 18.9749 20.9749C20 19.9497 20 18.2998 20 15V10.5C20 7.20017 20 5.55025 18.9749 4.52512C17.9497 3.5 16.2998 3.5 13 3.5Z"/><path d="M8 15H12M8 11H16"/>', // Note01Icon
   photo: '<path d="M12.6974 3.5H11.303C10.5884 3.5 10.2311 3.5 9.91067 3.612C9.71499 3.68039 9.53113 3.77879 9.36568 3.90367C9.09474 4.10816 8.89655 4.40544 8.50018 5L8.50017 5.00001C8.29717 5.30453 7.99794 5.75337 7.87867 5.87871C7.58314 6.18927 7.19563 6.39666 6.77329 6.47029C6.60284 6.5 6.41985 6.5 6.05387 6.5C5.07379 6.5 4.58376 6.5 4.18307 6.61342C3.18074 6.89716 2.39734 7.68055 2.1136 8.68289C2.00018 9.08357 2.00018 9.57361 2.00018 10.5537V14.5C2.00018 17.3284 2.00018 18.7426 2.87886 19.6213C3.75754 20.5 5.17176 20.5 8.00018 20.5H16.0002C18.8286 20.5 20.2428 20.5 21.1215 19.6213C22.0002 18.7426 22.0002 17.3284 22.0002 14.5V10.5537C22.0002 9.57361 22.0002 9.08357 21.8868 8.68289C21.603 7.68055 20.8196 6.89716 19.8173 6.61342C19.4166 6.5 18.9266 6.5 17.9465 6.5C17.5805 6.5 17.3975 6.5 17.2271 6.47029C16.8047 6.39666 16.4172 6.18927 16.1217 5.87871C16.0024 5.75336 15.7032 5.30451 15.5002 5C15.1038 4.40544 14.9056 4.10816 14.6347 3.90367C14.4692 3.77879 14.2854 3.68039 14.0897 3.612C13.7693 3.5 13.412 3.5 12.6974 3.5Z"/><path d="M16.0002 13C16.0002 15.2091 14.2093 17 12.0002 17C9.79104 17 8.00018 15.2091 8.00018 13C8.00018 10.7909 9.79104 9 12.0002 9C14.2093 9 16.0002 10.7909 16.0002 13Z"/><path d="M19.1252 9.5H19.0002M19.2502 9.5C19.2502 9.63807 19.1383 9.75 19.0002 9.75C18.8621 9.75 18.7502 9.63807 18.7502 9.5C18.7502 9.36193 18.8621 9.25 19.0002 9.25C19.1383 9.25 19.2502 9.36193 19.2502 9.5Z"/>', // Camera01Icon
+  alert: '<circle cx="12" cy="12" r="10"/><path d="M12 8V12"/><path d="M12.125 15.75H12M12.25 15.75C12.25 15.8881 12.1381 16 12 16C11.8619 16 11.75 15.8881 11.75 15.75C11.75 15.6119 11.8619 15.5 12 15.5C12.1381 15.5 12.25 15.6119 12.25 15.75Z"/>', // AlertCircleIcon
+  check: '<path d="M22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12Z"/><path d="M8 12.5L10.5 15L16 9"/>', // CheckmarkCircle02Icon
+  search: '<path d="M17 17L21 21"/><path d="M19 11C19 6.58172 15.4183 3 11 3C6.58172 3 3 6.58172 3 11C3 15.4183 6.58172 19 11 19C15.4183 19 19 15.4183 19 11Z"/>', // Search01Icon
+  award: '<path d="M15.9349 21.033C16.1789 21.5331 15.699 22 15.1239 22H8.87606C8.30096 22 7.82107 21.5331 8.06509 21.033C8.63149 19.8722 10.1793 19 12 19C13.8207 19 15.3685 19.8722 15.9349 21.033Z"/><path d="M12 16L11.9883 19"/><path d="M17.9866 4.49139C17.992 4.30176 17.9963 4.11477 17.9997 3.93095C18.0194 2.86463 17.1162 2.00002 16.0093 2.00002L7.99052 2C6.88381 2 5.98074 2.86438 6.00031 3.93054C6.00358 4.10833 6.00768 4.28907 6.01283 4.47231C6.05734 6.05627 6.18024 7.82593 6.51875 9.47415C7.18043 12.6958 8.66606 16 12.0001 16C15.3341 16 16.8193 12.6958 17.481 9.47415C17.8181 7.83255 17.9415 6.07048 17.9866 4.49139Z"/><path d="M18 4.5L19.4447 4.68748C20.9062 4.87714 22 6.122 22 7.59578C22 8.99373 21.0133 10.1973 19.6425 10.4715L17.5 11"/><path d="M6 4.5L4.55527 4.68748C3.09375 4.87714 2 6.122 2 7.59578C2 8.99373 2.98673 10.1973 4.35754 10.4715L6.5 11"/>', // Award01Icon
+  layers: '<path d="M8.64298 3.14559L6.93816 3.93362C4.31272 5.14719 3 5.75397 3 6.75C3 7.74603 4.31272 8.35281 6.93817 9.56638L8.64298 10.3544C10.2952 11.1181 11.1214 11.5 12 11.5C12.8786 11.5 13.7048 11.1181 15.357 10.3544L17.0618 9.56638C19.6873 8.35281 21 7.74603 21 6.75C21 5.75397 19.6873 5.14719 17.0618 3.93362L15.357 3.14559C13.7048 2.38186 12.8786 2 12 2C11.1214 2 10.2952 2.38186 8.64298 3.14559Z"/><path d="M20.788 11.0972C20.9293 11.2959 21 11.5031 21 11.7309C21 12.7127 19.6873 13.3109 17.0618 14.5072L15.357 15.284C13.7048 16.0368 12.8786 16.4133 12 16.4133C11.1214 16.4133 10.2952 16.0368 8.64298 15.284L6.93817 14.5072C4.31272 13.3109 3 12.7127 3 11.7309C3 11.5031 3.07067 11.2959 3.212 11.0972"/><path d="M20.3767 16.2661C20.7922 16.5971 21 16.927 21 17.3176C21 18.2995 19.6873 18.8976 17.0618 20.0939L15.357 20.8707C13.7048 21.6236 12.8786 22 12 22C11.1214 22 10.2952 21.6236 8.64298 20.8707L6.93817 20.0939C4.31272 18.8976 3 18.2995 3 17.3176C3 16.927 3.20778 16.5971 3.62334 16.2661"/>', // Layers01Icon
+  calendar: '<path d="M16 2V6M8 2V6"/><path d="M13 4H11C7.22876 4 5.34315 4 4.17157 5.17157C3 6.34315 3 8.22876 3 12V14C3 17.7712 3 19.6569 4.17157 20.8284C5.34315 22 7.22876 22 11 22H13C16.7712 22 18.6569 22 19.8284 20.8284C21 19.6569 21 17.7712 21 14V12C21 8.22876 21 6.34315 19.8284 5.17157C18.6569 4 16.7712 4 13 4Z"/><path d="M3 10H21"/><path d="M12.1258 14H12.0008M12.1258 18H12.0008M7.625 14H7.5M7.625 18H7.5M16.625 14H16.5M12.2508 14C12.2508 14.1381 12.1389 14.25 12.0008 14.25C11.8628 14.25 11.7508 14.1381 11.7508 14C11.7508 13.8619 11.8628 13.75 12.0008 13.75C12.1389 13.75 12.2508 13.8619 12.2508 14ZM12.2508 18C12.2508 18.1381 12.1389 18.25 12.0008 18.25C11.8628 18.25 11.7508 18.1381 11.7508 18C11.7508 17.8619 11.8628 17.75 12.0008 17.75C12.1389 17.75 12.2508 17.8619 12.2508 18ZM7.75 14C7.75 14.1381 7.63807 14.25 7.5 14.25C7.36193 14.25 7.25 14.1381 7.25 14C7.25 13.8619 7.36193 13.75 7.5 13.75C7.63807 13.75 7.75 13.8619 7.75 14ZM7.75 18C7.75 18.1381 7.63807 18.25 7.5 18.25C7.36193 18.25 7.25 18.1381 7.25 18C7.25 17.8619 7.36193 17.75 7.5 17.75C7.63807 17.75 7.75 17.8619 7.75 18ZM16.75 14C16.75 14.1381 16.6381 14.25 16.5 14.25C16.3619 14.25 16.25 14.1381 16.25 14C16.25 13.8619 16.3619 13.75 16.5 13.75C16.6381 13.75 16.75 13.8619 16.75 14Z"/>', // Calendar03Icon
+  mountain: '<path d="M16 20H2L5.22457 10.7557C6.79555 6.25189 7.58104 4 9 4C10.3373 4 11.1119 6 12.5116 10"/><path d="M6 20H22L17.4066 12.6585C15.8806 10.2195 15.1176 9 14 9C12.8824 9 12.1194 10.2195 10.5934 12.6585L9.12837 15"/>', // MountainIcon
+  wind: '<path d="M2 5.94145C5.5 9.37313 10.5755 7.90241 11.7324 5.94145C11.9026 5.65301 12 5.31814 12 4.96096C12 3.87795 11.1046 3 10 3C8.89543 3 8 3.87795 8 4.96096"/><path d="M17 8.92814C17 7.31097 18.1193 6 19.5 6C20.8807 6 22 7.31097 22 8.92814C22 9.6452 21.7799 10.3021 21.4146 10.8111C19.3463 14.1915 9.2764 12.9164 4 11.8563"/><path d="M13.0854 19.8873C13.2913 20.5356 13.8469 21 14.5 21C15.3284 21 16 20.2528 16 19.331C16 19.0176 15.9224 18.7244 15.7873 18.4738C14.4999 15.9925 7.99996 14.3239 2 18.7746"/><path d="M19 15.5H21"/>', // FastWindIcon
+  ring: '<path d="M9 9L5 5M16 12H22M12 16V22"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="10"/>', // ChartRingIcon
+  chevron: '<path d="M18 9.00005C18 9.00005 13.5811 15 12 15C10.4188 15 6 9 6 9"/>', // ArrowDown01Icon
 };
 // Problem types, as listed on the Grievance page.
 const grvTypes = [
@@ -73,6 +83,57 @@ const grvFields = [
 ];
 const sos = emergency[0];
 const fbLabel = contact.facebook.replace(/^https?:\/\/(www\.)?/, '');
+// ---- DEMO grievance dashboard ----
+// DEMO: every number and case below is made up to show the layout. The grievance form has no online
+// endpoint yet (contact.grievanceEndpoint), so no real figures exist. Replace with real data once cases
+// are stored, and keep the "Demo data" label on the page until then. Do not move these into site.ts.
+const toneColor: Record<string, string> = { lake: 'var(--lake)', green: 'var(--green)', blue: '#2f6fd0', orange: '#e0821b', violet: '#5a4fcf' };
+const demoStats = [
+  { label: 'Active', value: '23', icon: gi.alert, tone: 'orange' },
+  { label: 'Pending', value: '9', icon: gi.clock, tone: 'blue' },
+  { label: 'Resolved', value: '486', icon: gi.check, tone: 'green' },
+  { label: 'Avg. resolution', value: '3.8', unit: 'days', icon: gi.flash, tone: 'amber' },
+];
+const demoPeriods = [
+  { id: '30d', label: 'Last 30 days', cats: [
+    { label: 'Water supply', n: 16, trend: '+12%', tone: 'blue' },
+    { label: 'Broken drains', n: 14, trend: '+5%', tone: 'lake' },
+    { label: 'Missed garbage collection', n: 11, trend: '-2%', tone: 'green' },
+    { label: 'Street lights', n: 8, trend: '0%', tone: 'orange' },
+    { label: 'Anything else', n: 5, trend: '-4%', tone: 'violet' },
+  ] },
+  { id: '12m', label: 'Last 12 months', cats: [
+    { label: 'Water supply', n: 189, trend: '+15%', tone: 'blue' },
+    { label: 'Broken drains', n: 162, trend: '+8%', tone: 'lake' },
+    { label: 'Missed garbage collection', n: 131, trend: '-6%', tone: 'green' },
+    { label: 'Street lights', n: 97, trend: '+2%', tone: 'orange' },
+    { label: 'Anything else', n: 58, trend: '-3%', tone: 'violet' },
+  ] },
+].map((p) => {
+  const total = p.cats.reduce((a, c) => a + c.n, 0);
+  const max = Math.max(...p.cats.map((c) => c.n));
+  let at = 0;
+  // Donut: one conic-gradient stop per category, with a thin gap between segments.
+  const ring = p.cats.map((c) => { const a = at, b = at + (c.n / total) * 100; at = b; return `${toneColor[c.tone]} ${a.toFixed(2)}% ${(b - 0.8).toFixed(2)}%, transparent ${(b - 0.8).toFixed(2)}% ${b.toFixed(2)}%`; }).join(', ');
+  return { ...p, total, ring, cats: p.cats.map((c) => ({ ...c, w: Math.round((c.n / max) * 100), dir: c.trend.startsWith('+') ? 'up' : c.trend.startsWith('-') ? 'down' : 'flat' })) };
+});
+const demoConditions = [
+  { label: 'Water stress', note: 'Low supply in 3 wards', value: 64, tone: 'blue', icon: gi.water },
+  { label: 'Landslide watch', note: 'Monsoon alert', value: 38, tone: 'orange', icon: gi.mountain },
+  { label: 'Air quality', note: 'Good', value: 22, tone: 'green', icon: gi.wind },
+];
+// Share of cases resolved on time and average days, per ward (demo). Wards come from site.ts.
+const demoWardScores: Record<string, [number, number]> = { I: [94, 1.9], III: [91, 2.1], IV: [88, 2.4], II: [85, 2.8], VI: [83, 3.0], V: [80, 3.3], VII: [78, 3.6], IX: [74, 4.1], VIII: [71, 4.4] };
+const demoRanking = wards
+  .map((w) => ({ no: w.no, short: w.short ?? '', pct: demoWardScores[w.no]?.[0] ?? 0, days: (demoWardScores[w.no]?.[1] ?? 0).toFixed(1) }))
+  .sort((a, b) => b.pct - a.pct);
+const demoCases = [
+  { id: 'GRV-1048', status: 'critical', ago: '2', unit: 'hours ago', ward: 'III', text: 'Drain overflowing onto the road on Thana Line after heavy rain last night.', team: 'Public works section', priority: 'High' },
+  { id: 'GRV-1046', status: 'progress', ago: '5', unit: 'hours ago', ward: 'IV', text: 'No piped water in Deosay Dara for two days. A tanker has been requested.', team: 'Water supply section', priority: 'Medium' },
+  { id: 'GRV-1041', status: 'resolved', ago: '1', unit: 'day ago', ward: 'I', text: 'Street light not working on the path to the school. The bulb has been replaced.', team: 'Electrical section', priority: 'Low' },
+  { id: 'GRV-1039', status: 'critical', ago: '3', unit: 'days ago', ward: 'VIII', text: 'Garbage dumped beside a stream that flows into the lake. Needs clearing before the rain.', team: 'Conservancy section', priority: 'High' },
+];
+const statusLabel: Record<string, string> = { critical: 'Critical', progress: 'In progress', resolved: 'Resolved' };
 ---
 <Layout title="Services & Grievances | Mirik Municipality">
   <PageHead slug="services" title="Services & Grievances" lead="How to apply for municipal services, and how to report a problem in your ward." />
@@ -111,14 +172,125 @@ const fbLabel = contact.facebook.replace(/^https?:\/\/(www\.)?/, '');
 
   <section id="grievances">
     <div class="wrap">
-      <div class="section-head">
-        <p class="eyebrow grvx-eyebrow"><svg viewBox="0 0 24 24" aria-hidden="true" set:html={gi.pulse} />Grievances</p>
-        <h2>Report a problem in your ward</h2>
-        <p class="lead">Tell the Municipality Office what is wrong and where. A clear location and a photo help the office act quickly.</p>
+      <div class="grvx-top">
+        <div class="section-head">
+          <p class="eyebrow grvx-eyebrow"><svg viewBox="0 0 24 24" aria-hidden="true" set:html={gi.pulse} />Grievances</p>
+          <h2>Report a problem in your ward</h2>
+          <p class="lead">Tell the Municipality Office what is wrong and where. A clear location and a photo help the office act quickly.</p>
+        </div>
+        <ul class="grvx-stats">
+          {demoStats.map((s) => (
+            <li class={`grvx-stat tone-${s.tone}`}>
+              <span class="grvx-stat-h"><svg viewBox="0 0 24 24" aria-hidden="true" set:html={s.icon} /><span>{s.label}</span></span>
+              <b>{s.value}{s.unit && <small>{s.unit}</small>}</b>
+            </li>
+          ))}
+        </ul>
       </div>
+      <p class="grvx-demo-note"><span class="grvx-demo-badge">Demo data</span><span>The online grievance system is not live yet, so the figures and cases below are examples, not real reports.</span></p>
+
       <div class="grvx-grid">
         <div class="grvx-main">
-          <div class="grvx-panel">
+          <div class="grvx-panel grvx-overview o-2">
+            <div class="grvx-ov-head">
+              <div>
+                <h3><svg viewBox="0 0 24 24" aria-hidden="true" set:html={gi.pulse} />Grievance overview</h3>
+                <p>Cases by category and local conditions</p>
+              </div>
+              <div class="grvx-select">
+                <select aria-label="Time period" data-period-select>
+                  {demoPeriods.map((p) => <option value={p.id}>{p.label}</option>)}
+                </select>
+                <svg viewBox="0 0 24 24" aria-hidden="true" set:html={gi.chevron} />
+              </div>
+            </div>
+            {demoPeriods.map((p, i) => (
+              <div class="grvx-breakdown" data-period={p.id} hidden={i !== 0}>
+                <div class="grvx-donut-col">
+                  <p class="grvx-mini">Issue categories</p>
+                  <div class="grvx-donut" style={`--ring: conic-gradient(${p.ring})`}>
+                    <div><b>{p.total}</b><small>Total cases</small></div>
+                  </div>
+                </div>
+                <ul class="grvx-bars">
+                  {p.cats.map((c) => (
+                    <li class={`tone-${c.tone}`} style={`--w:${c.w}%`}>
+                      <div class="grvx-bar-row">
+                        <span class="grvx-dot" aria-hidden="true"></span>
+                        <span class="grvx-bar-l">{c.label}</span>
+                        <b>{c.n}</b>
+                        <em class={`grvx-trend ${c.dir}`}>{c.trend}</em>
+                      </div>
+                      <div class="grvx-bar" aria-hidden="true"><i></i></div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+            <div class="grvx-cond">
+              <div class="grvx-cond-head">
+                <p class="grvx-mini">Local conditions</p>
+                <span class="grvx-live"><span class="grvx-live-dots" aria-hidden="true"><i></i><i></i><i></i></span>Active monitoring</span>
+              </div>
+              <ul class="grvx-cond-grid">
+                {demoConditions.map((c) => (
+                  <li class={`tone-${c.tone}`} style={`--w:${c.value}%`}>
+                    <div class="grvx-cond-top">
+                      <span class="grvx-cond-ico"><svg viewBox="0 0 24 24" aria-hidden="true" set:html={c.icon} /></span>
+                      <b>{c.value}%</b>
+                    </div>
+                    <strong>{c.label}</strong>
+                    <small>{c.note}</small>
+                    <div class="grvx-bar" aria-hidden="true"><i></i></div>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+
+          <div class="grvx-cases o-5">
+            <div class="grvx-panel grvx-filter">
+              <label class="grvx-search">
+                <svg viewBox="0 0 24 24" aria-hidden="true" set:html={gi.search} />
+                <input type="search" placeholder="Search by keyword, ward or case ID" aria-label="Search by keyword, ward or case ID" data-case-search />
+              </label>
+              <div class="grvx-chips" role="group" aria-label="Filter cases">
+                {['all', 'critical', 'progress', 'resolved'].map((k, i) => (
+                  <button type="button" class={i === 0 ? 'on' : undefined} aria-pressed={i === 0 ? 'true' : 'false'} data-filter={k}>{k === 'all' ? 'All' : statusLabel[k]}</button>
+                ))}
+              </div>
+            </div>
+            <ul class="grvx-case-list">
+              {demoCases.map((c) => (
+                <li class={`grvx-panel grvx-case s-${c.status}`} data-status={c.status}>
+                  <div class="grvx-case-top">
+                    <span class="grvx-case-id"><i aria-hidden="true"></i>{c.id}</span>
+                    <span class="grvx-status">{statusLabel[c.status]}</span>
+                    <span class="grvx-case-meta">
+                      <span><svg viewBox="0 0 24 24" aria-hidden="true" set:html={gi.calendar} /><span>{c.ago}</span> <span>{c.unit}</span></span>
+                      <span class="grvx-case-ward"><svg viewBox="0 0 24 24" aria-hidden="true" set:html={gi.location} /><span>Ward</span> <span>{c.ward}</span></span>
+                    </span>
+                  </div>
+                  <div class="grvx-case-body">
+                    <div>
+                      <p class="grvx-mini">Issue description</p>
+                      <blockquote>{c.text}</blockquote>
+                    </div>
+                    <div class="grvx-esc">
+                      <p class="grvx-mini">Escalation status</p>
+                      <dl>
+                        <div><dt>Assigned</dt><dd>{c.team}</dd></div>
+                        <div><dt>Priority</dt><dd class={`p-${c.priority.toLowerCase()}`}>{c.priority}</dd></div>
+                      </dl>
+                    </div>
+                  </div>
+                </li>
+              ))}
+            </ul>
+            <p class="grvx-empty" hidden>No cases match your search.</p>
+          </div>
+
+          <div class="grvx-panel o-6">
             <div class="grvx-ph">
               <span class="grvx-ph-ico"><svg viewBox="0 0 24 24" aria-hidden="true" set:html={gi.pulse} /></span>
               <div><h3>What you can report</h3><p>Common problems the office can act on</p></div>
@@ -132,7 +304,7 @@ const fbLabel = contact.facebook.replace(/^https?:\/\/(www\.)?/, '');
               ))}
             </ul>
           </div>
-          <div class="grvx-panel">
+          <div class="grvx-panel o-7">
             <div class="grvx-ph">
               <span class="grvx-ph-ico"><svg viewBox="0 0 24 24" aria-hidden="true" set:html={gi.task} /></span>
               <div><h3>What to include</h3><p>The form asks for these details</p></div>
@@ -151,13 +323,32 @@ const fbLabel = contact.facebook.replace(/^https?:\/\/(www\.)?/, '');
           </div>
         </div>
         <aside class="grvx-side">
-          <div class="grvx-cta">
+          <div class="grvx-cta o-1">
             <span class="grvx-cta-ico"><svg viewBox="0 0 24 24" aria-hidden="true" set:html={gi.flash} /></span>
             <h3>Report a new issue</h3>
             <p>Give your ward and the exact location, and attach a photo if you can.</p>
             <a class="grvx-btn" href="/grievance/">Submit grievance</a>
           </div>
-          <div class="grvx-panel grvx-reach">
+          <div class="grvx-panel grvx-rank o-3">
+            <h3 class="grvx-side-h"><svg viewBox="0 0 24 24" aria-hidden="true" set:html={gi.award} />Ward response ranking</h3>
+            <p class="grvx-side-sub">Cases resolved on time</p>
+            <ol class="grvx-rank-list">
+              {demoRanking.map((r, i) => (
+                <li hidden={i > 2}>
+                  <span class="grvx-rank-n">#{i + 1}</span>
+                  <div class="grvx-rank-w"><strong><span>Ward</span> <span>{r.no}</span></strong>{r.short && <small>{r.short}</small>}</div>
+                  <div class="grvx-rank-v"><b>{r.pct}%</b><small><span>{r.days}</span> <span>days</span></small></div>
+                </li>
+              ))}
+            </ol>
+            <button type="button" class="grvx-more" aria-expanded="false"><span>View all wards</span><span hidden>Show fewer</span></button>
+          </div>
+          <div class="grvx-panel grvx-insights o-4">
+            <h3 class="grvx-side-h"><svg viewBox="0 0 24 24" aria-hidden="true" set:html={gi.layers} />Quick insights</h3>
+            <div class="grvx-ins"><small>Most reported</small><strong>{demoPeriods[0].cats[0].label}</strong></div>
+            <div class="grvx-ins"><small>Fastest ward</small><strong><span>Ward</span> <span>{demoRanking[0].no}</span></strong>{demoRanking[0].short && <em>{demoRanking[0].short}</em>}</div>
+          </div>
+          <div class="grvx-panel grvx-reach o-8">
             <h3>Other ways to reach the office</h3>
             <ul class="grvx-contacts">
               {contact.phones.map((p) => (
@@ -168,7 +359,7 @@ const fbLabel = contact.facebook.replace(/^https?:\/\/(www\.)?/, '');
               <li><span class="grvx-ci"><svg viewBox="0 0 24 24" aria-hidden="true" set:html={gi.clock} /></span><div><small>Office hours</small><span>{contact.hours}</span></div></li>
             </ul>
           </div>
-          <a class="grvx-sos" href="/emergency/">
+          <a class="grvx-sos o-9" href="/emergency/">
             <span class="grvx-sos-ico"><svg viewBox="0 0 24 24" aria-hidden="true" set:html={gi.siren} /></span>
             <span class="grvx-sos-t"><span>In an emergency, dial</span> <strong>{sos.number}</strong></span>
             <svg class="grvx-sos-go" viewBox="0 0 24 24" aria-hidden="true" set:html={arrow.in} />
@@ -253,4 +444,62 @@ const fbLabel = contact.facebook.replace(/^https?:\/\/(www\.)?/, '');
       });
     });
   }
+
+  // Grievance dashboard (demo data).
+  const overview = document.querySelector<HTMLElement>('.grvx-overview');
+  if (overview) {
+    // Bars grow in when the panel first scrolls into view.
+    if (!still && 'IntersectionObserver' in window) {
+      overview.classList.add('grvx-anim');
+      const io = new IntersectionObserver((entries) => {
+        if (!entries.some((e) => e.isIntersecting)) return;
+        overview.classList.add('in');
+        io.disconnect();
+      }, { threshold: 0.2 });
+      io.observe(overview);
+    }
+    // Time period switch: show the matching breakdown.
+    overview.querySelector<HTMLSelectElement>('[data-period-select]')?.addEventListener('change', (e) => {
+      const id = (e.target as HTMLSelectElement).value;
+      overview.querySelectorAll<HTMLElement>('[data-period]').forEach((b) => { b.hidden = b.dataset.period !== id; });
+    });
+  }
+
+  // Case list: status chips and search work together.
+  const cases = document.querySelector<HTMLElement>('.grvx-cases');
+  if (cases) {
+    const rows = Array.from(cases.querySelectorAll<HTMLElement>('.grvx-case'));
+    const chips = Array.from(cases.querySelectorAll<HTMLButtonElement>('[data-filter]'));
+    const search = cases.querySelector<HTMLInputElement>('[data-case-search]');
+    const empty = cases.querySelector<HTMLElement>('.grvx-empty');
+    let status = 'all';
+    const apply = () => {
+      const q = (search?.value ?? '').trim().toLowerCase();
+      let shown = 0;
+      rows.forEach((r) => {
+        const ok = (status === 'all' || r.dataset.status === status) && (!q || (r.textContent ?? '').toLowerCase().includes(q));
+        r.hidden = !ok;
+        if (ok) shown++;
+      });
+      if (empty) empty.hidden = shown > 0;
+    };
+    chips.forEach((c) => c.addEventListener('click', () => {
+      status = c.dataset.filter ?? 'all';
+      chips.forEach((x) => { x.classList.toggle('on', x === c); x.setAttribute('aria-pressed', String(x === c)); });
+      apply();
+    }));
+    search?.addEventListener('input', apply);
+  }
+
+  // Ward ranking: show all wards or only the top three.
+  document.querySelectorAll<HTMLButtonElement>('.grvx-more').forEach((btn) => {
+    const extra = Array.from(btn.parentElement?.querySelectorAll<HTMLElement>('.grvx-rank-list li') ?? []).slice(3);
+    const [more, less] = Array.from(btn.children) as HTMLElement[];
+    btn.addEventListener('click', () => {
+      const open = btn.getAttribute('aria-expanded') !== 'true';
+      extra.forEach((li) => { li.hidden = !open; });
+      btn.setAttribute('aria-expanded', String(open));
+      if (more && less) { more.hidden = open; less.hidden = !open; }
+    });
+  });
 </script>
