@@ -143,11 +143,42 @@ const artPaths: Record<string, string> = {
           <p class="grv-ticket-eyebrow">Grievance updates</p>
           <h2 id="hero-ticket-title">Streetlight repair</h2>
         </div>
-        <span class="grv-ticket-tag">Ward III</span>
+        <div class="grv-ticket-tags">
+          <span class="grv-ticket-tag">Ward III</span>
+          <span class="grv-ticket-badge priority">Priority: High</span>
+        </div>
       </div>
       <div class="grv-ticket-id">
-        <span>Case reference</span>
-        <strong>MM-2026-0187</strong>
+        <div>
+          <span>Case reference</span>
+          <strong>MM-2026-0187</strong>
+        </div>
+        <div class="grv-sla-badge">
+          <span>Target SLA</span>
+          <strong class="sla-num">48 Hrs</strong>
+        </div>
+      </div>
+      <div class="grv-ticket-meta">
+        <div class="grv-meta-row">
+          <div class="grv-meta-item">
+            <span class="grv-meta-label">Location / Asset</span>
+            <span class="grv-meta-val">Lake Path · Pole #042</span>
+          </div>
+          <div class="grv-meta-item">
+            <span class="grv-meta-label">Assigned Unit</span>
+            <span class="grv-meta-val">Crew #03 · P. Gurung</span>
+          </div>
+        </div>
+        <div class="grv-meta-row">
+          <div class="grv-meta-item">
+            <span class="grv-meta-label">Direct Helpline</span>
+            <a class="grv-meta-val grv-link" href="tel:+919832012345">+91 98320 12345</a>
+          </div>
+          <div class="grv-meta-item">
+            <span class="grv-meta-label">Token ID</span>
+            <span class="grv-meta-val">#8492-MM</span>
+          </div>
+        </div>
       </div>
       <div class="grv-ticket-status">
         <span class="grv-ticket-dot" aria-hidden="true"></span>
@@ -159,7 +190,7 @@ const artPaths: Record<string, string> = {
       <ol class="grv-ticket-steps" aria-label="Grievance progress">
         <li>28 Sep<br />Submitted</li>
         <li>30 Sep<br />Field visit</li>
-        <li>02 Oct<br />Update due</li>
+        <li>02 Oct<br />Target fix</li>
       </ol>
     </aside>
   </section>

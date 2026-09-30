@@ -320,16 +320,15 @@ export const projects = [
 ];
 
 export const attractions = [
-  { name: 'Sumendu Lake', text: 'The heart of Mirik, with a 3.5 km walk around it, boating, pony rides and views of Kanchenjunga on clear days.', note: 'The lake was built by the West Bengal Tourism Department. Land was acquired from a neighbouring tea estate from 1969, work began in 1974 and it opened to visitors in April 1979.' },
-  { name: 'Indreni Pul and Savitri Pushpaudyan', text: 'The arched footbridge over the lake and the garden beside it, both named after INA martyrs.', note: 'Indreni Pul is named after Indreni Thapa and the garden after Savitri Thapa, both soldiers of the Indian National Army who died for the cause.' },
-  { name: 'Bokar Monastery', text: 'Buddhist meditation centre at the highest point of town, about 1,768 m.', note: 'Founded in 1984 by Kyabje Bokar Tulku Rinpoche in the Kagyu tradition of Tibetan Buddhism. It is a monastic centre with hundreds of monks.' },
-  { name: 'Rameetay Dara', text: 'Viewpoint over the surrounding ridges and the plains below.', note: 'A short walk from the lake, with wide views over the plains and, on clear days, the snow peaks. Bokar Monastery lies on the way.' },
-  { name: 'Debisthan', text: 'Hilltop Hindu temple near the lake.', note: 'The temple is dedicated to the goddess Singha Devi and also holds images of Shiva, Kali and Hanuman.' },
-  { name: 'Tingling View Point', text: 'Panorama of the tea gardens.' },
-  { name: 'Tea gardens', text: 'Thurbo, Soureni, Gopaldhara, Singbulli, Okayti and Phuguri estates around Mirik.' },
-  { name: 'Orange orchards', text: 'Mirik Busty, Murmah and Soureni Busty are known for oranges.' },
-  { name: 'Rai Dhap', text: 'A source of Mirik’s drinking water and a picnic spot.' },
-  { name: 'Mirik Church (UCNI)', text: 'Oldest church in Mirik (1962), at Deosay Dara, Ward IV.', note: 'The church was built in 1962. Nearby, the Darjeeling Hills Bible School has offered theological training in Nepali since 1954.' },
+  { name: 'Sumendu Lake', text: 'The heart of Mirik: an 80-hectare natural lake surrounded by a 3.5 km paved walkway, pine forest trails, boating, and Kanchenjunga views.', note: 'Created in the 1970s by the West Bengal Tourism Department. Land was acquired from Thurbo Tea Estate starting in 1969, and the lake opened to visitors in April 1979.' },
+  { name: 'Indreni Pul and Savitri Pushpaudyan', text: 'An 80-foot arched footbridge over the lake connecting the pine forest to the garden, named in honor of Indian National Army martyrs.', note: 'Indreni Pul is named after Indreni Thapa and Savitri Pushpaudyan after Savitri Thapa, both brave female soldiers of Netaji’s INA who gave their lives for Indian independence.' },
+  { name: 'Bokar Monastery', text: 'Buddhist meditation centre at the highest point of Mirik (1,768 m), overlooking the town and lake.', note: 'Founded in 1984 by Kyabje Bokar Tulku Rinpoche in the Kagyu tradition of Tibetan Buddhism. It houses hundreds of monks and features intricate wall murals and a golden stupa.' },
+  { name: 'Rameetay Dara', text: 'Scenic vantage viewpoint offering sweeping panoramas over the surrounding mountain ridges and the North Bengal plains below.', note: 'A short scenic walk from the lake with wide views extending to snow-capped peaks on clear days. Bokar Monastery lies along the path.' },
+  { name: 'Debisthan', text: 'Hilltop Hindu temple complex set amidst pine trees near the edge of Sumendu Lake.', note: 'The temple is dedicated to the goddess Singha Devi and also holds revered shrines for Shiva, Kali, and Hanuman.' },
+  { name: 'Tingling View Point', text: 'Panoramic lookout point offering breathtaking views over the undulating green tea slopes of Thurbo Tea Estate and surrounding valleys.', note: 'Located about 8 km from Mirik town on the road to Siliguri. It is a favorite photography stop for travelers surrounded by tea gardens.' },
+  { name: 'Tea gardens', text: 'World-famous tea estates including Thurbo, Soureni, Gopaldhara, Singbulli, Okayti and Phuguri producing finest Darjeeling Orthodox tea.', note: 'Tea plantation began here in the late 19th century. Visitors can walk through scenic tea trails, watch leaf plucking, and sample fresh teas at garden outlets.' },
+  { name: 'Orange orchards', text: 'Mirik Busty, Murmah and Soureni Busty are celebrated for cultivating sweet Darjeeling mandarin oranges.', note: 'During harvest season (November to January), the hillside groves glow orange. Local roadside stalls sell fresh organic fruit and orange blossom honey.' },
+  { name: 'Mirik Church (UCNI)', text: 'Historic church built in 1962, located at Deosay Dara in Ward IV overlooking the hill town.', note: 'The church was built in 1962. Nearby, the Darjeeling Hills Bible School has offered theological training in Nepali since 1954.' },
 ];
 
 export const gettingHere = [
@@ -342,26 +341,106 @@ export const gettingHere = [
 export const transportNote =
   'Shared taxis run from Mirik to Siliguri, Darjeeling, Kurseong, Sonada, Kalimpong and Kakarbhitta (Nepal); a few buses run to Siliguri and Darjeeling. Local taxis connect the lake (Krishnanagar) with Mirik Bazar. Fares change often; check locally.';
 
-export const health = [
-  { name: 'Mirik Rural Hospital', detail: '30 beds, Mirik' },
-  { name: 'Soureni Bustee PHC', detail: '10 beds' },
-  { name: 'Duptin PHC', detail: '2 beds' },
-  { name: 'Panighatta PHC', detail: 'Outpatient only' },
+export const health: { name: string; detail: string; text: string; note?: string }[] = [
+  {
+    name: 'Mirik Rural Hospital',
+    detail: '30 beds · Primary Hospital',
+    text: 'Main government hospital in Mirik offering 24/7 emergency care, maternity ward, outpatient services (OPD), pathology lab, and essential medicine distribution.',
+    note: 'Primary municipal medical facility located near Thana Line.',
+  },
+  {
+    name: 'Soureni Bustee PHC',
+    detail: '10 beds · Primary Health Centre',
+    text: 'Serves the Soureni Gram Panchayat and nearby tea estate worker communities with inpatient care, routine immunizations, and maternal health services.',
+    note: 'Situated along the main Mirik-Siliguri highway.',
+  },
+  {
+    name: 'Duptin PHC',
+    detail: '2 beds · Health Post',
+    text: 'Rural health centre providing general outpatient consultations, preventive health check-ups, child care, and emergency first-aid for local farming hamlets.',
+    note: 'Focuses on rural community health outreach.',
+  },
+  {
+    name: 'Panighatta PHC',
+    detail: 'Outpatient Clinic',
+    text: 'Outpatient primary care facility catering to the Panighatta tea garden and foothills population, providing medical consultations and essential medicines.',
+    note: 'Situated at the base of the Mirik Hills region.',
+  },
 ];
 
-export const education = [
-  'Mirik College (affiliated to the University of North Bengal)',
-  'Mirik Higher Secondary School',
-  'Don Bosco School',
-  'Snowdrops School',
-  'Orange Lake School',
-  'Glenmore International School',
-  'Brindavan Boarding School',
-  'Lewis English School',
-  'Green Lawn School',
-  'Woodlands Academy',
-  'Pinehall Academy',
-  'Temple of Wisdom',
+export const education: { name: string; detail: string; text: string; note?: string }[] = [
+  {
+    name: 'Mirik College (affiliated to the University of North Bengal)',
+    detail: 'Higher Education / Degree College',
+    text: 'Premier government-aided degree college offering undergraduate BA and BSc courses in Humanities, Sciences, and Nepali Literature for students of Mirik subdivision.',
+    note: 'Established in 2000 on Krishnanagar Road with mountain views.',
+  },
+  {
+    name: 'Mirik Higher Secondary School',
+    detail: 'Government Higher Secondary School',
+    text: 'Historic co-educational government school offering Secondary (Madhyamik) and Higher Secondary (WBCHSE) education across Arts, Science, and Commerce streams.',
+    note: 'Central school serving generations of local hill residents.',
+  },
+  {
+    name: 'Don Bosco School',
+    detail: 'Co-Ed ICSE / ISC School',
+    text: 'Renowned missionary institution providing holistic primary and secondary education with modern science labs, computer rooms, and sports grounds.',
+    note: 'Known for high academic standards and student discipline.',
+  },
+  {
+    name: 'Snowdrops School',
+    detail: 'English Medium Secondary School',
+    text: 'Established private English-medium institution emphasizing academic excellence, moral values, and active co-curricular engagement for children in Ward III.',
+    note: 'Located near Thana Line in central Mirik.',
+  },
+  {
+    name: 'Orange Lake School',
+    detail: 'Primary & Secondary School',
+    text: 'Popular local English-medium school providing primary and secondary education near the scenic Sumendu Lake area.',
+    note: 'Features small class sizes and personal student attention.',
+  },
+  {
+    name: 'Glenmore International School',
+    detail: 'Residential & Day Boarding School',
+    text: 'Modern co-educational school with residential hostel facilities, comprehensive sports infrastructure, and activity-based learning programs.',
+    note: 'Spacious campus situated in a peaceful hill environment.',
+  },
+  {
+    name: 'Brindavan Boarding School',
+    detail: 'Boarding & Day Secondary School',
+    text: 'Long-standing boarding school serving students from across Darjeeling district, focusing on disciplined study, character building, and sports.',
+    note: 'Offers full hostel facilities for outstation students.',
+  },
+  {
+    name: 'Lewis English School',
+    detail: 'Primary & Secondary School',
+    text: 'Community-centered English-medium school committed to quality foundational education, reading literacy, and public speaking skills.',
+    note: 'Serves families from Mirik town and surrounding tea estates.',
+  },
+  {
+    name: 'Green Lawn School',
+    detail: 'Primary & Middle School',
+    text: 'Dedicated elementary school fostering creative arts, environmental awareness, and foundational skills in a nurturing environment.',
+    note: 'Known for friendly faculty and green surroundings.',
+  },
+  {
+    name: 'Woodlands Academy',
+    detail: 'Secondary & High School',
+    text: 'Hillside academy providing comprehensive school curriculum, sports, physical education, and environmental studies.',
+    note: 'Located amidst pine groves on the town outskirts.',
+  },
+  {
+    name: 'Pinehall Academy',
+    detail: 'Primary & Secondary School',
+    text: 'Respected educational academy emphasizing STEM education, computer training, and regional language heritage.',
+    note: 'Features active sports and cultural clubs.',
+  },
+  {
+    name: 'Temple of Wisdom',
+    detail: 'Early Childhood & Primary School',
+    text: 'Innovative early learning center and elementary school focusing on holistic child development, play-based learning, and foundational education.',
+    note: 'Specialized early childhood development programs.',
+  },
 ];
 
 export const emergency = [

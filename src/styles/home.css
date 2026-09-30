@@ -214,10 +214,41 @@
   align-items: center;
   padding: .85rem 1.15rem .7rem;
 }
+.grv-ticket-tags { display: flex; align-items: center; gap: .4rem; }
+.grv-ticket-badge.priority {
+  padding: .22rem .5rem;
+  border-radius: 999px;
+  background: rgba(239, 68, 68, 0.22);
+  border: 1px solid rgba(252, 165, 165, 0.35);
+  color: #fca5a5;
+  font-size: .65rem;
+  font-weight: 700;
+  letter-spacing: .02em;
+}
 .hero-ticket .grv-ticket-eyebrow { margin-bottom: .15rem; font-size: .68rem; }
 .hero-ticket h2 { font-size: 1.16rem; white-space: nowrap; }
 .hero-ticket .grv-ticket-tag { padding: .28rem .5rem; font-size: .7rem; }
-.hero-ticket .grv-ticket-id { padding: .55rem 1.15rem; }
+.hero-ticket .grv-ticket-id { padding: .55rem 1.15rem; display: flex; justify-content: space-between; align-items: center; }
+.grv-sla-badge { text-align: right; }
+.grv-sla-badge span { display: block; font-size: .68rem; color: rgba(255,255,255,.72); }
+.grv-sla-badge .sla-num { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .92rem; color: #7dd3fc; letter-spacing: .04em; }
+
+.grv-ticket-meta {
+  display: grid;
+  gap: .45rem;
+  padding: .55rem 1.15rem;
+  background: rgba(0, 0, 0, .16);
+  border-top: 1px dashed rgba(255, 255, 255, .22);
+  border-bottom: 1px dashed rgba(255, 255, 255, .22);
+}
+.hero-ticket .grv-ticket-meta { padding-right: .9rem; }
+.grv-meta-row { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: .75rem; }
+.grv-meta-item { display: flex; flex-direction: column; }
+.grv-meta-label { font-size: .62rem; color: rgba(255, 255, 255, .64); text-transform: uppercase; letter-spacing: .05em; margin-bottom: .1rem; }
+.grv-meta-val { font-size: .74rem; font-weight: 600; color: #ffffff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.grv-meta-val.grv-link { color: #7dd3fc; text-decoration: none; transition: color 0.15s ease; }
+.grv-meta-val.grv-link:hover { color: #bae6fd; text-decoration: underline; }
+
 .hero-ticket .grv-ticket-status { gap: .6rem; padding: .7rem 1.15rem; }
 .hero-ticket .grv-ticket-status p { margin-top: .12rem; font-size: .78rem; white-space: nowrap; }
 .hero-ticket .grv-ticket-steps { gap: .8rem; padding: .65rem 1.15rem .75rem; }
@@ -235,6 +266,7 @@
   }
   .hero-ticket h2 { font-size: 1.05rem; }
   .hero-ticket .grv-ticket-status p { font-size: .72rem; }
+  .grv-meta-row { grid-template-columns: 1fr; gap: .35rem; }
   .hero-ticket-stub { right: .8rem; width: 1.85rem; }
 }
 
