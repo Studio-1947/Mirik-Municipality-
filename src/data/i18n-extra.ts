@@ -233,4 +233,7 @@ export const extra: Record<string, [string, string]> = {
   "WhatsApp number": ["व्हाट्सएप नम्बर", "হোয়াটসঅ্যাপ নম্বর"],
   "Times are rough estimates for normal weather and traffic on the hill road. Landslides, rain and roadworks can add a lot, so check locally before you set out.": ["सामान्य मौसम र यातायातमा पहाडी सडकका लागि अनुमानित समय मात्र। पहिरो, वर्षा र सडक मर्मतले धेरै समय थप्न सक्छ, त्यसैले हिँड्नु अघि स्थानीय रूपमा जाँच गर्नुहोस्।", "স্বাভাবিক আবহাওয়া ও যানবাহনে পাহাড়ি রাস্তার জন্য আনুমানিক সময়। ধস, বৃষ্টি ও রাস্তা মেরামতে অনেক বেশি সময় লাগতে পারে, তাই রওনা হওয়ার আগে স্থানীয়ভাবে জেনে নিন।"],
   'Language': ['भाषा', 'ভাষা'],
+  /* Shared scroll-to-top button */
+  'Scroll to top': ['माथि स्क्रोल गर्नुहोस्', 'উপরে স্ক্রল করুন'],
+  'Top': ['माथि', 'উপরে'],
 };
