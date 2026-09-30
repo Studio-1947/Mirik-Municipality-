@@ -1,78 +1,146 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import PageHead from '../components/PageHead.astro';
-import { services, projects, schemes } from '../data/site';
----
-<Layout title="Services and Projects | Mirik Municipality">
-  <PageHead slug="services" title="Services and Projects" lead="How to apply for municipal services, and the water, sanitation and housing projects under way in Mirik." />
+import { services } from '../data/site';
 
-  <section class="alt" id="services">
+// Icon and colour tone for each service card, keyed by title in site.ts.
+// Icons: Hugeicons free set, Stroke Rounded (MIT licence, https://hugeicons.com). The SVG shapes are
+// copied inline so the site stays dependency-free; the name after each entry is the Hugeicons icon.
+const look: Record<string, { tone: string; icon: string }> = {
+  'Trade Licence': { tone: 'orange', icon: '<path d="M3.5 9.99976V14.9998C3.5 17.8282 3.5 19.2424 4.37868 20.1211C5.25736 20.9998 6.67157 20.9998 9.5 20.9998H14.5C17.3284 20.9998 18.7426 20.9998 19.6213 20.1211C20.5 19.2424 20.5 17.8282 20.5 14.9998V9.99976"/><path d="M8 17.9998H16"/><path d="M17 7.50159C17 8.8823 15.8807 9.99973 14.5 9.99973C13.1193 9.99973 12 8.88044 12 7.49973C12 8.88044 10.8807 9.99973 9.5 9.99973C8.11929 9.99973 7 8.88044 7 7.49973C7 8.88044 5.82654 9.99973 4.379 9.99973C3.59983 9.99973 2.90007 9.67543 2.41999 9.16063C1.59461 8.27555 2.12559 6.97378 2.81446 5.98818L3.202 5.45827C4.08384 4.25246 4.52476 3.64956 5.16491 3.32469C5.80507 2.99983 6.552 2.99993 8.04586 3.00013L15.9551 3.00119C17.4485 3.00138 18.1952 3.00148 18.8351 3.32634C19.475 3.65119 19.9158 4.2539 20.7974 5.45933L21.1855 5.99004C21.8744 6.97565 22.4054 8.27742 21.58 9.16249C21.0999 9.67729 20.4001 10.0016 19.621 10.0016C18.1734 10.0016 17 8.8823 17 7.50159Z"/>' }, // Store02Icon
+  'Birth and Death Registration': { tone: 'violet', icon: '<path d="M11.5 22C7.49306 22 5.48959 22 4.2448 20.5355C3 19.0711 3 16.714 3 12C3 7.28596 3 4.92893 4.2448 3.46447C5.48959 2 7.49306 2 11.5 2C15.5069 2 17.5104 2 18.7552 3.46447C19.7572 4.64332 19.9527 6.40054 19.9908 9.5"/><path d="M8 8H15M8 13H11"/><path d="M19.6092 18.1054C20.4521 17.4918 21 16.4974 21 15.375C21 13.511 19.489 12 17.625 12H17.375C15.511 12 14 13.511 14 15.375C14 16.4974 14.5479 17.4918 15.3908 18.1054M19.6092 18.1054C19.0523 18.5108 18.3666 18.75 17.625 18.75H17.375C16.6334 18.75 15.9477 18.5108 15.3908 18.1054M19.6092 18.1054L20.192 19.9404C20.4143 20.6403 20.5255 20.9903 20.4951 21.2082C20.4318 21.6617 20.0619 21.9984 19.6252 22C19.4154 22.0008 19.101 21.8358 18.4723 21.5059C18.2027 21.3644 18.0679 21.2936 17.93 21.252C17.649 21.1673 17.351 21.1673 17.07 21.252C16.9321 21.2936 16.7973 21.3644 16.5277 21.5059C15.899 21.8358 15.5846 22.0008 15.3748 22C14.9381 21.9984 14.5682 21.6617 14.5049 21.2082C14.4745 20.9903 14.5857 20.6403 14.808 19.9404L15.3908 18.1054"/>' }, // Certificate01Icon
+  'Building Plan Sanction': { tone: 'blue', icon: '<path d="M16 10L18.1494 10.6448C19.5226 11.0568 20.2092 11.2628 20.6046 11.7942C21 12.3256 21 13.0425 21 14.4761V22"/><path d="M8 9L11 9M8 13L11 13"/><path d="M12 22V19C12 18.0572 12 17.5858 11.7071 17.2929C11.4142 17 10.9428 17 10 17H9C8.05719 17 7.58579 17 7.29289 17.2929C7 17.5858 7 18.0572 7 19V22"/><path d="M2 22L22 22"/><path d="M3 22V6.71724C3 4.20649 3 2.95111 3.79118 2.32824C4.58237 1.70537 5.74742 2.04355 8.07752 2.7199L13.0775 4.17122C14.4836 4.57937 15.1867 4.78344 15.5933 5.33965C16 5.89587 16 6.65344 16 8.16857V22"/>' }, // Building03Icon
+  'Mutation': { tone: 'leaf', icon: '<path d="M2 7H4.86503C5.59174 7 6.28868 6.64031 6.80255 6.00005C7.53643 5.08565 8.62195 4.76636 9.60655 5.17529L11 5.75402M2 15.9668H3.62068C4.78017 15.9668 5.35991 15.9668 5.90812 16.1213C5.93477 16.1288 5.96134 16.1366 5.98782 16.1446C6.53259 16.3101 7.01496 16.6209 7.97971 17.2427C9.86787 18.4596 10.812 19.0681 11.8407 18.994C11.8892 18.9905 11.9376 18.9858 11.9859 18.9801C13.0096 18.8577 13.8119 18.0821 15.4166 16.5308L17 15"/><path d="M22 7.23384H19.4832C18.4174 7.23384 17.6649 6.65468 16.9003 5.88258C16.4051 5.38247 15.7731 5.08772 15.1088 5.04713C14.366 5.00175 13.5053 4.93785 12.784 5.13601C11.9811 5.35656 11.451 5.96063 10.8902 6.59196L9.44309 8.22111C8.8523 8.88621 8.8523 9.96455 9.44309 10.6297C9.953 11.2037 10.7519 11.2928 11.3519 10.8424C11.7837 10.5184 12.2743 9.99506 12.7831 9.83025C13.3557 9.64476 13.7109 10.0615 14.0354 10.4999L16.3556 13.6344C17.2167 14.7976 17.6472 15.3793 18.2358 15.6896C18.8244 16 19.4969 16 20.842 16H22"/>' }, // Agreement01Icon
+  'Property (Holding) Tax': { tone: 'green', icon: '<path d="M5 9V19M9 9V19"/><path d="M15 9V12M19 9V12"/><path d="M20.875 21.75H20.75M15.375 16.25H15.25M21 16L15 22M21 21.75C21 21.8881 20.8881 22 20.75 22C20.6119 22 20.5 21.8881 20.5 21.75C20.5 21.6119 20.6119 21.5 20.75 21.5C20.8881 21.5 21 21.6119 21 21.75ZM15.5 16.25C15.5 16.3881 15.3881 16.5 15.25 16.5C15.1119 16.5 15 16.3881 15 16.25C15 16.1119 15.1119 16 15.25 16C15.3881 16 15.5 16.1119 15.5 16.25Z"/><path d="M21.3518 9H2.64822C2.29022 9 2 8.70651 2 8.34447C2 8.12259 2.11099 7.91577 2.29495 7.79485L8.73007 3.56485C10.3171 2.52162 11.1107 2 12 2C12.8893 2 13.6829 2.52162 15.2699 3.56485L21.7051 7.79485C21.889 7.91577 22 8.12259 22 8.34447C22 8.70651 21.7098 9 21.3518 9Z"/><path d="M11 22H3.64814C2.64867 22 2.14893 22 2.02456 21.6913C1.9002 21.3827 2.25356 21.0194 2.9603 20.2929L3.64814 19.5858C3.92929 19.2968 4.06987 19.1522 4.24863 19.0761C4.4274 19 4.62621 19 5.02382 19H11"/><path d="M12.125 5.75H12M12.25 5.75C12.25 5.88807 12.1381 6 12 6C11.8619 6 11.75 5.88807 11.75 5.75C11.75 5.61193 11.8619 5.5 12 5.5C12.1381 5.5 12.25 5.61193 12.25 5.75Z"/>' }, // TaxesIcon
+  'Water Connection': { tone: 'lake', icon: '<path d="M12.5 5.5H10.5C9.55719 5.5 9.08579 5.5 8.79289 5.79289C8.5 6.08579 8.5 6.55719 8.5 7.5V9.5C8.5 10.4428 8.5 10.9142 8.79289 11.2071C9.08579 11.5 9.55719 11.5 10.5 11.5H12.5C13.4428 11.5 13.9142 11.5 14.2071 11.2071C14.5 10.9142 14.5 10.4428 14.5 9.5V7.5C14.5 6.55719 14.5 6.08579 14.2071 5.79289C13.9142 5.5 13.4428 5.5 12.5 5.5Z"/><path d="M13 11.5H10V21.5H13V11.5Z"/><path d="M7.5 21.5H15.5"/><path d="M14.5 7H18.5C20.1569 7 21.5 8.34315 21.5 10V12.5H18.5V10H14.5V7Z"/><path d="M14.5 2.5H9.09949C7.83781 2.5 7.20696 2.5 6.70992 2.82302C6.21288 3.14603 5.95667 3.7225 5.44425 4.87545L2.5 11.5"/><path d="M20 15.5L20.5582 14.9991C20.4159 14.8406 20.213 14.75 20 14.75C19.787 14.75 19.5841 14.8406 19.4418 14.9991L20 15.5ZM20.75 18C20.75 18.4142 20.4142 18.75 20 18.75V20.25C21.2426 20.25 22.25 19.2426 22.25 18H20.75ZM20 18.75C19.5858 18.75 19.25 18.4142 19.25 18H17.75C17.75 19.2426 18.7574 20.25 20 20.25V18.75ZM19.25 18C19.25 18.003 19.2507 17.969 19.2771 17.8886C19.3022 17.8119 19.343 17.7162 19.4012 17.6031C19.5182 17.3759 19.6824 17.1227 19.8589 16.8772C20.0335 16.6345 20.2097 16.4137 20.3431 16.2528C20.4094 16.1727 20.4644 16.1084 20.5023 16.0646C20.5212 16.0428 20.5358 16.0262 20.5454 16.0153C20.5502 16.0099 20.5537 16.0059 20.5559 16.0035C20.557 16.0023 20.5577 16.0015 20.5581 16.001C20.5583 16.0008 20.5584 16.0007 20.5584 16.0007C20.5584 16.0007 20.5584 16.0007 20.5584 16.0007C20.5584 16.0007 20.5583 16.0008 20.5583 16.0008C20.5583 16.0008 20.5582 16.0009 20 15.5C19.4418 14.9991 19.4417 14.9992 19.4417 14.9992C19.4416 14.9993 19.4415 14.9994 19.4415 14.9994C19.4414 14.9996 19.4412 14.9997 19.441 14.9999C19.4407 15.0003 19.4403 15.0008 19.4397 15.0014C19.4387 15.0026 19.4373 15.0042 19.4355 15.0061C19.432 15.0101 19.4271 15.0156 19.4209 15.0226C19.4085 15.0367 19.3909 15.0568 19.3688 15.0822C19.3246 15.1332 19.2625 15.2059 19.1882 15.2955C19.0403 15.4739 18.8415 15.7228 18.6411 16.0015C18.4426 16.2774 18.2318 16.5975 18.0675 16.9166C17.9157 17.2115 17.75 17.6053 17.75 18H19.25ZM20 15.5C19.4418 16.0009 19.4417 16.0008 19.4417 16.0008C19.4417 16.0008 19.4416 16.0007 19.4416 16.0007C19.4416 16.0007 19.4416 16.0007 19.4416 16.0007C19.4416 16.0007 19.4417 16.0008 19.4419 16.001C19.4423 16.0015 19.443 16.0023 19.4441 16.0035C19.4463 16.0059 19.4498 16.0099 19.4546 16.0153C19.4642 16.0262 19.4788 16.0428 19.4977 16.0646C19.5356 16.1084 19.5906 16.1727 19.6569 16.2528C19.7903 16.4137 19.9665 16.6345 20.1411 16.8772C20.3176 17.1227 20.4818 17.3759 20.5988 17.6031C20.657 17.7162 20.6978 17.8119 20.7229 17.8886C20.7493 17.969 20.75 18.003 20.75 18H22.25C22.25 17.6053 22.0843 17.2115 21.9325 16.9166C21.7682 16.5975 21.5574 16.2774 21.3589 16.0015C21.1585 15.7228 20.9597 15.4739 20.8118 15.2955C20.7375 15.2059 20.6754 15.1332 20.6312 15.0822C20.6091 15.0568 20.5915 15.0367 20.5791 15.0226C20.5729 15.0156 20.568 15.0101 20.5645 15.0061C20.5627 15.0042 20.5613 15.0026 20.5603 15.0014C20.5597 15.0008 20.5593 15.0003 20.559 14.9999C20.5588 14.9997 20.5586 14.9996 20.5585 14.9994C20.5585 14.9994 20.5584 14.9993 20.5583 14.9992C20.5583 14.9992 20.5582 14.9991 20 15.5Z" fill="currentColor"/><path d="M11.5 2.5V5.5"/>' }, // WaterPumpIcon
+  'Tenders': { tone: 'pine', icon: '<path d="M18 6C17.9531 4.44655 17.7797 3.51998 17.1377 2.87868C16.2581 2 14.8423 2 12.0108 2H8.0065C5.17501 2 3.75926 2 2.87963 2.87868C2 3.75736 2 5.17157 2 8V16C2 18.8284 2 20.2426 2.87963 21.1213C3.75926 22 5.17501 22 8.0065 22H12.0108C14.8423 22 16.2581 22 17.1377 21.1213C17.7797 20.48 17.9531 19.5535 18 18"/><path d="M20.2419 11.7419L21.419 10.5648C21.6894 10.2944 21.8246 10.1592 21.8969 10.0134C22.0344 9.73584 22.0344 9.41003 21.8969 9.13252C21.8246 8.98666 21.6894 8.85145 21.419 8.58104C21.1485 8.31062 21.0133 8.17542 20.8675 8.10314C20.59 7.96562 20.2642 7.96562 19.9866 8.10314C19.8408 8.17542 19.7056 8.31062 19.4352 8.58104L18.2581 9.7581M20.2419 11.7419L14.9757 17.0081L12 18L12.9919 15.0243L18.2581 9.7581M20.2419 11.7419L18.2581 9.7581"/><path d="M5 19H6L7.25 16.5L8.5 19H9.5"/><path d="M6 6H14"/><path d="M6 10H12"/>' }, // ContractsIcon
+  'Grievances': { tone: 'rose', icon: '<path d="M17.0004 7L17.0049 5.50488M17.0504 9.90037H17.0004M17.1004 9.90037C17.1004 9.9556 17.0556 10.0004 17.0004 10.0004C16.9452 10.0004 16.9004 9.9556 16.9004 9.90037C16.9004 9.84514 16.9452 9.80037 17.0004 9.80037C17.0556 9.80037 17.1004 9.84514 17.1004 9.90037Z"/><path d="M17 12.5667C19.7611 12.5667 22 10.4249 22 7.78336C22 5.14178 19.7611 3 17 3C14.2389 3 12 5.14178 12 7.78336C12 9.05254 12.5167 10.2058 13.3594 11.0616C13.545 11.25 13.6689 11.5074 13.6189 11.7724C13.5364 12.2056 13.3494 12.6097 13.0756 12.9465C13.796 13.0805 14.5451 12.9598 15.1875 12.6182L15.1881 12.6179C15.4148 12.4973 15.5282 12.437 15.6083 12.4248C15.6884 12.4126 15.8032 12.4341 16.0327 12.4772C16.3516 12.5371 16.6753 12.5671 17 12.5667Z"/><path d="M10 13C10 14.6569 8.65685 16 7 16C5.34315 16 4 14.6569 4 13C4 11.3431 5.34315 10 7 10C8.65685 10 10 11.3431 10 13Z"/><path d="M12 21C12 18.2386 9.76142 16 7 16C4.23858 16 2 18.2386 2 21"/>' }, // ComplaintIcon
+};
+const fallback = { tone: 'lake', icon: '<circle cx="12" cy="12" r="10"/><path d="M12 16V12"/><path d="M12.125 8.25H12M12.25 8.25C12.25 8.11193 12.1381 8 12 8C11.8619 8 11.75 8.11193 11.75 8.25C11.75 8.38807 11.8619 8.5 12 8.5C12.1381 8.5 12.25 8.38807 12.25 8.25Z"/>' }; // InformationCircleIcon
+const arrow = { in: '<path d="M18.5 12L4.99997 12"/><path d="M13 18C13 18 19 13.5811 19 12C19 10.4188 13 6 13 6"/>', out: '<path d="M9 6.65032C9 6.65032 15.9383 6.10759 16.9154 7.08463C17.8924 8.06167 17.3496 15 17.3496 15M16.5 7.5L6.5 17.5"/>' }; // ArrowRight02Icon, ArrowUpRight01Icon
+const isExternal = (href: string) => !(href.startsWith('/') || href.startsWith('#'));
+
+// FAQ. Keep the English text exact: it is the translation key in i18n.ts.
+const faqs = [
+  { q: 'How do I apply for a trade licence?', a: 'Apply online on the state e-District portal. You register first with your mobile number and an OTP. Renewals are done there too.' },
+  { q: 'How do I register a birth or death?', a: 'Use the state Janma-Mrityu Tathya portal. Once the record is registered, you can download the certificate online.' },
+  { q: 'Where do I submit a building plan?', a: 'Building plans are submitted and tracked on the state Online Building Permission System (OBPS).' },
+  { q: 'How do I apply for a mutation?', a: 'Apply at the Municipality Office. Take your holding number and the papers that show who owns the property.' },
+  { q: 'How do I pay holding tax?', a: 'Holding tax is assessed and paid through the Municipality Office. Take your holding number with you.' },
+  { q: 'How do I report a problem in my ward?', a: 'Use the Grievance button at the top of any page, or email or call the office. Give your ward and the exact location so the office can act quickly.' },
+  { q: 'When is the office open?', a: 'Monday to Friday, 10:00 AM to 5:30 PM. The office is closed on government holidays.' },
+  { q: 'Who do I call in an emergency?', a: 'Dial 112 for any emergency. Police is 100, fire is 101 and ambulance is 108. The Emergency page lists more numbers.' },
+];
+const chevron = '<path d="M18 9.00005C18 9.00005 13.5811 15 12 15C10.4188 15 6 9 6 9"/>'; // Hugeicons ArrowDown01Icon
+---
+<Layout title="Services & Grievances | Mirik Municipality">
+  <PageHead slug="services" title="Services & Grievances" lead="How to apply for municipal services, and how to report a problem in your ward." />
+
+  <section class="alt svc-sec" id="services">
     <div class="wrap">
       <div class="section-head">
         <p class="eyebrow">Citizen Services</p>
         <h2>Apply online or at the office</h2>
         <p class="lead">Most municipal services in West Bengal run on state portals. Use the links below from anywhere, or visit the office at Thana Line.</p>
       </div>
-      <div class="cards">
-        {services.map((s) => (
-          <article class="card">
-            <span class={s.online ? 'tag' : 'tag office'}>{s.online ? 'Online' : 'At the office'}</span>
-            <h3>{s.title}</h3>
-            <p>{s.text}</p>
-            {s.link && (
-              <a class="go" href={s.link} target={s.link.startsWith('/') || s.link.startsWith('#') ? undefined : '_blank'} rel="noopener">{s.linkLabel}</a>
-            )}
-          </article>
-        ))}
+      <div class="svc-grid">
+        {services.map((s) => {
+          const l = look[s.title] ?? fallback;
+          const href = s.link || '/contact/';
+          const ext = isExternal(href);
+          return (
+            <article class={`svc-card tone-${l.tone}`}>
+              <svg class="svc-mark" viewBox="0 0 24 24" aria-hidden="true" set:html={l.icon} />
+              <div class="svc-top">
+                <span class="svc-ico"><svg viewBox="0 0 24 24" aria-hidden="true" set:html={l.icon} /></span>
+                <span class={s.online ? 'svc-tag on' : 'svc-tag'}><i aria-hidden="true"></i>{s.online ? 'Online' : 'At the office'}</span>
+              </div>
+              <h3>{s.title}</h3>
+              <p>{s.text}</p>
+              <a class="svc-go" href={href} target={ext ? '_blank' : undefined} rel={ext ? 'noopener' : undefined}>
+                <span>{s.link ? s.linkLabel : 'Office address and hours'}</span>
+                <svg viewBox="0 0 24 24" aria-hidden="true" set:html={ext ? arrow.out : arrow.in} />
+              </a>
+            </article>
+          );
+        })}
       </div>
     </div>
   </section>
 
-  <section id="projects">
-    <div class="wrap">
-      <div class="section-head">
-        <p class="eyebrow">Projects</p>
-        <h2>Projects under way</h2>
-        <p class="lead">Water, sanitation, housing and health schemes being delivered in Mirik.</p>
-      </div>
-      <div class="grid-3">
-        {projects.map((p) => (
-          <article class="card project">
-            <div class="figure">{p.figure}</div>
-            <h3>{p.title}</h3>
-            <p>{p.text}</p>
-          </article>
-        ))}
-      </div>
-
-      <h3 id="schemes" style="margin-top:48px">Special projects and schemes</h3>
-      <div class="schemes">
-        {schemes.map((s, i) => (
-          <details id={s.id} open={i === 0}>
-            <summary>{s.short} <span>{s.name}</span></summary>
-            <div class="body"><p>{s.text}</p></div>
-          </details>
-        ))}
-      </div>
-    </div>
-  </section>
-  <section class="alt" id="faq">
-    <div class="wrap">
-      <div class="section-head">
-        <p class="eyebrow">FAQ</p>
-        <h2>Common questions</h2>
-        <p class="lead">Quick answers about applying, paying and getting help.</p>
-      </div>
-      <div class="schemes faq">
-        <details><summary>How do I apply for a trade licence?</summary><div class="body"><p>Apply online on the state e-District portal. You register first with your mobile number and an OTP. Renewals are done there too.</p></div></details>
-        <details><summary>How do I register a birth or death?</summary><div class="body"><p>Use the state Janma-Mrityu Tathya portal. Once the record is registered, you can download the certificate online.</p></div></details>
-        <details><summary>Where do I submit a building plan?</summary><div class="body"><p>Building plans are submitted and tracked on the state Online Building Permission System (OBPS).</p></div></details>
-        <details><summary>How do I apply for a mutation?</summary><div class="body"><p>Apply at the Municipality Office. Take your holding number and the papers that show who owns the property.</p></div></details>
-        <details><summary>How do I pay holding tax?</summary><div class="body"><p>Holding tax is assessed and paid through the Municipality Office. Take your holding number with you.</p></div></details>
-        <details><summary>How do I report a problem in my ward?</summary><div class="body"><p>Use the Grievance button at the top of any page, or email or call the office. Give your ward and the exact location so the office can act quickly.</p></div></details>
-        <details><summary>When is the office open?</summary><div class="body"><p>Monday to Friday, 10:00 AM to 5:30 PM. The office is closed on government holidays.</p></div></details>
-        <details><summary>Who do I call in an emergency?</summary><div class="body"><p>Dial 112 for any emergency. Police is 100, fire is 101 and ambulance is 108. The Emergency page lists more numbers.</p></div></details>
+  <section id="faq">
+    <div class="wrap faqx">
+      <div class="faqx-main">
+        <div class="section-head">
+          <p class="eyebrow">FAQ</p>
+          <h2>Common questions</h2>
+          <p class="lead">Quick answers about applying, paying and getting help.</p>
+        </div>
+        <div class="faqx-list">
+          {faqs.map((f, i) => (
+            <div class="faqx-item">
+              <h3 class="faqx-q">
+                <button type="button" id={`faq-q-${i}`} aria-expanded="true" aria-controls={`faq-a-${i}`}>
+                  <span>{f.q}</span>
+                  <svg viewBox="0 0 24 24" aria-hidden="true" set:html={chevron} />
+                </button>
+              </h3>
+              <div class="faqx-a" id={`faq-a-${i}`} role="region" aria-labelledby={`faq-q-${i}`}>
+                <div><p>{f.a}</p></div>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   </section>
 </Layout>
+
+<script>
+  // Service cards: fade up one after another when scrolled into view, and a soft glow that follows the pointer.
+  const grid = document.querySelector<HTMLElement>('.svc-grid');
+  const cards = grid ? Array.from(grid.querySelectorAll<HTMLElement>('.svc-card')) : [];
+  const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (grid && !still && 'IntersectionObserver' in window) {
+    grid.classList.add('svc-anim');
+    const io = new IntersectionObserver((entries) => {
+      // Stagger only the cards that arrive together, so later rows don't wait for earlier ones.
+      entries.filter((e) => e.isIntersecting).forEach((e, n) => {
+        const c = e.target as HTMLElement;
+        c.style.setProperty('--d', `${n * 80}ms`);
+        c.classList.add('in');
+        io.unobserve(c);
+      });
+    }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+    cards.forEach((c) => io.observe(c));
+  }
+
+  if (!still && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+    cards.forEach((c) => {
+      c.addEventListener('pointermove', (e) => {
+        const r = c.getBoundingClientRect();
+        c.style.setProperty('--mx', `${e.clientX - r.left}px`);
+        c.style.setProperty('--my', `${e.clientY - r.top}px`);
+      });
+    });
+  }
+
+  // FAQ accordion: one answer open at a time. Without JS every answer stays visible.
+  const faqList = document.querySelector<HTMLElement>('.faqx-list');
+  if (faqList) {
+    const items = Array.from(faqList.querySelectorAll<HTMLElement>('.faqx-item'));
+    const setOpen = (item: HTMLElement, open: boolean) => {
+      item.classList.toggle('open', open);
+      item.querySelector('button')?.setAttribute('aria-expanded', String(open));
+    };
+    items.forEach((item) => setOpen(item, false));
+    faqList.classList.add('faqx-js');
+    items.forEach((item) => {
+      item.querySelector('button')?.addEventListener('click', () => {
+        const open = !item.classList.contains('open');
+        items.forEach((other) => setOpen(other, other === item && open));
+      });
+    });
+  }
+</script>

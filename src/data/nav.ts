@@ -2,12 +2,12 @@
 export const pages = [
   { slug: 'about', num: '01', label: 'About Mirik', blurb: 'History, census, places to see, transport, health and schools.' },
   { slug: 'administration', num: '02', label: 'Administration', blurb: 'Officers, wards and jurisdiction.' },
-  { slug: 'services', num: '03', label: 'Services & Projects', blurb: 'Online services, AMRUT, sanitation, housing and health schemes.' },
+  { slug: 'services', num: '03', label: 'Services & Grievances', blurb: 'Online services, grievances and common questions.' },
   { slug: 'clean-mirik', num: '04', label: 'Clean Mirik', blurb: 'Fines and waste segregation rules.' },
   { slug: 'emergency', num: '05', label: 'Emergency', blurb: 'Helplines and landslide advice.' },
   { slug: 'grievance', num: '06', label: 'Grievance', blurb: 'Report a problem in your ward.' },
   { slug: 'contact', num: '07', label: 'Contact', blurb: 'Office address, phones and map.' },
-  { slug: 'notices', num: '08', label: 'Notices', blurb: 'Official notices.' },
+  { slug: 'notices', num: '08', label: 'Notices', blurb: 'Official notices, projects and schemes.' },
   { slug: 'policies', num: '09', label: 'Website policies', blurb: 'Privacy, terms and accessibility.' },
 ] as const;
 
@@ -55,9 +55,12 @@ export const sections: Record<string, { href: string; label: string }[]> = {
   ],
   services: [
     { href: '#services', label: 'Citizen services' },
+    { href: '#faq', label: 'Common questions' },
+  ],
+  notices: [
+    { href: '#notices', label: 'Notice board' },
     { href: '#projects', label: 'Projects under way' },
     { href: '#schemes', label: 'Special projects and schemes' },
-    { href: '#faq', label: 'Common questions' },
   ],
   'clean-mirik': [
     { href: '#fines', label: 'Fines' },

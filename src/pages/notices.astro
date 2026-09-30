@@ -1,7 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import PageHead from '../components/PageHead.astro';
-import { notices } from '../data/site';
+import { notices, projects, schemes } from '../data/site';
 ---
 <Layout title="Notices | Mirik Municipality">
   <PageHead slug="notices" title="Notice board" lead="Official announcements from the Municipality Office." />
@@ -13,6 +13,35 @@ import { notices } from '../data/site';
             <time>{n.date}</time>
             <div><h3>{n.title}</h3><p>{n.body}</p></div>
           </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="alt" id="projects">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">Projects</p>
+        <h2>Projects under way</h2>
+        <p class="lead">Water, sanitation, housing and health schemes being delivered in Mirik.</p>
+      </div>
+      <div class="grid-3">
+        {projects.map((p) => (
+          <article class="card project">
+            <div class="figure">{p.figure}</div>
+            <h3>{p.title}</h3>
+            <p>{p.text}</p>
+          </article>
+        ))}
+      </div>
+
+      <h3 id="schemes" style="margin-top:48px">Special projects and schemes</h3>
+      <div class="schemes">
+        {schemes.map((s, i) => (
+          <details id={s.id} open={i === 0}>
+            <summary>{s.short} <span>{s.name}</span></summary>
+            <div class="body"><p>{s.text}</p></div>
+          </details>
         ))}
       </div>
     </div>

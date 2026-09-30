@@ -233,4 +233,11 @@ export const extra: Record<string, [string, string]> = {
   "WhatsApp number": ["व्हाट्सएप नम्बर", "হোয়াটসঅ্যাপ নম্বর"],
   "Times are rough estimates for normal weather and traffic on the hill road. Landslides, rain and roadworks can add a lot, so check locally before you set out.": ["सामान्य मौसम र यातायातमा पहाडी सडकका लागि अनुमानित समय मात्र। पहिरो, वर्षा र सडक मर्मतले धेरै समय थप्न सक्छ, त्यसैले हिँड्नु अघि स्थानीय रूपमा जाँच गर्नुहोस्।", "স্বাভাবিক আবহাওয়া ও যানবাহনে পাহাড়ি রাস্তার জন্য আনুমানিক সময়। ধস, বৃষ্টি ও রাস্তা মেরামতে অনেক বেশি সময় লাগতে পারে, তাই রওনা হওয়ার আগে স্থানীয়ভাবে জেনে নিন।"],
   'Language': ['भाषा', 'ভাষা'],
+  // ---- Services & Grievances rename; projects moved to Notices ----
+  'Services & Grievances': ['सेवा र गुनासो', 'পরিষেবা ও অভিযোগ'],
+  'Services & Grievances | Mirik Municipality': ['सेवा र गुनासो | मिरिक नगरपालिका', 'পরিষেবা ও অভিযোগ | মিরিক পৌরসভা'],
+  'How to apply for municipal services, and how to report a problem in your ward.': ['नगरपालिका सेवाका लागि कसरी आवेदन दिने, र आफ्नो वडाको समस्या कसरी जानकारी गराउने।', 'পৌর পরিষেবার জন্য কীভাবে আবেদন করবেন এবং আপনার ওয়ার্ডের সমস্যা কীভাবে জানাবেন।'],
+  'Online services, grievances and common questions.': ['अनलाइन सेवा, गुनासो र सामान्य प्रश्नहरू।', 'অনলাইন পরিষেবা, অভিযোগ ও সাধারণ প্রশ্ন।'],
+  'Office address and hours':['कार्यालयको ठेगाना र समय', 'অফিসের ঠিকানা ও সময়'],
+  'Official notices, projects and schemes.':['आधिकारिक सूचना, परियोजना र योजनाहरू।', 'সরকারি বিজ্ঞপ্তি, প্রকল্প ও পরিকল্পনা।'],
 };
