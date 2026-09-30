@@ -455,11 +455,11 @@ export const emergency = [
 
 // Optional `photo` (e.g. '/images/offices/sdo.jpg') replaces the map thumbnail once real photos are added to public/.
 export const offices: { name: string; detail: string; address: string; photo?: string }[] = [
-  { name: 'Sub-Divisional Office (SDO), Mirik', detail: 'Near Mirik Police Station', address: 'Near Mirik Police Station, Thana Line, Mirik, Darjeeling, West Bengal 734214' },
-  { name: 'SDPO Office, Mirik', detail: 'Near Mirik Police Station', address: 'Near Mirik Police Station, Thana Line, Mirik, Darjeeling, West Bengal 734214' },
-  { name: 'Mirik Police Station', detail: 'Thana Line', address: 'Thana Line, Mirik, Darjeeling, West Bengal 734214' },
-  { name: 'Taluka Court, Mirik', detail: 'Civil Judge and Judicial Magistrate', address: 'Mirik, Darjeeling, West Bengal 734214' },
-  { name: 'Mirik Block (BDO) Office', detail: 'Rural areas and Gram Panchayats', address: 'Mirik, Darjeeling, West Bengal 734214' },
+  { name: 'Sub-Divisional Office (SDO), Mirik', detail: 'Near Mirik Police Station', address: 'Near Mirik Police Station, Thana Line, Mirik, Darjeeling, West Bengal 734214', photo: '/images/offices/mirik-sdo.webp' },
+  { name: 'SDPO Office, Mirik', detail: 'Near Mirik Police Station', address: 'Near Mirik Police Station, Thana Line, Mirik, Darjeeling, West Bengal 734214', photo: '/images/offices/mirik-sdo.webp' },
+  { name: 'Mirik Police Station', detail: 'Thana Line', address: 'Thana Line, Mirik, Darjeeling, West Bengal 734214', photo: '/images/offices/mirik-police-station-building.webp' },
+  { name: 'Taluka Court, Mirik', detail: 'Civil Judge and Judicial Magistrate', address: 'Mirik, Darjeeling, West Bengal 734214', photo: '/images/offices/mirik-court.webp' },
+  { name: 'Mirik Block (BDO) Office', detail: 'Rural areas and Gram Panchayats', address: 'Mirik, Darjeeling, West Bengal 734214', photo: '/images/offices/mirik-bdo-no-person.png' },
 ];
 
 export const links = [

@@ -114,7 +114,7 @@ const wardMap = blockMapRaw
               <li>
                 <div class="thumb">
                   {o.photo
-                    ? <img src={o.photo} alt={`${o.name}`} width="800" height="600" loading="lazy" />
+                    ? <img src={o.photo} alt={`View around ${o.name}, Mirik`} width="800" height="600" loading="lazy" />
                     : <iframe title={`Map: ${o.name}`} src={`https://www.google.com/maps?q=${encodeURIComponent(o.name + ', ' + o.address)}&z=16&output=embed`} loading="lazy" tabindex="-1" referrerpolicy="no-referrer-when-downgrade"></iframe>}
                 </div>
                 <div class="obody">

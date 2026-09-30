@@ -11,6 +11,13 @@ Downloaded 30 September 2026 for the Mirik Municipality About page. The images a
 
 Before a public production launch, confirm the applicable licence or obtain permission from every listed image owner.
 
+## Public offices
+
+- Mirik SDO Office and Mirik BDO Office — visitor photographs from [Yappe's Mirik SDO listing](https://yappe.in/west-bengal/mirik/sdo-office/2346873) and [Mirik BDO listing](https://yappe.in/west-bengal/mirik/mirik-b-d-o/2346863), downloaded 30 September 2026. Confirm permission/licensing before public production use.
+- Mirik Court — street-view photograph from the [Google Maps listing for Mirik Court](https://maps.app.goo.gl/otiJJzZ5qxkEsWYP7), downloaded 30 September 2026. Confirm permission/licensing before public production use.
+- Mirik Police Station — photograph from the [Google Maps listing for Mirik Police Station](https://maps.app.goo.gl/bkyELZprHQ6J74YJ7), downloaded 30 September 2026 and cropped to the building (a vehicle number plate was removed). Confirm permission/licensing before public production use.
+- `mirik-bdo-no-person.png` is an edited derivative of the Yappe BDO visitor photograph: the identifiable visitor was removed; the building and signboard were retained.
+
 ## Health-care and education imagery
 
 - Mirik Rural Hospital — All India Trinamool Congress, [Mirik BPHC](https://aitcofficial.org/mirik-bphc-to-be-upgraded-to-states-69th-sub-divisional-hospital/)
