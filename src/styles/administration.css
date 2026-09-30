@@ -1,0 +1,43 @@
+/* Administration page styles. Owned by the administration page; loaded after global.css from administration.astro. */
+/* Administration: the complete, photo-led body directory. */
+.admin-body { margin-top: 2.75rem; padding-top: 2.75rem; border-top: 1px solid var(--line); }
+.admin-body-head { display: flex; align-items: end; justify-content: space-between; gap: 2rem; margin-bottom: 1.35rem; }
+.admin-body-head .eyebrow { margin-bottom: .4rem; }
+.admin-body-head h2 { margin: 0; font-size: clamp(1.65rem, 3vw, 2.2rem); }
+.admin-body-head > p { max-width: 34rem; margin: 0; color: var(--muted); font-size: .96rem; line-height: 1.55; }
+@media (max-width: 640px) { .admin-body { margin-top: 2.25rem; padding-top: 2rem; } .admin-body-head { display: grid; align-items: start; gap: .75rem; } }
+
+/* Administration offices: landscape media cards on wide screens, stacked only when space is genuinely limited. */
+ul.offices { gap: 1rem; }
+ul.offices li { grid-template-columns: minmax(10.5rem, 31%) minmax(0, 1fr); min-height: 10.5rem; gap: 1.05rem; padding: .8rem; border-left-width: .32rem; border-radius: 1rem; box-shadow: 0 .35rem 1rem rgba(15,50,40,.04); transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease; }
+ul.offices li:hover { transform: translateY(-2px); border-color: rgba(106,76,147,.42); box-shadow: 0 .8rem 1.7rem rgba(15,50,40,.1); }
+ul.offices .thumb { min-height: 0; height: 100%; border-radius: .72rem; }
+ul.offices .obody { display: flex; flex-direction: column; align-items: flex-start; min-width: 0; padding: .25rem .35rem .25rem .1rem; }
+ul.offices .obody strong { font-size: clamp(1rem, 1.8vw, 1.17rem); line-height: 1.24; }
+ul.offices .obody small { margin-top: .28rem; font-size: .9rem; }
+ul.offices address { margin: .65rem 0 .9rem; line-height: 1.48; }
+ul.offices .dir { margin-top: auto; min-height: 2.6rem; display: inline-flex; align-items: center; }
+@media (max-width: 860px) { ul.offices li { grid-template-columns: minmax(9rem, 34%) minmax(0, 1fr); } }
+@media (max-width: 600px) { ul.offices li { grid-template-columns: 1fr; min-height: 0; padding: .72rem; } ul.offices .thumb { min-height: 10.5rem; aspect-ratio: 16 / 8; } ul.offices .obody { padding: .85rem .3rem .25rem; } ul.offices .dir { margin-top: .55rem; } }
+@media (prefers-reduced-motion: reduce) { ul.offices li { transition: none; } ul.offices li:hover { transform: none; } }
+
+/* Office directory: a wrapping grid of landscape cards, never a horizontal rail. */
+ .office-directory { margin-top: 3.25rem; padding-top: 2.75rem; border-top: 1px solid var(--line); }
+.office-directory-head { margin-bottom: 1.25rem; }
+.office-directory-head .eyebrow { margin-bottom: .4rem; }
+.office-directory-head h2 { margin: 0; font-size: clamp(1.65rem, 3vw, 2.2rem); }
+ul.offices { display: grid; grid-auto-flow: row; grid-template-columns: repeat(3, minmax(0, 1fr)); overflow: visible; padding: 0; margin: 0; }
+ul.offices li { min-width: 0; }
+@media (max-width: 1180px) { ul.offices { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 760px) { ul.offices { grid-template-columns: 1fr; } }
+@media (max-width: 600px) {
+  .office-directory { margin-top: 2.25rem; padding-top: 2rem; }
+  ul.offices { gap: .8rem; }
+  ul.offices li { grid-template-columns: minmax(7.2rem, 35%) minmax(0, 1fr); min-height: 11rem; }
+  ul.offices .thumb { min-height: 0; height: 100%; aspect-ratio: auto; }
+  ul.offices .obody { padding: .25rem .1rem; }
+  ul.offices .obody strong { font-size: 1rem; }
+  ul.offices .obody small { font-size: .82rem; }
+  ul.offices address { margin: .45rem 0 .7rem; font-size: .82rem; }
+  ul.offices .dir { min-height: 2.35rem; padding: .55rem .85rem; font-size: .8rem; }
+}
