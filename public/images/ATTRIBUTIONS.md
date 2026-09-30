@@ -11,6 +11,10 @@ Downloaded 30 September 2026 for the Mirik Municipality About page. The images a
 
 Before a public production launch, confirm the applicable licence or obtain permission from every listed image owner.
 
+## Schemes showcase
+
+- PMAY-U affordable housing complex, Bedwas, Udaipur — Ministry of Housing and Urban Affairs, [PMAY(U) Glimpses of Progress](https://pmay-urban.gov.in/glimpses-of-progress/AHP/8/city/0). Downloaded 30 September 2026 for the Housing for All programme card.
+
 ## Health-care and education imagery
 
 - Mirik Rural Hospital — All India Trinamool Congress, [Mirik BPHC](https://aitcofficial.org/mirik-bphc-to-be-upgraded-to-states-69th-sub-divisional-hospital/)

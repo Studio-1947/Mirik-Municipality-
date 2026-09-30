@@ -4,7 +4,18 @@ import '../styles/administration.css';
 import PageHead from '../components/PageHead.astro';
 import Avatar from '../components/Avatar.astro';
 import AppointmentDialog from '../components/AppointmentDialog.astro';
-import { meta, contact, administration, offices, body } from '../data/site';
+import blockMapRaw from '../assets/mirik-block-map.svg?raw';
+import { meta, contact, administration, offices, body, wards, demographics } from '../data/site';
+
+const fmt = (n: number) => n.toLocaleString('en-IN');
+const census = demographics.census2011;
+const pinLayer = '<g id="ward-pins">' + wards.filter((w) => w.pos).map((w) =>
+  `<g class="pin" data-no="${w.no}" transform="translate(${w.pos![0]} ${w.pos![1]})" tabindex="0" role="button" aria-label="Ward ${w.no}"><g class="pin-s"><circle class="pin-ring" r="16" /><circle class="pin-dot" r="10.5" /><text class="pin-t" y="3.6">${w.no}</text></g></g>`
+).join('') + '</g>';
+const wardMap = blockMapRaw
+  .replace(/<svg([^>]*?)\s+width="817"\s+height="1156"/, '<svg id="ward-svg" preserveAspectRatio="xMidYMid slice"$1')
+  .replace('viewBox="0 0 817 1156"', 'viewBox="142 66 400 420"')
+  .replace('</svg>', pinLayer + '</svg>');
 
 ---
 <Layout title="Who runs the municipality | Mirik Municipality">
@@ -66,27 +77,33 @@ import { meta, contact, administration, offices, body } from '../data/site';
           </div>
         </section>
 
-        <div class="grid-2" style="margin-top:40px">
-          <div>
-            <aside class="mapcard">
-              <h4>Detailed map of Mirik</h4>
-              <p>Block map of Mirik, Darjeeling showing tea gardens, forests, rivers and administrative boundaries. It does not mark the nine municipal ward boundaries.</p>
-              <a class="btn solid dark" href="https://www.scribd.com/doc/142758278/MIRIK-Darjeeling" target="_blank" rel="noopener">Open detailed map <span aria-hidden="true">&rarr;</span></a>
-            </aside>
+        <section class="admin-ward-map" id="jurisdiction" aria-labelledby="ward-map-title">
+          <div class="row-head">
+            <div><p class="eyebrow">Ward map</p><h2 id="ward-map-title">Mirik and its nine wards</h2></div>
+            <a class="more" href="/administration/#offices">Public offices <span aria-hidden="true">&rarr;</span></a>
           </div>
-          <div>
-            <h3 id="jurisdiction">Jurisdiction</h3>
-            <dl class="kv juris">
-              <dt>Body</dt><dd>{meta.legalName}</dd>
-              <dt>Wards</dt><dd>{administration.wards}</dd>
-              <dt>Last election</dt><dd>{administration.lastElection}</dd>
-              <dt>Subdivision</dt><dd>{administration.subdivision}</dd>
-              <dt>District</dt><dd>{meta.district}, {meta.state}</dd>
-              <dt>Assembly seat</dt><dd>{administration.assembly}</dd>
-              <dt>Lok Sabha seat</dt><dd>{administration.loksabha}</dd>
-            </dl>
+          <div class="wardmap">
+            <figure class="wm-map">
+              <div class="mapview"><Fragment set:html={wardMap} /></div>
+              <figcaption>Select a ward marker to view its locality information. Ward boundaries and pins are approximate.</figcaption>
+            </figure>
+            <div class="wm-side">
+              <div class="wm-card">
+                <div class="wc-sec"><div class="wc-head"><h3>Ward selection</h3><span>9 wards</span></div>
+                  <div class="ward-localities" aria-live="polite"><strong id="ward-title">All wards</strong><p id="ward-locality">Choose a ward marker on the map to see the available locality information.</p></div>
+                </div>
+                <div class="wc-sec"><div class="wc-head"><h3>Key numbers</h3><span>Census 2011</span></div>
+                  <div class="demo-grid">
+                    <div class="dstat"><b>{fmt(census.total)}</b><span>Population</span><small>Census 2011</small></div><div class="dstat"><b>{fmt(census.male)}</b><span>Men</span><small>49%</small></div><div class="dstat"><b>{fmt(census.female)}</b><span>Women</span><small>51%</small></div><div class="dstat"><b>1,024</b><span>Sex ratio</span><small>females per 1,000 males</small></div>
+                  </div>
+                </div>
+                <div class="wc-sec jurisdiction-summary"><div class="wc-head"><h3>Jurisdiction</h3></div>
+                  <dl class="kv"><dt>Body</dt><dd>{meta.legalName}</dd><dt>Subdivision</dt><dd>{administration.subdivision}</dd><dt>District</dt><dd>{meta.district}, {meta.state}</dd><dt>Assembly seat</dt><dd>{administration.assembly}</dd></dl>
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
+        </section>
         <section class="office-directory" aria-labelledby="offices">
           <div class="office-directory-head">
             <p class="eyebrow">Public offices</p>
@@ -97,14 +114,14 @@ import { meta, contact, administration, offices, body } from '../data/site';
               <li>
                 <div class="thumb">
                   {o.photo
-                    ? <img src={o.photo} alt={`${o.name}`} width="800" height="600" loading="lazy" />
+                    ? <img src={o.photo} alt={`View around ${o.name}, Mirik`} width="800" height="600" loading="lazy" />
                     : <iframe title={`Map: ${o.name}`} src={`https://www.google.com/maps?q=${encodeURIComponent(o.name + ', ' + o.address)}&z=16&output=embed`} loading="lazy" tabindex="-1" referrerpolicy="no-referrer-when-downgrade"></iframe>}
                 </div>
                 <div class="obody">
                   <strong>{o.name}</strong>
                   <small>{o.detail}</small>
                   <address>{o.address}</address>
-                  <a class="dir" href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(o.name + ', ' + o.address)}`} target="_blank" rel="noopener">Get directions <span aria-hidden="true">&rarr;</span></a>
+                  <a class="dir" href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(o.name + ', ' + o.address)}`} target="_blank" rel="noopener">Directions <span class="direction-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path class="direction-icon-frame" d="m12 2.6 9.4 9.4-9.4 9.4L2.6 12 12 2.6Z" /><path class="direction-icon-turn" d="M8.6 18v-7h6V7l5 5-5 5v-4h-3.8v5H8.6Z" /></svg></span></a>
                 </div>
               </li>
             ))}
@@ -113,4 +130,15 @@ import { meta, contact, administration, offices, body } from '../data/site';
       </div>
     </section>
   <AppointmentDialog />
+  <script define:vars={{ wards }}>
+    const title = document.getElementById('ward-title');
+    const locality = document.getElementById('ward-locality');
+    document.querySelectorAll('.pin').forEach((pin) => pin.addEventListener('click', () => {
+      const ward = wards.find((item) => item.no === pin.dataset.no);
+      if (!ward || !title || !locality) return;
+      document.querySelectorAll('.pin').forEach((item) => item.classList.toggle('on', item === pin));
+      title.textContent = `Ward ${ward.no}`;
+      locality.textContent = ward.localities || 'Locality details will be added when confirmed by the Municipality.';
+    }));
+  </script>
 </Layout>

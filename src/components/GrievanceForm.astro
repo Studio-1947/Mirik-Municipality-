@@ -84,4 +84,10 @@ const { prefix = 'g' } = Astro.props;
 
   @media (max-width: 640px) { form.grv .wa-opts { grid-template-columns: 1fr; } }
   @media (prefers-reduced-motion: reduce) { form.grv .wa-num { animation: none; } .wa-tick, .wa-tick::after, form.grv .wa-opts .wa-opt { transition: none; } }
+
+  /* Ward dropdown: rounded pill with a solid caret, like the home page ward selector. */
+  form.grv select { height: 48px; padding: 0 46px 0 20px; border-radius: 999px; border: 1px solid var(--line); background-color: #faf8f3; color: var(--ink); font-weight: 600; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='M0 0h12L6 8z' fill='%23485650'/%3E%3C/svg%3E"); background-position: right 20px center; background-size: 12px 8px; background-repeat: no-repeat; -webkit-backdrop-filter: none; backdrop-filter: none; }
+  form.grv select:hover { border-color: var(--green); }
+  form.grv select:focus, form.grv select:focus-visible { outline: 3px solid var(--lake); outline-offset: 2px; border-color: var(--lake); background-color: #faf8f3; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='M0 0h12L6 8z' fill='%23485650'/%3E%3C/svg%3E"); box-shadow: none; }
+  form.grv select option { color: var(--ink); background: #fff; }
 </style>

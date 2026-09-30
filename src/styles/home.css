@@ -204,39 +204,6 @@
   opacity: .78;
 }
 
-/* Wide landscape ticket: balances the home hero rather than competing with it. */
-.hero-ticket {
-  top: clamp(14.5rem, 29vh, 18rem);
-  width: min(31rem, calc(100vw - 3rem));
-  padding-right: 4.75rem;
-}
-.hero-ticket .grv-ticket-head {
-  align-items: center;
-  padding: .85rem 1.15rem .7rem;
-}
-.hero-ticket .grv-ticket-eyebrow { margin-bottom: .15rem; font-size: .68rem; }
-.hero-ticket h2 { font-size: 1.16rem; white-space: nowrap; }
-.hero-ticket .grv-ticket-tag { padding: .28rem .5rem; font-size: .7rem; }
-.hero-ticket .grv-ticket-id { padding: .55rem 1.15rem; }
-.hero-ticket .grv-ticket-status { gap: .6rem; padding: .7rem 1.15rem; }
-.hero-ticket .grv-ticket-status p { margin-top: .12rem; font-size: .78rem; white-space: nowrap; }
-.hero-ticket .grv-ticket-steps { gap: .8rem; padding: .65rem 1.15rem .75rem; }
-.hero-ticket .grv-ticket-steps li { grid-template-columns: auto 1fr; align-items: center; column-gap: .35rem; row-gap: 0; font-size: .68rem; }
-.hero-ticket .grv-ticket-steps li::before { grid-row: 1 / span 2; }
-.hero-ticket-stub { top: .75rem; right: 1.15rem; bottom: .75rem; width: 2.35rem; }
-@media (max-width: 1000px) { .hero-ticket { display: none; } }
-@media (min-width: 1001px) and (max-width: 1240px) {
-  .hero-ticket {
-    display: block;
-    top: clamp(13.5rem, 27vh, 16rem);
-    right: 1rem;
-    width: min(24rem, calc(100vw - 37rem));
-    padding-right: 3.9rem;
-  }
-  .hero-ticket h2 { font-size: 1.05rem; }
-  .hero-ticket .grv-ticket-status p { font-size: .72rem; }
-  .hero-ticket-stub { right: .8rem; width: 1.85rem; }
-}
 
 /* Keep the quick-service panel in the first viewport on compact displays. */
 .quick-sec { margin-top: clamp(-7rem, -10svh, -3.4rem); }
@@ -326,21 +293,126 @@
   .hero-ticket { top: clamp(13rem, 34vh, 18rem); }
 }
 
-/* ---- Home page: FAQ (.faqx-*), moved from the Services page ----
-   Questions in a divided list.
+/* ---- Home page: FAQ (.faqx-*) ----
+   Two-column split: left container holds image & civic assistance card; right column aligns FAQ questions.
    Answers collapse only once the page script adds .faqx-js, so they stay readable without JS. */
-.faqx-main .section-head { margin-bottom: 14px; }
-/* Heading stays left with the other home sections; only the question list is centred */
-.faqx-list { max-width: 860px; margin-inline: auto; }
+.faqx .section-head { margin-bottom: 24px; }
+
+.faqx-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 4.6fr) minmax(0, 7.4fr);
+  gap: 48px;
+  align-items: start;
+}
+
+.faqx-media {
+  position: sticky;
+  top: 96px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.faqx-img-card {
+  position: relative;
+  border-radius: 18px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  box-shadow: 0 12px 30px -8px rgba(18, 48, 38, 0.10);
+}
+
+.faqx-img-card img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  max-height: 440px;
+  object-fit: cover;
+  object-position: center;
+  transition: transform .6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.faqx-img-card:hover img {
+  transform: scale(1.02);
+}
+
+.faqx-help-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 16px 18px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+}
+
+.faqx-help-icon {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: var(--lake-soft);
+  color: var(--lake);
+  display: grid;
+  place-items: center;
+}
+
+.faqx-help-icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.faqx-help-title {
+  margin: 0 0 4px;
+  font-size: 0.94rem;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.faqx-help-desc {
+  margin: 0 0 8px;
+  font-size: 0.85rem;
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.faqx-help-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.86rem;
+  font-weight: 600;
+  color: var(--lake);
+  text-decoration: none;
+  transition: gap .2s, color .2s;
+}
+
+.faqx-help-link:hover {
+  color: var(--pine-deep);
+  gap: 9px;
+}
+
+/* Right column: FAQ question list */
+.faqx-list {
+  width: 100%;
+  margin: 0;
+}
 
 .faqx-item { border-bottom: 1px solid var(--line); }
+.faqx-item:first-child { border-top: 1px solid var(--line); }
 .faqx-q { margin: 0; font-size: inherit; }
 .faqx-q button { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 20px 2px; background: none; border: 0; text-align: left; font-size: 1.02rem; line-height: 1.4; color: var(--ink); cursor: pointer; transition: color .2s; }
 .faqx-q button:hover { color: var(--lake); }
 .faqx-q button:focus-visible { outline: 3px solid var(--lake); outline-offset: 2px; border-radius: 8px; }
 .faqx-q svg { flex: none; width: 30px; height: 30px; padding: 6px; border-radius: 50%; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; color: var(--ink); background: transparent; transition: transform .5s ease-in-out, background .3s, color .3s; box-sizing: border-box; }
-.faqx-item.open .faqx-q button { color: var(--pine-deep); }
-.faqx-item.open .faqx-q svg { transform: rotate(180deg); background: var(--lake-soft); color: var(--lake); }
+/* Active FAQ uses the Grievance green tone and isolated margins to prevent border line artifacts. */
+.faqx-item.open { background: var(--green-deep); border: 1px solid var(--green-deep); border-radius: 14px; margin: 12px 0; }
+.faqx-item.open:first-child { margin-top: 0; }
+.faqx-item.open:last-child { margin-bottom: 0; }
+.faqx-item:has(+ .faqx-item.open) { border-bottom-color: transparent; }
+.faqx-item.open + .faqx-item { border-top: 0; }
+.faqx-item.open .faqx-q button { padding: 20px 16px 12px; color: #fff; }
+.faqx-item.open .faqx-q svg { transform: rotate(180deg); background: rgba(255,255,255,.2); color: #fff; }
 
 /* Height animates via grid rows 0fr -> 1fr; visibility keeps closed answers out of the tab order and screen readers */
 .faqx-a { display: grid; grid-template-rows: 1fr; }
@@ -350,6 +422,30 @@
 .faqx-js .faqx-a p { transform: translateY(-8px); transition: transform .5s ease-in-out; }
 .faqx-js .faqx-item.open .faqx-a { grid-template-rows: 1fr; opacity: 1; visibility: visible; transition: grid-template-rows .5s ease-in-out, opacity .5s ease-in-out, visibility 0s; }
 .faqx-js .faqx-item.open .faqx-a p { transform: none; }
+.faqx-item.open .faqx-a p { padding: 0 60px 20px 16px; color: rgba(255,255,255,.88); }
+
+@media (max-width: 960px) {
+  .faqx-grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+  .faqx-media {
+    position: static;
+  }
+  .faqx-img-card img {
+    max-height: 360px;
+    height: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .faqx-img-card img {
+    max-height: 280px;
+  }
+  .faqx-help-card {
+    padding: 14px;
+  }
+}
 
 @media (max-width: 400px) {
   .faqx-q button { font-size: .98rem; padding: 18px 0; }

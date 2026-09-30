@@ -1050,4 +1050,13 @@ export const extra: Record<string, [string, string]> = {
   "Support local shops, guides and businesses.": ["स्थानीय पसल, गाइड र व्यवसायलाई साथ दिनुहोस्।", "স্থানীয় দোকান, গাইড ও ব্যবসাকে সমর্থন করুন।"],
   "Leave Mirik as beautiful as you found it.": ["मिरिकलाई जस्तो सुन्दर पाउनुभयो, त्यस्तै छोड्नुहोस्।", "মিরিককে যেমন সুন্দর পেয়েছেন, তেমনই রেখে যান।"],
   "When we protect Mirik, we protect its tourism, its livelihoods and its future.": ["हामीले मिरिकको रक्षा गर्दा यसको पर्यटन, जीविका र भविष्यको रक्षा गर्छौं।", "আমরা যখন মিরিককে রক্ষা করি, তখন এর পর্যটন, জীবিকা ও ভবিষ্যৎকেও রক্ষা করি।"],
+  // ---- Clean Mirik page: waste-management awareness card ----
+  "Waste management": ["फोहोर व्यवस्थापन", "বর্জ্য ব্যবস্থাপনা"],
+  "Waste is everyone's business": ["फोहोर सबैको जिम्मेवारी हो", "বর্জ্য সবার দায়িত্ব"],
+  "Mirik's beauty is our economy — the lake, the gardens and the tea slopes bring visitors, and waste is the one thing that can undo it. Every household and shop sorts its waste and puts it out on time; every visitor carries back what they bring in.": ["मिरिकको सुन्दरता नै हाम्रो अर्थतन्त्र हो — ताल, बगैंचा र चियाबारीले पाहुना ल्याउँछन्, र फोहोर त्यो एउटा कुरा हो जसले यसलाई बिगार्न सक्छ। हरेक घर र पसलले फोहोर छुट्याउँछ र समयमै निकाल्छ; हरेक पाहुनाले ल्याएको फोहोर आफैं फिर्ता लैजान्छ।", "মিরিকের সৌন্দর্যই আমাদের অর্থনীতি — লেক, বাগান ও চা-বাগানের ঢাল পর্যটক আনে, আর বর্জ্যই একমাত্র জিনিস যা তা নষ্ট করতে পারে। প্রতিটি ঘর ও দোকান বর্জ্য আলাদা করে এবং সময়মতো রাখে; প্রতিটি পর্যটক নিজের বর্জ্য সঙ্গে ফেরত নেয়।"],
+  "At home: use the green, white and black bins and keep wet and dry waste apart.": ["घरमा: हरियो, सेतो र कालो डस्टबिन प्रयोग गर्नुहोस् र भिजेको तथा सुक्खा फोहोर छुट्याउनुहोस्।", "বাড়িতে: সবুজ, সাদা ও কালো বিন ব্যবহার করুন এবং ভেজা ও শুকনো বর্জ্য আলাদা করুন।"],
+  "Out and about: use the public bins or carry it home — never the drain, the lake or the roadside.": ["बाहिर: सार्वजनिक डस्टबिन प्रयोग गर्नुहोस् वा घर लैजानुहोस् — कहिल्यै नाली, ताल वा सडकछेउमा नफाल्नुहोस्।", "বাইরে: পাবলিক বিন ব্যবহার করুন বা বাড়ি নিয়ে যান — কখনও নর্দমা, লেক বা রাস্তার ধারে ফেলবেন না।"],
+  "The lake: report dumping or burning of waste to the office — fines apply under the state rules.": ["ताल: फोहोर फाल्ने वा जलाउने काम कार्यालयमा जानकारी दिनुहोस् — राज्य नियमअनुसार जरिवाना लाग्छ।", "লেক: বর্জ্য ফেলা বা পোড়ানোর খবর অফিসে দিন — রাজ্যের নিয়ম অনুযায়ী জরিমানা হবে।"],
+  "How to sort your waste": ["फोहोर कसरी छुट्याउने", "বর্জ্য কীভাবে আলাদা করবেন"],
+  "SAMPLE GRIEVANCE TRACKER": ["नमुना गुनासो ट्रयाकर", "নমুনা অভিযোগ ট্র্যাকার"],
 };

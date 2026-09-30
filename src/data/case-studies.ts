@@ -19,7 +19,7 @@ export type CaseStudy = {
   tagline: string;
   status: string;
   tone: 'blue' | 'lake' | 'orange';
-  icon: 'water' | 'lake' | 'landslide';
+  icon: 'water' | 'lake' | 'landslide' | 'people';
   updated: string;
   photo?: Photo;
   facts: Fact[];
@@ -95,7 +95,7 @@ export const caseStudies: CaseStudy[] = [
       { name: 'Mirik Municipality', role: 'New tap connections and supply complaints' },
     ],
     residents: [
-      { text: 'Ask at the Municipality Office about a new tap connection. Take your holding number.', href: '/contact/', cta: 'Office address and hours' },
+      { text: 'Ask at the Municipality Office about a new tap connection. Take your holding number.', href: '#contact', cta: 'Office address and hours' },
       { text: 'Report leaks, low pressure or no supply with the grievance form.', href: '/grievance/', cta: 'Report a problem' },
       { text: 'Do not damage or tap into new pipelines. Report any damage you see.' },
     ],
@@ -254,7 +254,7 @@ export const caseStudies: CaseStudy[] = [
     residents: [
       { text: 'Keep the helpline numbers handy and read the landslide advice.', href: '/emergency/', cta: 'Emergency numbers' },
       { text: 'Report cracks in the ground, blocked drains or new slips near homes straight away.', href: '/grievance/', cta: 'Report a problem' },
-      { text: 'If your family lost documents in the landslides, ask at the office how to replace them.', href: '/contact/', cta: 'Office address and hours' },
+      { text: 'If your family lost documents in the landslides, ask at the office how to replace them.', href: '#contact', cta: 'Office address and hours' },
     ],
     challenges: [
       { title: 'Monsoon damage', text: 'Rain damaged the temporary bridge in June 2026, and the river is eroding the site of the permanent bridge.', src: 'nh2026' },
@@ -271,6 +271,225 @@ export const caseStudies: CaseStudy[] = [
       { id: 'ba2026', label: 'Business Aajkal, 8 July 2026: Rebuilt Dudhia bridge inaugurated', url: 'https://www.businessaajkal.com/politics/suvendu-inaugurates-rebuilt-dudhia-bridge-restoring-siliguri-mirik-connectivity-30670' },
       { id: 'mp2026', label: 'Millennium Post, 8 June 2026: Minister announces 2 new STPs in Mirik, reviews lake revival', url: 'https://www.millenniumpost.in/bengal/minister-announces-2-new-stps-in-mirik-reviews-lake-revival-663457' },
       { id: 'tender2026', label: 'PHE Kurseong Division tender, 2026: Water supply and sanitation for the Thurbo Tea Garden landslide victims settlement', url: 'https://www.tenderdetail.com/Indian-tender/landslide-tenders' },
+    ],
+  },
+  {
+    slug: 'swachh-bharat-mission',
+    project: 'Swachh Bharat Mission (Urban)',
+    title: 'Swachh Bharat Mission (Urban)',
+    tagline: 'A cleaner Mirik through source segregation, reliable collection and responsible waste handling.',
+    status: 'Programme guide',
+    tone: 'lake',
+    icon: 'lake',
+    updated: 'September 2026',
+    facts: [
+      { value: '2 Oct 2014', label: 'National mission launched', src: 'sbm' },
+      { value: '2.0', label: 'Current urban mission phase', src: 'sbm' },
+      { value: '4 steps', label: 'Segregate, collect, process and dispose safely', src: 'mirik' },
+    ],
+    summary: [
+      'Swachh Bharat Mission (Urban) is the national urban cleanliness mission. Its current phase focuses on garbage-free cities and on sanitation and waste systems that work every day.',
+      'In Mirik, the programme connects household waste practices with municipal collection, processing and disposal. The local Solid Waste Management Bye-Laws set the rules residents and businesses need to follow.',
+    ],
+    problem: [
+      { title: 'Waste reaches water and drains', text: 'When waste is mixed or dumped in public places, it can block drains and reach the lake and streams that are central to Mirik.', src: 'mirik' },
+      { title: 'Collection only works with segregation', text: 'Separate handling of different waste streams starts at homes, shops and institutions; mixed waste makes recovery and safe processing harder.', src: 'sbm' },
+      { title: 'Cleanliness is a shared service', text: 'The mission combines municipal systems with citizen participation, rather than treating waste as a problem for collection crews alone.', src: 'sbm' },
+    ],
+    scope: [
+      { title: 'Source segregation', text: 'Keeping waste separated where it is generated so it can be collected and handled appropriately.', src: 'mirik' },
+      { title: 'Door-to-door collection', text: 'Organised collection is one of the core municipal service steps needed to keep waste out of streets and drains.', src: 'sbm' },
+      { title: 'Processing and recovery', text: 'The national mission promotes processing of municipal solid waste and reducing the waste that is sent for disposal.', src: 'sbm' },
+      { title: 'Public sanitation', text: 'Functional sanitation facilities and the safe management of used water are part of the wider SBM-U framework.', src: 'sbm' },
+    ],
+    progress: [],
+    timeline: [
+      { date: '2 October 2014', title: 'SBM-Urban launched', text: 'The Government of India launched Swachh Bharat Mission (Urban) as a national urban sanitation and cleanliness mission.', state: 'done', src: 'sbm' },
+      { date: 'October 2021', title: 'SBM-U 2.0 begins', text: 'The second phase set out the goal of making cities garbage-free and strengthening sustainable sanitation and waste systems.', state: 'done', src: 'sbm' },
+      { date: '2023', title: 'Mirik waste-management rules', text: 'Mirik Municipal solid waste bye-laws provide the local framework for segregation, collection, processing and disposal.', state: 'done', src: 'mirik' },
+      { date: 'Ongoing', title: 'Everyday implementation', text: 'The practical test is regular participation by residents, businesses and municipal service teams.', state: 'now', src: 'sbm' },
+    ],
+    agencies: [
+      { name: 'Ministry of Housing and Urban Affairs', role: 'National mission and urban policy framework' },
+      { name: 'West Bengal Urban Development & Municipal Affairs Department', role: 'State-level urban programme support' },
+      { name: 'Mirik Municipality', role: 'Local waste-management services and enforcement' },
+    ],
+    residents: [
+      { text: 'Use the correct bins and do not mix household waste where separate collection is available.', href: '/clean-mirik/', cta: 'Clean Mirik guidance' },
+      { text: 'Do not throw waste into drains, streams or Sumendu Lake. Report illegal dumping to the municipality.', href: '/grievance/', cta: 'Report a problem' },
+      { text: 'Businesses and institutions should follow the municipal Solid Waste Management Bye-Laws.', href: '/clean-mirik/#fines', cta: 'See the rules and fines' },
+    ],
+    challenges: [
+      { title: 'No published Mirik performance dashboard', text: 'The municipality has not published current local collection, processing or segregation figures. This page therefore does not show an estimated progress percentage.' },
+    ],
+    sources: [
+      { id: 'sbm', label: 'Swachh Bharat Mission (Urban) 2.0, Government of India: mission framework and progress', url: 'https://stagingwebsite.sbmurban.org/' },
+      { id: 'mirik', label: 'Mirik Municipality: Solid Waste Management Bye-Laws and Clean Mirik guidance', url: '/clean-mirik/' },
+    ],
+  },
+  {
+    slug: 'urban-livelihoods-mission',
+    project: 'National Urban Livelihoods Mission',
+    title: 'National Urban Livelihoods Mission',
+    tagline: 'Supporting urban households, self-employment, skills, shelters and street vendors.',
+    status: 'Programme guide',
+    tone: 'orange',
+    icon: 'people',
+    updated: 'September 2026',
+    facts: [
+      { value: 'DAY-NULM', label: 'Current name of the national mission', src: 'nulm' },
+      { value: '6 areas', label: 'Institutions, skills, jobs, enterprises, shelters and vendors', src: 'guidelines' },
+      { value: 'Local office', label: 'Executive Officer is listed as Mirik’s nodal officer', src: 'mirik' },
+    ],
+    summary: [
+      'Deendayal Antyodaya Yojana–National Urban Livelihoods Mission (DAY-NULM) works to reduce poverty and vulnerability among urban poor households through sustainable self-employment and skilled wage-employment opportunities.',
+      'The mission also supports grassroots institutions of the urban poor, shelters for people experiencing homelessness and measures for street vendors, including access to vending spaces, credit, skills and social-security linkages.',
+    ],
+    problem: [
+      { title: 'Work can be insecure', text: 'Many urban households rely on informal or low-paid work with limited access to formal credit, skills development or social-security support.', src: 'nulm' },
+      { title: 'Street vendors need legitimate space', text: 'Vendors are an important part of the urban economy but can face barriers to safe vending locations, finance and essential services.', src: 'vendors' },
+      { title: 'Homelessness needs more than a bed', text: 'The mission framework calls for shelters with essential services, combined with pathways toward health, identity, work and social support.', src: 'nulm' },
+    ],
+    scope: [
+      { title: 'Community institutions', text: 'Building and strengthening grassroots organisations of urban poor households, including women’s self-help groups and federations.', src: 'guidelines' },
+      { title: 'Skills and employment', text: 'Training and support intended to improve access to skilled wage employment and livelihood opportunities.', src: 'guidelines' },
+      { title: 'Self-employment and enterprises', text: 'Support for micro-enterprises and self-employment through programme components and financial inclusion.', src: 'guidelines' },
+      { title: 'Street-vendor support', text: 'Vendor surveys, vending plans and links to credit, skills and social security are set out in the national guidance.', src: 'vendors' },
+    ],
+    progress: [],
+    timeline: [
+      { date: '2013', title: 'National Urban Livelihoods Mission begins', text: 'The urban livelihoods mission was introduced to support sustainable livelihoods for urban poor households.', state: 'done', src: 'nulm' },
+      { date: '2014', title: 'DAY-NULM identity adopted', text: 'The mission became part of Deendayal Antyodaya Yojana–National Urban Livelihoods Mission.', state: 'done', src: 'nulm' },
+      { date: 'Ongoing', title: 'Local programme coordination', text: 'Mirik lists the Executive Officer as the nodal officer for this scheme.', state: 'now', src: 'mirik' },
+    ],
+    agencies: [
+      { name: 'Ministry of Housing and Urban Affairs', role: 'National DAY-NULM mission' },
+      { name: 'State and city mission units', role: 'Programme implementation and monitoring' },
+      { name: 'Mirik Municipality', role: 'Local coordination; Executive Officer listed as nodal officer' },
+    ],
+    residents: [
+      { text: 'Ask the Municipality Office about the current local contact point for livelihood, training or vendor support.', href: '#contact', cta: 'Office address and hours' },
+      { text: 'Street vendors can ask about local vending arrangements, identification and available support schemes.' },
+      { text: 'If you are facing a municipal service issue affecting your work or neighbourhood, send a grievance with the location.', href: '/grievance/', cta: 'Report a problem' },
+    ],
+    challenges: [
+      { title: 'Local programme data has not been published', text: 'No current Mirik figures for self-help groups, training placements, loans, shelters or vendor support have been published on this website. They should be added when verified by the office.' },
+    ],
+    sources: [
+      { id: 'nulm', label: 'DAY-NULM, Ministry of Housing and Urban Affairs: mission objectives', url: 'https://nulm.gov.in/default.aspx' },
+      { id: 'guidelines', label: 'DAY-NULM: component guidelines and programme resources', url: 'https://nulm.gov.in/Guidelines.html' },
+      { id: 'vendors', label: 'DAY-NULM: Support to Urban Street Vendors operational guidelines', url: 'https://nulm.gov.in/PDF/NULM_Mission/NULM-SUSV-Guidelines.pdf' },
+      { id: 'mirik', label: 'Mirik Municipality: National Urban Livelihoods Mission overview', url: '/notices/#nulm' },
+    ],
+  },
+  {
+    slug: 'housing-for-all',
+    project: 'Pradhan Mantri Awas Yojana (Urban)',
+    title: 'Housing for All',
+    tagline: 'Affordable urban housing and essential services for eligible households.',
+    status: 'Programme guide',
+    tone: 'blue',
+    icon: 'people',
+    updated: 'September 2026',
+    facts: [
+      { value: '2015', label: 'Original PMAY-Urban mission launched', src: 'pmay' },
+      { value: '2024', label: 'PMAY-U 2.0 approved', src: 'pmay2' },
+      { value: '1 crore', label: 'Additional urban households targeted by PMAY-U 2.0', src: 'pmay2' },
+    ],
+    summary: [
+      'Pradhan Mantri Awas Yojana (Urban) is India’s urban affordable-housing mission. It links housing with the basic civic services that make a home liveable, including water, sanitation, electricity and access to local infrastructure.',
+      'Mirik Municipality reports that it surveyed wards, held consultations with residents and local groups, and prepared a Housing for All Plan of Action with the State Urban Development Agency. The current site does not publish a verified household or construction count for Mirik.',
+    ],
+    problem: [
+      { title: 'A house needs services too', text: 'Housing plans need to account for safe water, sanitation, electricity and access to essential physical and social infrastructure.', src: 'hfapoa' },
+      { title: 'Urban need is diverse', text: 'Affordable housing requires different pathways for households seeking to build, buy or rent a home at an affordable cost.', src: 'pmay2' },
+      { title: 'Planning must include residents', text: 'Housing for All Plans are designed as participatory city-level plans that identify need, basic services and delivery options.', src: 'hfapoa' },
+    ],
+    scope: [
+      { title: 'Housing need assessment', text: 'Local surveys and city-level planning help identify households and the type of support needed.', src: 'hfapoa' },
+      { title: 'Basic infrastructure', text: 'Housing plans should include sanitation, drinking water, electricity, roads and livelihood-supporting infrastructure.', src: 'hfapoa' },
+      { title: 'Affordable ownership and rental options', text: 'PMAY-U 2.0 provides central assistance through States, Union Territories, implementing agencies and lenders for eligible housing options.', src: 'pmay2' },
+      { title: 'Local plan coordination', text: 'Mirik’s published overview describes ward surveys and a Housing for All Plan of Action prepared with SUDA.', src: 'mirik' },
+    ],
+    progress: [],
+    timeline: [
+      { date: '2015', title: 'Housing for All mission', text: 'PMAY-Urban and the Housing for All mission framework were introduced for urban affordable housing.', state: 'done', src: 'pmay' },
+      { date: '2015 onwards', title: 'City plans and project approvals', text: 'State and city agencies prepared housing plans and submitted project proposals under the mission framework.', state: 'done', src: 'pmay' },
+      { date: '9 August 2024', title: 'PMAY-U 2.0 approved', text: 'The Union Cabinet approved PMAY-U 2.0 to support eligible urban households to construct, purchase or rent affordable housing.', state: 'done', src: 'pmay2' },
+      { date: 'Ongoing', title: 'Mirik plan information', text: 'The municipality should publish verified local eligibility, application and delivery information when it is available.', state: 'now', src: 'mirik' },
+    ],
+    agencies: [
+      { name: 'Ministry of Housing and Urban Affairs', role: 'National PMAY-U mission and guidance' },
+      { name: 'State Urban Development Agency, West Bengal', role: 'State-level housing programme coordination' },
+      { name: 'Mirik Municipality', role: 'Ward surveys and local Housing for All planning' },
+    ],
+    residents: [
+      { text: 'Ask the Municipality Office whether there is a current PMAY-U application or survey process for Mirik.', href: '#contact', cta: 'Office address and hours' },
+      { text: 'Keep proof of identity, household details and property or tenancy documents ready if the office requests them.' },
+      { text: 'Report an unsafe drain, broken water connection or other local service issue through the grievance form.', href: '/grievance/', cta: 'Report a problem' },
+    ],
+    challenges: [
+      { title: 'No verified Mirik beneficiary data', text: 'This website does not have a current official list of eligible households, sanctioned homes, construction progress or application dates for Mirik. The office should confirm these before publishing them.' },
+    ],
+    sources: [
+      { id: 'pmay', label: 'PMAY-Urban, Ministry of Housing and Urban Affairs: mission notices and guidance', url: 'https://www.pmay-urban.gov.in/hfa-important-notices-clarifications-and-formats' },
+      { id: 'pmay2', label: 'PMAY-U 2.0, Ministry of Housing and Urban Affairs: approval and affordable-rental housing framework', url: 'https://pmay-urban.gov.in/ARH-EOI.pdf' },
+      { id: 'hfapoa', label: 'PMAY-U: Housing for All Plan of Action reference', url: 'https://pmay-urban.gov.in/material/component5/HFAPoA%20Gwalior%20%28Sample%29.pdf' },
+      { id: 'mirik', label: 'Mirik Municipality: Housing for All overview', url: '/notices/#pmay' },
+    ],
+  },
+  {
+    slug: 'community-health-care',
+    project: 'Community Based Primary Health Care Services',
+    title: 'Community Based Primary Health Care Services',
+    tagline: 'Primary health care and referral support for vulnerable urban residents in West Bengal.',
+    status: 'Programme guide',
+    tone: 'lake',
+    icon: 'people',
+    updated: 'September 2026',
+    facts: [
+      { value: '2006', label: 'Programme initiated in West Bengal', src: 'suda' },
+      { value: '71 ULBs', label: 'Current implementation listed by SUDA', src: 'suda' },
+      { value: 'State-funded', label: 'Funded by Health & Family Welfare Department', src: 'suda' },
+    ],
+    summary: [
+      'Community Based Primary Health Care Services (CBPHCS) is a West Bengal urban health programme. The State Urban Development Agency says it provides quality primary health care and referral services to urban poor people and other vulnerable sections of society.',
+      'The programme is implemented in urban local bodies and is funded by the Department of Health and Family Welfare. Mirik’s published overview notes that the municipality has recruited for a contractual Health Officer under the scheme.',
+    ],
+    problem: [
+      { title: 'Care should be close to home', text: 'Primary health services need to reach vulnerable households before a condition becomes an emergency or requires specialist care.', src: 'suda' },
+      { title: 'Referral matters', text: 'The programme is designed to link primary care with referral services where a higher level of assessment or treatment is needed.', src: 'suda' },
+      { title: 'Urban vulnerability is not limited to income', text: 'The stated programme focus includes urban poor people as well as other vulnerable sections of society.', src: 'suda' },
+    ],
+    scope: [
+      { title: 'Community-level primary care', text: 'The programme supports access to quality primary health-care services within urban local-body areas.', src: 'suda' },
+      { title: 'Referral support', text: 'People who need a higher level of care can be referred onward through the health system.', src: 'suda' },
+      { title: 'Health-worker network', text: 'The West Bengal programme framework has used honorary health workers and other local support roles in urban local bodies.', src: 'history' },
+      { title: 'Municipal coordination', text: 'Municipalities work with the Health and Family Welfare and urban-development departments to deliver the programme locally.', src: 'history' },
+    ],
+    progress: [],
+    timeline: [
+      { date: '2006', title: 'CBPHCS initiated', text: 'The State Urban Development Agency records the programme as having been initiated in 2006.', state: 'done', src: 'suda' },
+      { date: '2006 onwards', title: 'Urban local-body implementation', text: 'The programme has been delivered through participating West Bengal urban local bodies with health-department funding.', state: 'done', src: 'suda' },
+      { date: 'Ongoing', title: 'Local health coordination', text: 'Mirik’s published overview refers to a contractual Health Officer under the scheme.', state: 'now', src: 'mirik' },
+    ],
+    agencies: [
+      { name: 'Department of Health and Family Welfare, Government of West Bengal', role: 'Programme funding' },
+      { name: 'State Urban Development Agency, West Bengal', role: 'Programme information and urban local-body support' },
+      { name: 'Mirik Municipality', role: 'Local coordination and Health Officer recruitment' },
+    ],
+    residents: [
+      { text: 'For emergency care, call the emergency number or go to the nearest appropriate health facility.', href: '/emergency/', cta: 'Emergency numbers' },
+      { text: 'Ask the Municipality Office for the current local CBPHCS contact or clinic information.', href: '#contact', cta: 'Office address and hours' },
+      { text: 'Report a sanitation, water or other municipal issue that is affecting your neighbourhood’s health.', href: '/grievance/', cta: 'Report a problem' },
+    ],
+    challenges: [
+      { title: 'Local service details still need publication', text: 'This website does not yet list Mirik’s current clinic locations, outreach schedule, referral pathway or contact number. Those details should be confirmed with the health team before publication.' },
+    ],
+    sources: [
+      { id: 'suda', label: 'State Urban Development Agency, West Bengal: CBPHCS programme details', url: 'https://sudawb.org/Program-Details/2' },
+      { id: 'history', label: 'State Urban Development Agency, West Bengal: CBPHCS programme plan and urban health history', url: 'https://sudawb.org/uploads/digitaldoc/HEALTH/SUDA_HEALTH_72_08%20%283%20TO%203%29/CP_01.pdf' },
+      { id: 'mirik', label: 'Mirik Municipality: CBPHCS overview', url: '/notices/#cbphcs' },
     ],
   },
 ];

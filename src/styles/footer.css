@@ -56,3 +56,32 @@ footer.site.big .f-base .base { display: flex; flex-wrap: wrap; align-items: cen
   footer.site.big .f-base .base { flex-direction: column; align-items: flex-start; gap: .6rem; padding-top: 1.25rem; padding-bottom: 5.5rem; }
 }
 @media (prefers-reduced-motion: reduce) { footer.site.big ul.f-links a { transition: none; } }
+
+/* Alignment fixes: equal-width right column, panels that fill their height, evenly spaced helpline rows. */
+footer.site.big .f-main { grid-template-rows: auto 1fr; align-items: stretch; }
+footer.site.big .f-main > .f-social-col { align-self: stretch; }
+footer.site.big .f-grv a.f-square { aspect-ratio: auto; max-width: none; width: 100%; min-height: 100%; margin: 0; box-sizing: border-box; gap: .9rem; }
+footer.site.big .f-grv .f-art { align-self: center; width: min(9rem, 70%); height: auto; opacity: .85; }
+footer.site.big .f-contact, footer.site.big .f-help { display: flex; flex-direction: column; }
+footer.site.big .f-contact .f-sub { margin-top: auto; padding-top: 1.5rem; }
+footer.site.big .f-contact .f-sub + p { margin-bottom: 0; }
+footer.site.big .f-help .f-sos-list { flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
+footer.site.big .f-help .f-sos-list li { flex: 1; padding: .35rem 0; }
+footer.site.big .f-help .f-sos-list li:last-child { border-bottom: 0; }
+@media (max-width: 1100px) {
+  footer.site.big .f-main { grid-template-rows: none; }
+  footer.site.big .f-help .f-sos-list li { flex: none; padding: .5rem 0; }
+}
+
+/* The grievance cell is also :last-child, which re-added panel padding and pushed the card in and down. */
+footer.site.big .f-main > .f-col.f-grv, footer.site.big .f-main > .f-col.f-grv:last-child { padding: 0; margin: 0; border: 0; background: none; }
+footer.site.big .f-main > .f-col.f-social-col { margin: 0; }
+footer.site.big .f-main > .f-col { box-sizing: border-box; }
+
+/* Boxy footer: full-width block with large rounded top corners, tighter top spacing. */
+footer.site.big { border-radius: 2.75rem 2.75rem 0 0; padding-top: 64px; margin-top: -1px; box-shadow: 0 -.6rem 2rem rgba(10,30,26,.12); isolation: isolate; }
+@media (max-width: 700px) { footer.site.big { border-radius: 1.75rem 1.75rem 0 0; padding-top: 44px; } }
+
+/* Fully rounded box: same radius on the bottom corners, with a little page showing beneath so the curve is visible. */
+footer.site.big { border-radius: 2.75rem; margin: -1px 0 .75rem; box-shadow: 0 .4rem 2rem rgba(10,30,26,.14); }
+@media (max-width: 700px) { footer.site.big { border-radius: 1.75rem; margin-bottom: .5rem; } }

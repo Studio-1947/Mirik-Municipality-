@@ -7,14 +7,14 @@
 .svc-sec { background-image: radial-gradient(640px 320px at 6% 0%, rgba(47,111,143,.07), transparent 70%), radial-gradient(560px 300px at 100% 100%, rgba(46,139,62,.07), transparent 70%); }
 .svc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 18px; }
 .svc-card { --t: var(--lake); --t-ink: var(--lake); --t-soft: var(--lake-soft); --mx: 50%; --my: 0%; position: relative; isolation: isolate; overflow: hidden; display: flex; flex-direction: column; padding: 22px 22px 20px; border-radius: 18px; background: #fff; border: 1px solid var(--line); box-shadow: 0 1px 2px rgba(20,40,30,.04); transition: transform .35s cubic-bezier(.2,.8,.2,1), box-shadow .35s, border-color .35s; }
-.svc-card.tone-orange, .grvx-type.tone-orange, .grvx-bars > .tone-orange, .grvx-cond-grid > .tone-orange { --t: #e0821b; --t-ink: #a8580a; --t-soft: #fdebd3; }
-.svc-card.tone-violet, .grvx-type.tone-violet, .grvx-bars > .tone-violet, .grvx-cond-grid > .tone-violet { --t: #5a4fcf; --t-ink: #5a4fcf; --t-soft: #e8e6fb; }
-.svc-card.tone-blue, .grvx-type.tone-blue, .grvx-bars > .tone-blue, .grvx-cond-grid > .tone-blue   { --t: #2f6fd0; --t-ink: #2a62b8; --t-soft: #e3eefc; }
-.svc-card.tone-leaf, .grvx-type.tone-leaf, .grvx-bars > .tone-leaf, .grvx-cond-grid > .tone-leaf   { --t: #4a9a2a; --t-ink: #3a7a1f; --t-soft: #e0f3d8; }
-.svc-card.tone-green, .grvx-type.tone-green, .grvx-bars > .tone-green, .grvx-cond-grid > .tone-green  { --t: var(--green); --t-ink: var(--green-deep); --t-soft: #dff3e6; }
-.svc-card.tone-lake, .grvx-type.tone-lake, .grvx-bars > .tone-lake, .grvx-cond-grid > .tone-lake   { --t: var(--lake); --t-ink: var(--lake); --t-soft: var(--lake-soft); }
-.svc-card.tone-pine, .grvx-type.tone-pine, .grvx-bars > .tone-pine, .grvx-cond-grid > .tone-pine   { --t: var(--pine); --t-ink: var(--pine); --t-soft: var(--pine-soft); }
-.svc-card.tone-rose, .grvx-type.tone-rose, .grvx-bars > .tone-rose, .grvx-cond-grid > .tone-rose   { --t: #a2416b; --t-ink: #a2416b; --t-soft: #f6e6ee; }
+.svc-card.tone-orange, .grvx-bars > .tone-orange, .grvx-cond-grid > .tone-orange { --t: #e0821b; --t-ink: #a8580a; --t-soft: #fdebd3; }
+.svc-card.tone-violet, .grvx-bars > .tone-violet, .grvx-cond-grid > .tone-violet { --t: #5a4fcf; --t-ink: #5a4fcf; --t-soft: #e8e6fb; }
+.svc-card.tone-blue, .grvx-bars > .tone-blue, .grvx-cond-grid > .tone-blue   { --t: #2f6fd0; --t-ink: #2a62b8; --t-soft: #e3eefc; }
+.svc-card.tone-leaf, .grvx-bars > .tone-leaf, .grvx-cond-grid > .tone-leaf   { --t: #4a9a2a; --t-ink: #3a7a1f; --t-soft: #e0f3d8; }
+.svc-card.tone-green, .grvx-bars > .tone-green, .grvx-cond-grid > .tone-green  { --t: var(--green); --t-ink: var(--green-deep); --t-soft: #dff3e6; }
+.svc-card.tone-lake, .grvx-bars > .tone-lake, .grvx-cond-grid > .tone-lake   { --t: var(--lake); --t-ink: var(--lake); --t-soft: var(--lake-soft); }
+.svc-card.tone-pine, .grvx-bars > .tone-pine, .grvx-cond-grid > .tone-pine   { --t: var(--pine); --t-ink: var(--pine); --t-soft: var(--pine-soft); }
+.svc-card.tone-rose, .grvx-bars > .tone-rose, .grvx-cond-grid > .tone-rose   { --t: #a2416b; --t-ink: #a2416b; --t-soft: #f6e6ee; }
 
 /* Colour bar that sweeps across the top on hover */
 .svc-card::before { content: ''; position: absolute; inset: 0 0 auto 0; height: 4px; background: var(--t); background: linear-gradient(90deg, var(--t), color-mix(in srgb, var(--t) 35%, #fff)); transform-origin: left; transform: scaleX(.3); transition: transform .55s cubic-bezier(.2,.8,.2,1); }
@@ -29,7 +29,8 @@
 .svc-card:hover .svc-mark { transform: rotate(0deg) scale(1.1); opacity: .13; }
 
 .svc-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 18px; }
-.svc-ico { flex: none; width: 52px; height: 52px; border-radius: 15px; display: grid; place-items: center; color: #fff; background: var(--t); background: linear-gradient(140deg, color-mix(in srgb, var(--t) 65%, #fff), var(--t) 70%); box-shadow: 0 10px 20px -10px var(--t), inset 0 1px 0 rgba(255,255,255,.35); transition: transform .45s cubic-bezier(.34,1.56,.64,1); }
+.svc-ico { flex: none; width: 52px; height: 52px; border-radius: 15px; display: grid; place-items: center; color: #fff; background: var(--t); box-shadow: none; transition: transform .45s cubic-bezier(.34,1.56,.64,1); }
+.svc-card:hover .svc-ico, .svc-card:focus-within .svc-ico { box-shadow: none; }
 .svc-ico svg { width: 26px; height: 26px; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
 .svc-card:hover .svc-ico, .svc-card:focus-within .svc-ico { transform: rotate(-8deg) scale(1.08); }
 
@@ -44,10 +45,12 @@
 
 /* Action link; its ::after stretches over the card so the whole card is clickable */
 .svc-go { margin-top: auto; align-self: flex-start; display: inline-flex; align-items: center; gap: 8px; font-weight: 600; font-size: .92rem; color: var(--t-ink); text-decoration: none; }
+.svc-go.is-long { gap: 6px; font-size: .84rem; letter-spacing: -.015em; white-space: nowrap; }
 .svc-go::after { content: ''; position: absolute; inset: 0; z-index: 1; border-radius: 18px; }
 .svc-go:focus-visible { outline: none; }
 .svc-go:focus-visible::after { outline: 3px solid var(--t-ink); outline-offset: -3px; }
 .svc-go svg { box-sizing: border-box; flex: none; width: 28px; height: 28px; padding: 6px; border-radius: 50%; background: var(--t-soft); fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; transition: transform .3s cubic-bezier(.34,1.56,.64,1), background .25s, color .25s; }
+.svc-go.is-long svg { width: 26px; height: 26px; padding: 5px; }
 .svc-card:hover .svc-go svg, .svc-go:focus-visible svg { background: var(--t); color: #fff; transform: translateX(4px); }
 
 /* Scroll-in reveal (the page script adds .svc-anim only when motion is allowed) */
@@ -77,7 +80,7 @@ main > section#grievances { --accent: #a2416b; --accent-soft: #f6e6ee; }
 .grvx-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 360px); gap: 24px; align-items: start; }
 .grvx-main, .grvx-side { display: grid; gap: 24px; min-width: 0; }
 .grvx-panel { background: #fff; border: 1px solid var(--line); border-radius: 22px; padding: 26px; box-shadow: 0 1px 2px rgba(20,40,30,.04), 0 18px 40px -32px rgba(18,48,58,.35); }
-.grvx-panel svg, .grvx-cta svg, .grvx-sos svg { fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+.grvx-panel svg, .grvx-cta svg { fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
 
 /* Panel heading: icon chip + title + subtitle */
 .grvx-ph { display: flex; align-items: center; gap: 14px; padding-bottom: 18px; margin-bottom: 20px; border-bottom: 1px solid var(--line); }
@@ -85,29 +88,6 @@ main > section#grievances { --accent: #a2416b; --accent-soft: #f6e6ee; }
 .grvx-ph-ico svg { width: 22px; height: 22px; }
 .grvx-ph h3 { margin: 0 0 2px; font-size: 1.2rem; }
 .grvx-ph p { margin: 0; font-size: .88rem; color: var(--muted); }
-
-/* What you can report: coloured tiles with a bar that fills on hover */
-.grvx-types { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
-.grvx-type { position: relative; overflow: hidden; display: flex; flex-direction: column; gap: 12px; padding: 16px 16px 24px; border-radius: 16px; background: #fbfaf7; border: 1px solid var(--line); font-weight: 600; font-size: .95rem; line-height: 1.3; color: var(--ink); transition: transform .3s cubic-bezier(.2,.8,.2,1), border-color .3s, background .3s; }
-.grvx-type::after { content: ""; position: absolute; left: 16px; right: 16px; bottom: 12px; height: 4px; border-radius: 99px; background: var(--t-soft); background-image: linear-gradient(var(--t), var(--t)); background-repeat: no-repeat; background-size: 40% 100%; transition: background-size .6s cubic-bezier(.2,.8,.2,1); }
-.grvx-type:hover { transform: translateY(-3px); border-color: color-mix(in srgb, var(--t) 30%, var(--line)); background: #fff; }
-.grvx-type:hover::after { background-size: 100% 100%; }
-.grvx-ti { width: 40px; height: 40px; border-radius: 12px; display: grid; place-items: center; background: var(--t-soft); color: var(--t-ink); }
-.grvx-ti svg { width: 22px; height: 22px; }
-
-/* What to include: rows like case cards, with Required / Optional chips */
-.grvx-fields { list-style: none; margin: 0; padding: 0; }
-.grvx-fields li { display: flex; gap: 14px; align-items: flex-start; padding: 14px 0; border-top: 1px dashed var(--line); }
-.grvx-fields li:first-child { border-top: 0; padding-top: 0; }
-.grvx-fields li:last-child { padding-bottom: 0; }
-.grvx-fi { flex: none; width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center; background: var(--paper); border: 1px solid var(--line); color: var(--pine); }
-.grvx-fi svg { width: 19px; height: 19px; }
-.grvx-fields > li > div { flex: 1; min-width: 0; }
-.grvx-frow { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px 10px; }
-.grvx-frow strong { font-size: .98rem; color: var(--ink); }
-.grvx-fields p { margin: 4px 0 0; font-size: .9rem; line-height: 1.55; color: var(--muted); }
-.grvx-chip { font-size: .68rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; padding: 3px 9px; border-radius: 999px; background: var(--lake-soft); color: var(--lake); white-space: nowrap; }
-.grvx-chip.req { background: var(--alert-soft); color: var(--alert); }
 
 /* Dark call-to-action card */
 .grvx-cta { position: relative; overflow: hidden; isolation: isolate; padding: 28px; border-radius: 24px; color: #fff; background: linear-gradient(155deg, var(--navy), #0b1f26 70%); box-shadow: 0 26px 50px -30px rgba(12,31,38,.8); }
@@ -134,36 +114,26 @@ main > section#grievances { --accent: #a2416b; --accent-soft: #f6e6ee; }
 .grvx-contacts a:hover { color: var(--accent); }
 
 /* Emergency strip */
-.grvx-sos { display: flex; align-items: center; gap: 12px; padding: 14px 16px; border-radius: 16px; background: var(--alert-soft); border: 1px solid color-mix(in srgb, var(--alert) 25%, transparent); color: var(--alert); text-decoration: none; transition: transform .25s, box-shadow .25s; }
-.grvx-sos:hover { transform: translateY(-2px); box-shadow: 0 12px 24px -16px rgba(179,71,29,.6); }
-.grvx-sos:focus-visible { outline: 3px solid var(--alert); outline-offset: 3px; }
-.grvx-sos-ico { flex: none; width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center; background: #fff; }
-.grvx-sos-ico svg { width: 20px; height: 20px; }
-.grvx-sos-t { flex: 1; font-size: .92rem; font-weight: 600; color: var(--ink); }
-.grvx-sos-t strong { color: var(--alert); font-size: 1.15rem; }
-.grvx-sos-go { flex: none; width: 20px; height: 20px; transition: transform .25s; }
-.grvx-sos:hover .grvx-sos-go { transform: translateX(3px); }
 
 @media (max-width: 980px) {
   .grvx-grid { grid-template-columns: 1fr; }
   .grvx-side { order: -1; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
 }
 @media (max-width: 640px) {
-  .grvx-types { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .grvx-panel { padding: 20px 18px; border-radius: 18px; }
   .grvx-cta { padding: 24px 20px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .grvx-type, .grvx-type::after, .grvx-btn, .grvx-sos, .grvx-sos-go { transition: none; }
-  .grvx-type:hover, .grvx-btn:hover, .grvx-sos:hover, .grvx-sos:hover .grvx-sos-go { transform: none; }
+  .grvx-btn { transition: none; }
+  .grvx-btn:hover { transform: none; }
 }
 
 /* ---- Services page: Grievances demo dashboard (.grvx-*) ----
    Stats, overview (donut, category bars, local conditions), case list, ward ranking, insights.
    All figures are DEMO data (see services.astro); the "Demo data" note must stay visible. */
-.grvx-top { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 20px 32px; margin-bottom: 18px; }
-.grvx-top .section-head { flex: 1 1 420px; margin-bottom: 0; }
-.grvx-stats { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(112px, 1fr)); gap: 12px; }
+.grvx-top { display: flex; flex-direction: column; gap: 22px; margin-bottom: 20px; }
+.grvx-top .section-head { width: 100%; margin-bottom: 0; }
+.grvx-stats { list-style: none; margin: 0; padding: 0; width: 100%; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
 .grvx-stat { --t: var(--lake); background: #fff; border: 1px solid var(--line); border-radius: 16px; padding: 14px 16px; box-shadow: 0 10px 24px -20px rgba(18,48,58,.4); transition: transform .25s; }
 .grvx-stat:hover { transform: translateY(-2px); }
 .grvx-stat.tone-orange { --t: var(--alert); }
@@ -233,18 +203,15 @@ main > section#grievances { --accent: #a2416b; --accent-soft: #f6e6ee; }
 .grvx-anim .grvx-donut::before { opacity: 0; transform: rotate(-90deg) scale(.85); transition: transform 1s cubic-bezier(.2,.8,.2,1), opacity .6s; }
 .grvx-anim.in .grvx-bar i, .grvx-anim.in .grvx-donut::before { opacity: 1; transform: none; }
 
-/* Case list with search and status chips */
+/* Case list with search */
 .grvx-cases { display: grid; gap: 16px; }
 .grvx-filter { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding: 12px; border-radius: 18px; }
 .grvx-search { flex: 1 1 240px; display: flex; align-items: center; gap: 10px; padding: 0 14px; border-radius: 12px; background: var(--paper); border: 1px solid transparent; transition: border-color .2s, background .2s; }
 .grvx-search:focus-within { border-color: var(--accent); background: #fff; }
 .grvx-search svg { flex: none; width: 18px; height: 18px; color: var(--muted); }
 .grvx-search input { flex: 1; min-width: 0; padding: 11px 0; border: 0; background: none; font: inherit; font-size: .9rem; color: var(--ink); outline: none; }
-.grvx-chips { display: flex; flex-wrap: wrap; gap: 6px; }
-.grvx-chips button { padding: 8px 14px; border: 0; border-radius: 999px; background: var(--paper); color: var(--muted); font: inherit; font-size: .72rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; cursor: pointer; transition: background .2s, color .2s, box-shadow .2s; }
-.grvx-chips button:hover { color: var(--ink); }
-.grvx-chips button.on { background: var(--alert); color: #fff; box-shadow: 0 8px 16px -10px rgba(179,71,29,.9); }
-.grvx-chips button:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.grvx-filter-heading { flex: 1 1 310px; display: flex; align-items: center; gap: 8px; min-width: 0; margin: 0; padding: 11px 15px; border: 1px solid color-mix(in srgb, var(--accent) 24%, var(--line)); border-radius: 12px; background: linear-gradient(135deg, var(--accent-soft), #fff); color: var(--ink); font-size: clamp(.68rem, 1.15vw, .8rem); font-weight: 750; line-height: 1; letter-spacing: .01em; white-space: nowrap; box-shadow: inset 0 1px rgba(255,255,255,.8); }
+.grvx-filter-heading::before { content: ""; flex: none; width: 7px; height: 7px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 14%, transparent); }
 
 .grvx-case-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 16px; }
 .grvx-case { --s: var(--alert); --s-soft: var(--alert-soft); padding: 22px; transition: transform .25s, box-shadow .25s; }

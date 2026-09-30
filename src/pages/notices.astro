@@ -56,6 +56,21 @@ const years = [...new Set(earlier.map((n) => n.when!.getUTCFullYear()))];
 const ext = (href: string) => /^https?:/.test(href);
 // Project card -> its case study page (matched by title).
 const study = (title: string) => caseStudies.find((c) => c.project === title);
+// Visual context for the schemes showcase. Local images keep the section fast and reliable;
+// the PMAY-U image is from the official programme gallery (see public/images/ATTRIBUTIONS.md).
+const schemeVisuals: Record<string, { image: string; alt: string; pos?: string }> = {
+  amrut: { image: '/images/projects/piped-water.jpg', alt: 'Water tanker on a Darjeeling street', pos: 'center 60%' },
+  sbm: { image: '/images/projects/sumendu-lake.jpg', alt: 'Sumendu Lake in Mirik', pos: 'center 55%' },
+  nulm: { image: '/images/tea.jpg', alt: 'Tea gardens in the Mirik hills' },
+  pmay: { image: '/images/schemes/pmay-urban-udaipur.jpg', alt: 'PMAY Urban affordable housing complex in Udaipur' },
+  cbphcs: { image: '/images/health-mirik-rural-hospital.jpg', alt: 'Mirik Rural Hospital' },
+};
+const schemeDetailSlug: Record<string, string> = {
+  sbm: 'swachh-bharat-mission',
+  nulm: 'urban-livelihoods-mission',
+  pmay: 'housing-for-all',
+  cbphcs: 'community-health-care',
+};
 ---
 <Layout title="Notices | Mirik Municipality">
   <PageHead slug="notices" title="Notice board" lead="Official announcements from the Municipality Office." />
@@ -178,14 +193,47 @@ const study = (title: string) => caseStudies.find((c) => c.project === title);
         })}
       </div>
 
-      <h3 id="schemes" style="margin-top:48px">Special projects and schemes</h3>
-      <div class="schemes">
-        {schemes.map((s, i) => (
-          <details id={s.id} open={i === 0}>
-            <summary>{s.short} <span>{s.name}</span></summary>
-            <div class="body"><p>{s.text}</p></div>
-          </details>
-        ))}
+      <div class="scheme-head">
+        <div>
+          <p class="eyebrow">Programmes and schemes</p>
+          <h3 id="schemes">Special projects and schemes</h3>
+        </div>
+        <p>National missions and local action for better everyday services in Mirik.</p>
+      </div>
+      <section class="scheme-feature" aria-label="Featured programme">
+        <div class="scheme-feature-copy">
+          <p class="scheme-kicker">Featured programme</p>
+          <h4>AMRUT 2.0</h4>
+          <p class="scheme-full-name">Atal Mission for Rejuvenation and Urban Transformation</p>
+          <p>{schemes[0].text}</p>
+          <dl class="scheme-facts">
+            <div><dt>Rs 199 crore</dt><dd>Water supply project approved for Mirik</dd></div>
+            <div><dt>135 litres</dt><dd>Daily water-supply target per resident</dd></div>
+          </dl>
+          <a class="scheme-project-link" href="/notices/projects/piped-water/">Read the project overview <span aria-hidden="true">→</span></a>
+        </div>
+        <figure class="scheme-feature-image">
+          <img src={schemeVisuals.amrut.image} alt={schemeVisuals.amrut.alt} style={`object-position:${schemeVisuals.amrut.pos}`} />
+          <figcaption>Water supply in the Darjeeling hills</figcaption>
+        </figure>
+      </section>
+      <div class="schemes scheme-directory">
+        {schemes.slice(1).map((s) => {
+          const visual = schemeVisuals[s.id];
+          return (
+            <article id={s.id} class={`scheme-directory-card scheme-${s.id}`}>
+              <figure>
+                <img src={visual.image} alt={visual.alt} loading="lazy" style={visual.pos ? `object-position:${visual.pos}` : undefined} />
+              </figure>
+              <div>
+                <p class="scheme-kicker">{s.short}</p>
+                <h4>{s.name}</h4>
+                <p>{s.text}</p>
+                <a class="scheme-directory-link" href={`/notices/projects/${schemeDetailSlug[s.id]}/`}>Read the programme overview <span aria-hidden="true">→</span></a>
+              </div>
+            </article>
+          );
+        })}
       </div>
     </div>
   </section>

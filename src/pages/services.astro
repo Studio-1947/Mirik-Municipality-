@@ -2,7 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import PageHead from '../components/PageHead.astro';
 import '../styles/services-grievances.css';
-import { services, contact, emergency, wards } from '../data/site';
+import { services, contact, wards } from '../data/site';
 
 // Icon and colour tone for each service card, keyed by title in site.ts.
 // Icons: Hugeicons free set, Stroke Rounded (MIT licence, https://hugeicons.com). The SVG shapes are
@@ -53,24 +53,6 @@ const gi: Record<string, string> = {
   ring: '<path d="M9 9L5 5M16 12H22M12 16V22"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="10"/>', // ChartRingIcon
   chevron: '<path d="M18 9.00005C18 9.00005 13.5811 15 12 15C10.4188 15 6 9 6 9"/>', // ArrowDown01Icon
 };
-// Problem types, as listed on the Grievance page.
-const grvTypes = [
-  { label: 'Broken drains', tone: 'lake', icon: gi.drains },
-  { label: 'Missed garbage collection', tone: 'green', icon: gi.garbage },
-  { label: 'Water supply', tone: 'blue', icon: gi.water },
-  { label: 'Street lights', tone: 'orange', icon: gi.lights },
-  { label: 'Illegal dumping', tone: 'rose', icon: gi.dumping },
-  { label: 'Anything else', tone: 'violet', icon: gi.other },
-];
-// Details the grievance form asks for (see GrievanceForm.astro). Labels match the form so they share translations.
-const grvFields = [
-  { label: 'Phone number', text: 'So the office can contact you. You can add a WhatsApp number too.', need: true, icon: gi.phone },
-  { label: 'Ward', text: 'Choose your ward from the list.', need: true, icon: gi.ward },
-  { label: 'Location or holding number', text: 'A road name, landmark or holding number, so the spot can be found.', need: true, icon: gi.location },
-  { label: 'Issue / Subject / Problem', text: 'A short title, then what is wrong. Up to 300 characters.', need: true, icon: gi.issue },
-  { label: 'Photo', text: 'A clear photo helps the office see the problem.', need: false, icon: gi.photo },
-];
-const sos = emergency[0];
 const fbLabel = contact.facebook.replace(/^https?:\/\/(www\.)?/, '');
 // ---- DEMO grievance dashboard ----
 // DEMO: every number and case below is made up to show the layout. The grievance form has no online
@@ -137,7 +119,7 @@ const statusLabel: Record<string, string> = { critical: 'Critical', progress: 'I
       <div class="svc-grid">
         {services.map((s) => {
           const l = look[s.title] ?? fallback;
-          const href = s.link || '/contact/';
+          const href = s.link || '#contact';
           const ext = isExternal(href);
           return (
             <article class={`svc-card tone-${l.tone}`}>
@@ -148,7 +130,7 @@ const statusLabel: Record<string, string> = { critical: 'Critical', progress: 'I
               </div>
               <h3>{s.title}</h3>
               <p>{s.text}</p>
-              <a class="svc-go" href={href} target={ext ? '_blank' : undefined} rel={ext ? 'noopener' : undefined}>
+              <a class={s.title === 'Birth and Death Registration' ? 'svc-go is-long' : 'svc-go'} href={href} target={ext ? '_blank' : undefined} rel={ext ? 'noopener' : undefined}>
                 <span>{s.link ? s.linkLabel : 'Office address and hours'}</span>
                 <svg viewBox="0 0 24 24" aria-hidden="true" set:html={ext ? arrow.out : arrow.in} />
               </a>
@@ -243,11 +225,7 @@ const statusLabel: Record<string, string> = { critical: 'Critical', progress: 'I
                 <svg viewBox="0 0 24 24" aria-hidden="true" set:html={gi.search} />
                 <input type="search" placeholder="Search by keyword, ward or case ID" aria-label="Search by keyword, ward or case ID" data-case-search />
               </label>
-              <div class="grvx-chips" role="group" aria-label="Filter cases">
-                {['all', 'critical', 'progress', 'resolved'].map((k, i) => (
-                  <button type="button" class={i === 0 ? 'on' : undefined} aria-pressed={i === 0 ? 'true' : 'false'} data-filter={k}>{k === 'all' ? 'All' : statusLabel[k]}</button>
-                ))}
-              </div>
+              <p class="grvx-filter-heading">Few Important issues that we are currently working on</p>
             </div>
             <ul class="grvx-case-list">
               {demoCases.map((c) => (
@@ -279,37 +257,6 @@ const statusLabel: Record<string, string> = { critical: 'Critical', progress: 'I
             <p class="grvx-empty" hidden>No cases match your search.</p>
           </div>
 
-          <div class="grvx-panel o-6">
-            <div class="grvx-ph">
-              <span class="grvx-ph-ico"><svg viewBox="0 0 24 24" aria-hidden="true" set:html={gi.pulse} /></span>
-              <div><h3>What you can report</h3><p>Common problems the office can act on</p></div>
-            </div>
-            <ul class="grvx-types">
-              {grvTypes.map((t) => (
-                <li class={`grvx-type tone-${t.tone}`}>
-                  <span class="grvx-ti"><svg viewBox="0 0 24 24" aria-hidden="true" set:html={t.icon} /></span>
-                  <span>{t.label}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div class="grvx-panel o-7">
-            <div class="grvx-ph">
-              <span class="grvx-ph-ico"><svg viewBox="0 0 24 24" aria-hidden="true" set:html={gi.task} /></span>
-              <div><h3>What to include</h3><p>The form asks for these details</p></div>
-            </div>
-            <ul class="grvx-fields">
-              {grvFields.map((f) => (
-                <li>
-                  <span class="grvx-fi"><svg viewBox="0 0 24 24" aria-hidden="true" set:html={f.icon} /></span>
-                  <div>
-                    <div class="grvx-frow"><strong>{f.label}</strong><span class={f.need ? 'grvx-chip req' : 'grvx-chip'}>{f.need ? 'Required' : 'Optional'}</span></div>
-                    <p>{f.text}</p>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </div>
         </div>
         <aside class="grvx-side">
           <div class="grvx-cta o-1">
@@ -348,11 +295,6 @@ const statusLabel: Record<string, string> = { critical: 'Critical', progress: 'I
               <li><span class="grvx-ci"><svg viewBox="0 0 24 24" aria-hidden="true" set:html={gi.clock} /></span><div><small>Office hours</small><span>{contact.hours}</span></div></li>
             </ul>
           </div>
-          <a class="grvx-sos o-9" href="/emergency/">
-            <span class="grvx-sos-ico"><svg viewBox="0 0 24 24" aria-hidden="true" set:html={gi.siren} /></span>
-            <span class="grvx-sos-t"><span>In an emergency, dial</span> <strong>{sos.number}</strong></span>
-            <svg class="grvx-sos-go" viewBox="0 0 24 24" aria-hidden="true" set:html={arrow.in} />
-          </a>
         </aside>
       </div>
     </div>
@@ -409,29 +351,22 @@ const statusLabel: Record<string, string> = { critical: 'Critical', progress: 'I
     });
   }
 
-  // Case list: status chips and search work together.
+  // Case list search.
   const cases = document.querySelector<HTMLElement>('.grvx-cases');
   if (cases) {
     const rows = Array.from(cases.querySelectorAll<HTMLElement>('.grvx-case'));
-    const chips = Array.from(cases.querySelectorAll<HTMLButtonElement>('[data-filter]'));
     const search = cases.querySelector<HTMLInputElement>('[data-case-search]');
     const empty = cases.querySelector<HTMLElement>('.grvx-empty');
-    let status = 'all';
     const apply = () => {
       const q = (search?.value ?? '').trim().toLowerCase();
       let shown = 0;
       rows.forEach((r) => {
-        const ok = (status === 'all' || r.dataset.status === status) && (!q || (r.textContent ?? '').toLowerCase().includes(q));
+        const ok = !q || (r.textContent ?? '').toLowerCase().includes(q);
         r.hidden = !ok;
         if (ok) shown++;
       });
       if (empty) empty.hidden = shown > 0;
     };
-    chips.forEach((c) => c.addEventListener('click', () => {
-      status = c.dataset.filter ?? 'all';
-      chips.forEach((x) => { x.classList.toggle('on', x === c); x.setAttribute('aria-pressed', String(x === c)); });
-      apply();
-    }));
     search?.addEventListener('input', apply);
   }
 

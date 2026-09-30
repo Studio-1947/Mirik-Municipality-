@@ -148,32 +148,6 @@ const chevron = '<path d="M18 9.00005C18 9.00005 13.5811 15 12 15C10.4188 15 6 9
         <a class="btn outline" href="/notices/">Latest Notices <span aria-hidden="true">&rarr;</span></a>
       </div>
     </div>
-    <aside class="grv-ticket hero-ticket" aria-labelledby="hero-ticket-title">
-      <span class="hero-ticket-stub" aria-hidden="true"></span>
-      <div class="grv-ticket-head">
-        <div>
-          <p class="grv-ticket-eyebrow">Grievance updates</p>
-          <h2 id="hero-ticket-title">Streetlight repair</h2>
-        </div>
-        <span class="grv-ticket-tag">Ward III</span>
-      </div>
-      <div class="grv-ticket-id">
-        <span>Case reference</span>
-        <strong>MM-2026-0187</strong>
-      </div>
-      <div class="grv-ticket-status">
-        <span class="grv-ticket-dot" aria-hidden="true"></span>
-        <div>
-          <strong>Inspection scheduled</strong>
-          <p>Field team assigned · 30 September 2026</p>
-        </div>
-      </div>
-      <ol class="grv-ticket-steps" aria-label="Grievance progress">
-        <li>28 Sep<br />Submitted</li>
-        <li>30 Sep<br />Field visit</li>
-        <li>02 Oct<br />Update due</li>
-      </ol>
-    </aside>
   </section>
 
   <section class="quick-sec">
@@ -427,12 +401,39 @@ const chevron = '<path d="M18 9.00005C18 9.00005 13.5811 15 12 15C10.4188 15 6 9
 
   <section class="alt" id="faq">
     <div class="wrap faqx">
-      <div class="faqx-main">
-        <div class="section-head">
-          <p class="eyebrow">FAQ</p>
-          <h2>Common questions</h2>
-          <p class="lead">Quick answers about applying, paying and getting help.</p>
+      <div class="section-head">
+        <p class="eyebrow">FAQ</p>
+        <h2>Common questions</h2>
+        <p class="lead">Quick answers about applying, paying and getting help.</p>
+      </div>
+      <div class="faqx-grid">
+        <div class="faqx-media">
+          <div class="faqx-img-card">
+            <img
+              src="/images/faqimg.jpg"
+              alt="Mirik Municipality FAQ and citizen assistance"
+              loading="lazy"
+            />
+          </div>
+          <div class="faqx-help-card">
+            <div class="faqx-help-icon">
+              <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                <line x1="12" y1="17" x2="12.01" y2="17"></line>
+              </svg>
+            </div>
+            <div>
+              <p class="faqx-help-title">Need direct assistance?</p>
+              <p class="faqx-help-desc">Visit the municipal office at Krishnanagar, Mirik or lodge a grievance online.</p>
+              <a href="/grievance/" class="faqx-help-link">
+                <span>Submit a grievance</span>
+                <span aria-hidden="true">&rarr;</span>
+              </a>
+            </div>
+          </div>
         </div>
+
         <div class="faqx-list">
           {faqs.map((f, i) => (
             <div class="faqx-item">

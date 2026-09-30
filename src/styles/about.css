@@ -1,21 +1,113 @@
 /* About page styles. Loaded after global.css from about.astro. */
 /* About guide: a consistent photo-led treatment for health and education cards. */
 #town-guide .pgrid.small { align-items: stretch; }
-#town-guide .pcard.compact { min-height: 100%; box-shadow: 0 4px 14px rgba(15,50,40,.045); }
+#town-guide .pcard.compact { min-height: 100%; box-shadow: 0 4px 14px rgba(15,50,40,.045); display: flex; flex-direction: column; }
 #town-guide .pcard.compact .pthumb { aspect-ratio: 16 / 8.4; background: #dbe8e2; }
 #town-guide .pcard.compact .pthumb::after { content: ''; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(180deg, transparent 52%, rgba(7,33,26,.14)); }
 #town-guide .pcard.compact .pthumb img { object-position: center; transform: scale(1.001); transition: transform .35s ease, filter .35s ease; }
 #town-guide .pcard.compact:hover .pthumb img { transform: scale(1.04); filter: saturate(1.06) contrast(1.02); }
-#town-guide .pcard.compact .pbody { gap: 9px; padding: 16px; }
-#town-guide .pcard.compact h4 { min-height: 2.45em; font-size: 1rem; line-height: 1.22; }
-#town-guide .pcard.compact .pdir { min-height: 2.6rem; padding-inline: 17px; }
-#town-guide .health-card .pdir { background: #a12b2b; }
+#town-guide .pcard.compact .pbody { gap: 8px; padding: 16px; flex: 1; display: flex; flex-direction: column; }
+#town-guide .pcard.compact h4 { min-height: 2.2em; font-size: 1rem; line-height: 1.25; margin-bottom: 2px; }
+#town-guide .pcard-tag {
+  display: inline-block;
+  align-self: flex-start;
+  font-size: .7rem;
+  font-weight: 700;
+  padding: .2rem .55rem;
+  border-radius: 999px;
+  letter-spacing: .01em;
+}
+#town-guide .pcard-tag.red { background: #fee2e2; color: #991b1b; }
+#town-guide .pcard-tag.blue { background: #e0e7ff; color: #3730a3; }
+#town-guide .pcard.compact .pdir { margin-top: auto; min-height: 2.5rem; padding-inline: 16px; }
+
+/* Dedicated highlighted container box ONLY for Health Care 4 cards */
+.health-highlight-box {
+  margin: 36px 0 44px;
+  padding: 28px 26px 30px;
+  border-radius: 24px;
+  background: linear-gradient(150deg, rgba(254, 242, 242, 0.95), rgba(255, 247, 237, 0.88));
+  border: 2px solid rgba(220, 38, 38, 0.22);
+  box-shadow: 0 16px 40px rgba(185, 28, 28, 0.07), inset 0 1px 0 #ffffff;
+  position: relative;
+  overflow: hidden;
+}
+.health-box-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 20px;
+  margin-bottom: 22px;
+  padding-bottom: 16px;
+  border-bottom: 1px dashed rgba(220, 38, 38, 0.2);
+}
+.health-badge-label {
+  margin: 0 0 2px;
+  color: #991b1b;
+  font-size: .72rem;
+  font-weight: 800;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+.health-h {
+  margin: 0 !important;
+  color: #7f1d1d;
+  font-size: 1.65rem;
+}
+.health-lead {
+  margin: 0;
+  color: #7f1d1d;
+  font-size: .88rem;
+  max-width: 440px;
+  line-height: 1.45;
+  opacity: .88;
+}
+
+/* 4 Health Care Cards Layout & Precise Alignment */
+.health-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  align-items: stretch;
+}
+#town-guide .health-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: #ffffff;
+  border: 1px solid rgba(220, 38, 38, 0.16);
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(153, 27, 27, 0.05);
+  transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+}
+#town-guide .health-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 28px rgba(153, 27, 27, 0.12);
+  border-color: rgba(220, 38, 38, 0.38);
+}
+#town-guide .health-card .pbody {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 16px;
+  gap: 10px;
+}
+#town-guide .health-card .pdir {
+  margin-top: auto;
+  align-self: flex-start;
+  background: #a12b2b;
+}
 #town-guide .health-card .pdir:hover { background: #7c1e1e; }
 #town-guide .school-card .pdir { background: #3d358d; }
 #town-guide .school-card .pdir:hover { background: #2d276d; }
+
+@media (max-width: 1100px) {
+  .health-grid { grid-template-columns: repeat(2, 1fr); }
+  .health-box-head { flex-direction: column; align-items: flex-start; gap: 8px; }
+}
 @media (max-width: 600px) {
-  #town-guide .pcard.compact .pbody { padding: 14px; }
-  #town-guide .pcard.compact h4 { min-height: 0; }
+  .health-grid { grid-template-columns: 1fr; }
+  .health-highlight-box { padding: 18px 16px 20px; border-radius: 18px; }
 }
 @media (prefers-reduced-motion: reduce) {
   #town-guide .pcard.compact .pthumb img { transition: none; }
