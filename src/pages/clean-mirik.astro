@@ -21,11 +21,13 @@ const icons: Record<string, string> = {
   glove: 'M8 22v-8L5.5 10a1.5 1.5 0 0 1 2.5-1.6L9.5 10V4a1.5 1.5 0 0 1 3 0v5V3a1.5 1.5 0 0 1 3 0v6V5a1.5 1.5 0 0 1 3 0v10c0 4-2 7-5 7z',
 };
 
-// Line drawings for the waste-management awareness card.
-const awIcons = [
-  'M3 11l9-8 9 8 M5 10v10h14V10', // home
-  'M4 7h16 M9 7V5h6v2 M6 7l1 13h10l1-13', // bin
-  'M12 3c3 4 6 7 6 10a6 6 0 0 1-12 0c0-3 3-6 6-10z', // droplet (lake)
+// Line drawings for the responsible-tourism card.
+const awPoints = [
+  { icon: 'M12 3c3 4 6 7 6 10a6 6 0 0 1-12 0c0-3 3-6 6-10z', text: 'Keep the lake, roads and public spaces clean.' }, // droplet (lake)
+  { icon: 'M4 7h16 M9 7V5h6v2 M6 7l1 13h10l1-13', text: 'Use designated bins and avoid single-use plastic.' }, // bin
+  { icon: 'M5 19C5 10 11 5 20 4c0 9-5 15-14 15z M5 19l8-8', text: 'Respect local culture, nature and wildlife.' }, // leaf
+  { icon: 'M4 10l1.5-5h13L20 10 M4 10v10h16V10 M4 10c0 2 4 2 4 0 0 2 4 2 4 0 0 2 4 2 4 0 0 2 4 2 4 0 M10 20v-5h4v5', text: 'Support local shops, guides and businesses.' }, // shop
+  { icon: 'M2 20l7-11 4 6 3-4 6 9z', text: 'Leave Mirik as beautiful as you found it.' }, // mountains
 ];
 ---
 <Layout title="Clean Mirik | Mirik Municipality">
@@ -75,27 +77,19 @@ const awIcons = [
       <div class="wrap">
         <div class="cm-aw-card">
           <div class="cm-aw-text">
-            <p class="eyebrow">Waste management</p>
-            <h2 id="cm-aw-title">Waste is everyone's business</h2>
-            <p class="cm-aw-lead">Mirik's beauty is our economy — the lake, the gardens and the tea slopes bring visitors, and waste is the one thing that can undo it. Every household and shop sorts its waste and puts it out on time; every visitor carries back what they bring in.</p>
+            <p class="eyebrow">Responsible Tourism</p>
+            <h2 id="cm-aw-title">Protect Mirik. Preserve what brings people here.</h2>
+            <p class="cm-aw-lead">Mirik’s lake, forests, tea gardens and mountain landscapes are more than beautiful places. They support local livelihoods, businesses and the town’s tourism economy.</p>
+            <p class="cm-aw-lead">Responsible tourism means enjoying Mirik while helping protect what makes it special. Every visitor can play a part through small, thoughtful actions.</p>
             <ul class="cm-aw-points">
-              <li>
-                <span class="cm-aw-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d={awIcons[0]} /></svg></span>
-                <span>At home: use the green, white and black bins and keep wet and dry waste apart.</span>
-              </li>
-              <li>
-                <span class="cm-aw-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d={awIcons[1]} /></svg></span>
-                <span>Out and about: use the public bins or carry it home — never the drain, the lake or the roadside.</span>
-              </li>
-              <li>
-                <span class="cm-aw-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d={awIcons[2]} /></svg></span>
-                <span>The lake: report dumping or burning of waste to the office — fines apply under the state rules.</span>
-              </li>
+              {awPoints.map((pt) => (
+                <li>
+                  <span class="cm-aw-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d={pt.icon} /></svg></span>
+                  <span>{pt.text}</span>
+                </li>
+              ))}
             </ul>
-            <div class="cm-aw-actions">
-              <a class="btn primary" href="/contact/">Contact the office</a>
-              <a class="btn ghost" href="#segregation">How to sort your waste</a>
-            </div>
+            <p class="cm-aw-close">When we protect Mirik, we protect its tourism, its livelihoods and its future.</p>
           </div>
           <div class="cm-aw-img"><img src="/images/lake.jpg" alt="Sumendu Lake, the heart of Mirik" loading="lazy" decoding="async" /></div>
         </div>
@@ -134,14 +128,14 @@ const awIcons = [
   @media (max-width: 980px) { .cm-bins { grid-template-columns: repeat(3, 1fr); } }
   @media (max-width: 640px) { .cm-bins { grid-template-columns: repeat(2, 1fr); gap: 12px; } .cm-bin { padding: 16px 12px; } .cm-bin img { height: 90px; } }
 
-  /* Awareness card: mirrors the home "About Mirik" glass card (text left, framed photo right).
+  /* Responsible-tourism card: mirrors the home "About Mirik" glass card (text left, framed photo right).
      Shares the paper background of the segregation section above, so the two read as one flow. */
   .cm-aw { background: var(--paper); padding: 8px 0 56px; }
   .cm-aw-card { display: grid; grid-template-columns: 1.1fr 1fr; gap: 52px; align-items: stretch; background: #fff; border: 1px solid var(--line); border-radius: 26px; padding: 38px 40px; box-shadow: 0 14px 40px rgba(0,0,0,.07); }
   .cm-aw-text { align-self: center; }
   .cm-aw-text h2 { font-size: clamp(1.5rem, 2.6vw, 2rem); line-height: 1.25; margin: 0 0 14px; color: var(--ink); }
-  .cm-aw-lead { margin: 0 0 22px; font-size: 1rem; line-height: 1.7; color: var(--muted); }
-  .cm-aw-points { list-style: none; margin: 0 0 24px; padding: 0; display: grid; gap: 15px; }
+  .cm-aw-lead { margin: 0 0 14px; font-size: 1rem; line-height: 1.7; color: var(--muted); }
+  .cm-aw-points { list-style: none; margin: 22px 0 24px; padding: 0; display: grid; gap: 12px; }
   .cm-aw-points li { display: flex; gap: 14px; align-items: flex-start; font-size: .95rem; line-height: 1.6; color: var(--ink); }
   .cm-aw-ic { flex: none; width: 40px; height: 40px; display: grid; place-items: center; border-radius: 12px; background: var(--pine-soft); color: var(--pine-deep); }
   .cm-aw-ic svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
@@ -150,8 +144,8 @@ const awIcons = [
   .cm-aw-img { position: relative; }
   .cm-aw-img::before { content: ''; position: absolute; inset: -14px 14px 14px -14px; background: var(--lake-soft); border-radius: 20px; }
   .cm-aw-img img { position: relative; width: 100%; height: 100%; min-height: 320px; object-fit: cover; border-radius: 18px; border: 5px solid #fff; box-shadow: 0 14px 34px rgba(0,0,0,.14); }
-  .cm-aw-actions { display: flex; flex-wrap: wrap; gap: 14px; }
+  .cm-aw-close { margin: 0; padding: 14px 18px; border-left: 4px solid var(--green); border-radius: 0 12px 12px 0; background: var(--pine-soft); font-weight: 700; line-height: 1.5; color: var(--pine-deep); }
   .cm-aw .eyebrow { color: var(--green-deep); }
   @media (max-width: 900px) { .cm-aw-card { grid-template-columns: 1fr; gap: 30px; padding: 26px 24px; } .cm-aw-img { order: -1; margin: 0 12px 0 14px; } .cm-aw-img img { height: auto; min-height: 0; aspect-ratio: 4 / 3.4; } }
-  @media (max-width: 640px) { .cm-aw-card { padding: 20px 16px; } .cm-aw-img { margin: 0 8px 0 10px; } .cm-aw-points { gap: 12px; } .cm-aw-points li { font-size: .9rem; } .cm-aw-actions { flex-direction: column; } .cm-aw-actions .btn { width: 100%; justify-content: center; } }
+  @media (max-width: 640px) { .cm-aw-card { padding: 20px 16px; } .cm-aw-img { margin: 0 8px 0 10px; } .cm-aw-points { gap: 12px; } .cm-aw-points li { font-size: .9rem; } .cm-aw-close { padding: 12px 14px; font-size: .95rem; } }
 </style>
