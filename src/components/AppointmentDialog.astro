@@ -12,7 +12,7 @@ import { contact } from '../data/site';
     <p class="dlg-lead">Tell the Sub-Divisional Office who you are, why you want to meet, and when suits you. The office will confirm the time.</p>
     <form class="grv apt" data-email={contact.email} novalidate>
       <div><label for="apt-name">Full name</label><input id="apt-name" name="name" required autocomplete="name" /></div>
-      <div><label for="apt-phone">Phone number</label><input id="apt-phone" name="phone" required inputmode="numeric" pattern="[0-9]{10}" maxlength="10" autocomplete="tel" /><div class="hint">10 digits</div></div>
+      <div><label for="apt-phone">Phone number</label><input id="apt-phone" name="phone" required inputmode="numeric" pattern="[0-9]{10}" maxlength="10" data-digits title="10 digits" autocomplete="tel" /><div class="hint">10 digits</div></div>
       <div>
         <label for="apt-reason">Reason for meeting</label>
         <select id="apt-reason" name="reason" required>
@@ -51,6 +51,9 @@ import { contact } from '../data/site';
   </div>
 </dialog>
 <script>
+  import { digitsOnly } from '../scripts/digits-only';
+  digitsOnly(document.getElementById('apt-dialog') ?? undefined);
+
   const dlg = document.getElementById('apt-dialog') as HTMLDialogElement | null;
   if (dlg && typeof dlg.showModal === 'function') {
     const form = dlg.querySelector<HTMLFormElement>('form.apt')!;

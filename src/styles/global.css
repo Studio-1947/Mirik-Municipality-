@@ -162,10 +162,10 @@ dl.kv dd { margin: 0; font-weight: 500; }
 .schemes .body { padding: 0 20px 18px; color: var(--muted); }
 
 /* Clean Mirik */
-.clean { background: var(--pine-deep); color: #e3ece6; }
-.clean h2, .clean h3 { color: #fff; }
-.clean .eyebrow { color: #9fd0e6; }
-.clean .lead { color: #c5d6cc; }
+.clean { background: var(--lake-soft); color: var(--ink); }
+.clean h2, .clean h3 { color: var(--ink); }
+.clean .eyebrow { color: var(--accent); }
+.clean .lead { color: var(--muted); }
 .fines { width: 100%; border-collapse: collapse; background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.15); border-radius: var(--radius); overflow: hidden; }
 .fines td { padding: 13px 16px; border-bottom: 1px solid rgba(255,255,255,.12); color: #e3ece6; }
 .fines tr:last-child td { border-bottom: 0; }
@@ -174,7 +174,7 @@ dl.kv dd { margin: 0; font-weight: 500; }
 .bins li { display: flex; align-items: center; gap: 14px; background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.12); border-radius: 10px; padding: 10px 14px; }
 .bins .sw { width: 28px; height: 34px; border-radius: 4px 4px 7px 7px; flex: none; border: 1px solid rgba(255,255,255,.35); }
 .bins b { color: #fff; margin-right: 6px; }
-.clean .motto { font-family: var(--serif); font-size: 1.3rem; color: #fff; margin-top: 24px; }
+.clean .motto { font-family: var(--serif); font-size: 1.3rem; color: var(--green-deep); margin-top: 24px; }
 
 /* Lists */
 ul.plain { list-style: none; padding: 0; margin: 0; }
@@ -265,7 +265,7 @@ main > section .project .figure { color: var(--accent); }
 main > section .schemes summary::after { color: var(--accent); }
 main > section .btn.primary, main > section form.grv button { background: var(--accent); }
 main > section .eyebrow { color: var(--accent); }
-main > section.clean .eyebrow { color: #9fd0e6; }
+main > section.clean .eyebrow { color: var(--accent); }
 
 /* Home */
 .notices-sec { padding: 48px 0 8px; }
@@ -2008,3 +2008,56 @@ form.grv.apt .msgbox textarea { min-height: 90px; }
 /* Form dropdowns: one tidy arrow, inset from the right edge (light on the dark glass) */
 form.grv select { appearance: none; -webkit-appearance: none; padding-right: 44px; cursor: pointer; background-image: linear-gradient(45deg, transparent 50%, #fff 50%), linear-gradient(135deg, #fff 50%, transparent 50%); background-position: calc(100% - 22px) 52%, calc(100% - 16px) 52%; background-size: 6px 6px, 6px 6px; background-repeat: no-repeat; }
 form.grv select:focus { background-image: linear-gradient(45deg, transparent 50%, #7fd1a3 50%), linear-gradient(135deg, #7fd1a3 50%, transparent 50%); }
+
+/* Grievance pop-up: calm focus state — quiet green border tint only, no outline ring
+   or glow. Applies at every dialog size. */
+#grv-dialog form.grv input:focus, #grv-dialog form.grv select:focus, #grv-dialog form.grv textarea:focus { outline: none; border-color: #7fd1a3; box-shadow: none; }
+#grv-dialog form.grv .msgbox:focus-within { outline: none; border-color: #7fd1a3; box-shadow: none; }
+
+/* Grievance pop-up on large screens: widen the card and split the form into two columns
+   with explicit placement — fields stacked left, description box spanning two rows on the
+   right, actions full width below. Fits in view without scrolling. Narrow or very short
+   viewports keep the single-column scrolling layout from above. */
+@media (min-width: 900px) and (min-height: 600px) {
+  dialog#grv-dialog { max-width: min(980px, calc(100% - 48px)); }
+  #grv-dialog .dlg-card { padding: 24px 28px 26px; }
+  #grv-dialog .dlg-lead { max-width: 640px; }
+  #grv-dialog form.grv {
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas: "name phone" "wa ward" "loc msg" "file msg" "act act";
+    gap: 12px 18px;
+    align-items: start;
+  }
+  #grv-dialog form.grv > div:nth-child(1) { grid-area: name; }
+  #grv-dialog form.grv > div:nth-child(2) { grid-area: phone; }
+  #grv-dialog form.grv > fieldset.wa { grid-area: wa; margin: 0; }
+  #grv-dialog form.grv > div:nth-child(4) { grid-area: ward; }
+  #grv-dialog form.grv > div:nth-child(5) { grid-area: loc; }
+  #grv-dialog form.grv > .msgbox { grid-area: msg; align-self: stretch; }
+  #grv-dialog form.grv > div:nth-child(7) { grid-area: file; }
+  #grv-dialog form.grv > .grv-actions { grid-area: act; margin: 0; justify-content: flex-end; }
+  /* Align the WhatsApp block with the label rhythm of its neighbours */
+  #grv-dialog form.grv fieldset.wa legend { margin-bottom: 5px; }
+  #grv-dialog form.grv .msgbox textarea { min-height: 132px; }
+}
+
+/* Header tools: one colour family for EN pill, Emergency Call and Grievance.
+   Emergency keeps the conventional alert rust (--alert) for urgency; grievance and the
+   language pill follow in deep green so the trio still reads as one set. */
+header.site .sos-btn { background: var(--alert); }
+header.site .sos-btn:hover { background: #8f3612; }
+header.site .cta-btn { background: var(--green-deep); }
+header.site .cta-btn:hover { background: var(--navy); }
+header.site .lang select { background-color: rgba(46,139,62,.32); border-color: rgba(255,255,255,.55); color: #fff; }
+header.site .lang select:hover { background-color: rgba(46,139,62,.5); }
+header.site.scrolled .lang select { background-color: rgba(46,139,62,.14); border-color: rgba(31,107,46,.45); color: var(--green-deep); }
+header.site.scrolled .lang select:hover { background-color: rgba(46,139,62,.24); }
+header.site.scrolled .lang select option { color: var(--ink); background: #fff; }
+
+/* Language pill: one inline SVG chevron pinned to the right edge, replacing the
+   two-gradient triangle whose position drifted across scroll/breakpoint states. */
+header.site .lang { position: relative; display: inline-flex; }
+header.site .lang::after { content: ''; position: absolute; right: 12px; top: 50%; width: 9px; height: 9px; pointer-events: none; transform: translateY(-64%) rotate(45deg); border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; opacity: .85; }
+header.site .lang select { appearance: none; -webkit-appearance: none; background-image: none; padding-right: 30px; }
+header.site.scrolled .lang select { padding: 6px 26px 6px 12px; font-size: .8rem; }
+header.site.scrolled .lang::after { right: 10px; width: 8px; height: 8px; }

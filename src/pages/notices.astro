@@ -1,20 +1,261 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import PageHead from '../components/PageHead.astro';
-import { notices } from '../data/site';
+import '../styles/notices.css';
+import { notices, projects, schemes, contact } from '../data/site';
+import { caseStudies } from '../data/case-studies';
+
+// Icons: Hugeicons free set (Stroke Rounded, MIT), inlined as SVG like the Services page.
+const ni: Record<string, string> = {
+  clean: '<path d="M21 3L13 11.5"/><path d="M9.44573 11.0854C6.96539 12.0368 4.98269 11.8736 3 11.0885C3.50059 17.531 6.50414 20.0089 10.5089 21C10.5089 21 13.5261 18.8664 13.961 13.8074C14.0081 13.2595 14.0317 12.9856 13.9178 12.6769C13.8038 12.3682 13.5802 12.1468 13.1329 11.704C12.3973 10.9757 12.0295 10.6116 11.5929 10.5204C11.1564 10.4293 10.5862 10.648 9.44573 11.0854Z"/><path d="M4.5 16.4464C4.5 16.4464 7 16.9286 9.5 15"/><path d="M8.5 7.25C8.5 7.94036 7.94036 8.5 7.25 8.5C6.55964 8.5 6 7.94036 6 7.25C6 6.55964 6.55964 6 7.25 6C7.94036 6 8.5 6.55964 8.5 7.25Z"/><path d="M11.125 4H11M11.25 4C11.25 4.13807 11.1381 4.25 11 4.25C10.8619 4.25 10.75 4.13807 10.75 4C10.75 3.86193 10.8619 3.75 11 3.75C11.1381 3.75 11.25 3.86193 11.25 4Z"/>', // CleanIcon
+  admin: '<path d="M2 22H22"/><path d="M18 9H14C11.518 9 11 9.518 11 12V22H21V12C21 9.518 20.482 9 18 9Z"/><path d="M15 22H3V5C3 2.518 3.518 2 6 2H12C14.482 2 15 2.518 15 5V9"/><path d="M3 6H6M3 10H6M3 14H6"/><path d="M15 13H17M15 16H17"/><path d="M16 22L16 19"/>', // Building05Icon
+  works: '<path d="M18 6H6C4.59987 6 3.8998 6 3.36502 6.27248C2.89462 6.51217 2.51217 6.89462 2.27248 7.36502C2 7.8998 2 8.59987 2 10C2 11.4001 2 12.1002 2.27248 12.635C2.51217 13.1054 2.89462 13.4878 3.36502 13.7275C3.8998 14 4.59987 14 6 14H18C19.4001 14 20.1002 14 20.635 13.7275C21.1054 13.4878 21.4878 13.1054 21.7275 12.635C22 12.1002 22 11.4001 22 10C22 8.59987 22 7.8998 21.7275 7.36502C21.4878 6.89462 21.1054 6.51217 20.635 6.27248C20.1002 6 19.4001 6 18 6Z"/><path d="M14 6L21 13"/><path d="M8 6L16 14"/><path d="M3 7L10 14"/><path d="M6 3V6M6 14V21"/><path d="M18 3V6M18 14V21"/>', // ConstructionIcon
+  general: '<path d="M10.5 8H18.5M10.5 12H13M18.5 12H16M10.5 16H13M18.5 16H16"/><path d="M7 7.5H6C4.11438 7.5 3.17157 7.5 2.58579 8.08579C2 8.67157 2 9.61438 2 11.5V18C2 19.3807 3.11929 20.5 4.5 20.5C5.88071 20.5 7 19.3807 7 18V7.5Z"/><path d="M16 3.5H11C10.07 3.5 9.60504 3.5 9.22354 3.60222C8.18827 3.87962 7.37962 4.68827 7.10222 5.72354C7 6.10504 7 6.57003 7 7.5V18C7 19.3807 5.88071 20.5 4.5 20.5H16C18.8284 20.5 20.2426 20.5 21.1213 19.6213C22 18.7426 22 17.3284 22 14.5V9.5C22 6.67157 22 5.25736 21.1213 4.37868C20.2426 3.5 18.8284 3.5 16 3.5Z"/>', // News01Icon
+  latest: '<path d="M20 18.5011L18.349 7.93407C17.8603 4.80601 15.166 2.5 12 2.5C8.83398 2.5 6.13971 4.80601 5.65098 7.93407L4 18.5011"/><path d="M20 18.5C20 16.8431 16.4183 15.5 12 15.5C7.58172 15.5 4 16.8431 4 18.5C4 20.1569 7.58172 21.5 12 21.5C16.4183 21.5 20 20.1569 20 18.5Z"/><path d="M13 18.5H11"/>', // Notification03Icon
+  ongoing: '<path d="M12 3V6"/><path d="M12 18V21"/><path d="M21 12L18 12"/><path d="M6 12L3 12"/><path d="M18.3635 5.63672L16.2422 7.75804"/><path d="M7.75804 16.2422L5.63672 18.3635"/><path d="M18.3635 18.3635L16.2422 16.2422"/><path d="M7.75804 7.75804L5.63672 5.63672"/>', // Loading03Icon
+  megaphone: '<path d="M9 14V6H6C5.07003 6 4.60504 6 4.22354 6.10222C3.18827 6.37962 2.37962 7.18827 2.10222 8.22354C2 8.60504 2 9.07003 2 10C2 10.93 2 11.395 2.10222 11.7765C2.37962 12.8117 3.18827 13.6204 4.22354 13.8978C4.60504 14 5.07003 14 6 14H9Z"/><path d="M9 14L9.96466 18.8233C9.98816 18.9408 10 19.0604 10 19.1802V19.3411C10 20.2573 9.25728 21 8.34109 21C7.55885 21 6.8829 20.4536 6.719 19.6887L5.5 14"/><path d="M10 6H9V14H10C11.2982 14 12.5614 14.4211 13.6 15.2L15.747 16.8103C15.9112 16.9334 16.111 17 16.3162 17C16.7246 17 17.0909 16.7404 17.2088 16.3495C17.5537 15.2067 18 13.2728 18 10C18 6.72718 17.5537 4.79327 17.2088 3.65054C17.0909 3.25961 16.7246 3 16.3162 3C16.111 3 15.9112 3.06658 15.747 3.18974L13.6 4.8C12.5614 5.57893 11.2982 6 10 6Z"/><path d="M21 9.99996H22M20.5 6.00109L21.5 5.40637M20.5 14L21.5 14.6481"/>', // Megaphone01Icon
+  calendar: '<path d="M16 2V6M8 2V6"/><path d="M13 4H11C7.22876 4 5.34315 4 4.17157 5.17157C3 6.34315 3 8.22876 3 12V14C3 17.7712 3 19.6569 4.17157 20.8284C5.34315 22 7.22876 22 11 22H13C16.7712 22 18.6569 22 19.8284 20.8284C21 19.6569 21 17.7712 21 14V12C21 8.22876 21 6.34315 19.8284 5.17157C18.6569 4 16.7712 4 13 4Z"/><path d="M3 10H21"/><path d="M12.1258 14H12.0008M12.1258 18H12.0008M7.625 14H7.5M7.625 18H7.5M16.625 14H16.5M12.2508 14C12.2508 14.1381 12.1389 14.25 12.0008 14.25C11.8628 14.25 11.7508 14.1381 11.7508 14C11.7508 13.8619 11.8628 13.75 12.0008 13.75C12.1389 13.75 12.2508 13.8619 12.2508 14ZM12.2508 18C12.2508 18.1381 12.1389 18.25 12.0008 18.25C11.8628 18.25 11.7508 18.1381 11.7508 18C11.7508 17.8619 11.8628 17.75 12.0008 17.75C12.1389 17.75 12.2508 17.8619 12.2508 18ZM7.75 14C7.75 14.1381 7.63807 14.25 7.5 14.25C7.36193 14.25 7.25 14.1381 7.25 14C7.25 13.8619 7.36193 13.75 7.5 13.75C7.63807 13.75 7.75 13.8619 7.75 14ZM7.75 18C7.75 18.1381 7.63807 18.25 7.5 18.25C7.36193 18.25 7.25 18.1381 7.25 18C7.25 17.8619 7.36193 17.75 7.5 17.75C7.63807 17.75 7.75 17.8619 7.75 18ZM16.75 14C16.75 14.1381 16.6381 14.25 16.5 14.25C16.3619 14.25 16.25 14.1381 16.25 14C16.25 13.8619 16.3619 13.75 16.5 13.75C16.6381 13.75 16.75 13.8619 16.75 14Z"/>', // Calendar03Icon
+  arrow: '<path d="M18.5 12L4.99997 12"/><path d="M13 18C13 18 19 13.5811 19 12C19 10.4188 13 6 13 6"/>', // ArrowRight02Icon
+  facebook: '<path d="M2.5 12C2.5 7.52166 2.5 5.28249 3.89124 3.89124C5.28249 2.5 7.52166 2.5 12 2.5C16.4783 2.5 18.7175 2.5 20.1088 3.89124C21.5 5.28249 21.5 7.52166 21.5 12C21.5 16.4783 21.5 18.7175 20.1088 20.1088C18.7175 21.5 16.4783 21.5 12 21.5C7.52166 21.5 5.28249 21.5 3.89124 20.1088C2.5 18.7175 2.5 16.4783 2.5 12Z"/><path d="M16.9265 8.02637H13.9816C12.9378 8.02637 12.0894 8.86847 12.0817 9.91229L11.9964 21.4268M10.082 14.0017H14.8847"/>', // Facebook01Icon
+};
+
+// Page-only presentation for notices: category, icon and a related link, keyed by the notice title in site.ts.
+// Kept here (not in site.ts) because the home page also lists notices from site.ts.
+const cats: Record<string, { label: string; icon: string }> = {
+  clean: { label: 'Cleanliness', icon: ni.clean },
+  admin: { label: 'Administration', icon: ni.admin },
+  works: { label: 'Projects and works', icon: ni.works },
+  general: { label: 'Notice', icon: ni.general },
+};
+const extra: Record<string, { cat: string; href?: string; cta?: string }> = {
+  'Strict cleanliness rules now in force, with fines': { cat: 'clean', href: '/clean-mirik/#fines', cta: 'See the fine list' },
+  'Board dissolved; SDO Mirik appointed Administrator': { cat: 'admin', href: '/administration/', cta: 'See the Administration page' },
+  'Two new sewage treatment plants announced': { cat: 'works', href: '#projects', cta: 'See the lake project' },
+  'AMRUT 2.0 drinking water project': { cat: 'works', href: '#amrut', cta: 'Read about AMRUT 2.0' },
+};
+
+const months = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'];
+// "1 September 2026" -> Date; anything else (e.g. "Ongoing") -> null.
+const parseDate = (s: string) => {
+  const m = s.trim().match(/^(\d{1,2})\s+([A-Za-z]+)\s+(\d{4})$/);
+  const mi = m ? months.indexOf(m[2].toLowerCase()) : -1;
+  return m && mi >= 0 ? new Date(Date.UTC(+m[3], mi, +m[1])) : null;
+};
+const slug = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+
+const board = notices.map((n) => {
+  const x = extra[n.title] ?? { cat: 'general' };
+  const d = parseDate(n.date);
+  return { ...n, ...x, cat: cats[x.cat] ? x.cat : 'general', when: d, iso: d?.toISOString().slice(0, 10), id: `notice-${slug(n.title)}` };
+});
+const dated = board.filter((n) => n.when).sort((a, b) => b.when!.getTime() - a.when!.getTime());
+const ongoing = board.filter((n) => !n.when);
+const latest = dated[0];
+const earlier = dated.slice(1);
+const years = [...new Set(earlier.map((n) => n.when!.getUTCFullYear()))];
+const ext = (href: string) => /^https?:/.test(href);
+// Project card -> its case study page (matched by title).
+const study = (title: string) => caseStudies.find((c) => c.project === title);
+// Visual context for the schemes showcase. Local images keep the section fast and reliable;
+// the PMAY-U image is from the official programme gallery (see public/images/ATTRIBUTIONS.md).
+const schemeVisuals: Record<string, { image: string; alt: string; pos?: string }> = {
+  amrut: { image: '/images/projects/piped-water.jpg', alt: 'Water tanker on a Darjeeling street', pos: 'center 60%' },
+  sbm: { image: '/images/projects/sumendu-lake.jpg', alt: 'Sumendu Lake in Mirik', pos: 'center 55%' },
+  nulm: { image: '/images/tea.jpg', alt: 'Tea gardens in the Mirik hills' },
+  pmay: { image: '/images/schemes/pmay-urban-udaipur.jpg', alt: 'PMAY Urban affordable housing complex in Udaipur' },
+  cbphcs: { image: '/images/health-mirik-rural-hospital.jpg', alt: 'Mirik Rural Hospital' },
+};
+const schemeDetailSlug: Record<string, string> = {
+  sbm: 'swachh-bharat-mission',
+  nulm: 'urban-livelihoods-mission',
+  pmay: 'housing-for-all',
+  cbphcs: 'community-health-care',
+};
 ---
 <Layout title="Notices | Mirik Municipality">
   <PageHead slug="notices" title="Notice board" lead="Official announcements from the Municipality Office." />
-  <section id="notices" class="notices-page">
-    <div class="wrap">
-      <div class="notice-list">
-        {notices.map((n, i) => (
-          <article class={i === 0 ? 'notice-row urgent' : 'notice-row'}>
-            <time>{n.date}</time>
-            <div><h3>{n.title}</h3><p>{n.body}</p></div>
+  <section id="notices" class="notices-page nb-sec">
+    <div class="wrap nb-grid">
+      <div class="nb-main">
+        {latest && (
+          <article class={`nb-feature cat-${latest.cat} nb-o1`} id={latest.id}>
+            <svg class="nb-mark" viewBox="0 0 24 24" aria-hidden="true" set:html={cats[latest.cat].icon} />
+            <div class="nb-meta">
+              <span class="nb-latest"><svg viewBox="0 0 24 24" aria-hidden="true" set:html={ni.latest} />Latest</span>
+              <span class="nb-cat"><svg viewBox="0 0 24 24" aria-hidden="true" set:html={cats[latest.cat].icon} />{cats[latest.cat].label}</span>
+              <time class="nb-date" datetime={latest.iso}><svg viewBox="0 0 24 24" aria-hidden="true" set:html={ni.calendar} />{latest.date}</time>
+            </div>
+            <h2>{latest.title}</h2>
+            <p>{latest.body}</p>
+            {latest.href && (
+              <div class="nb-actions">
+                <a class="nb-btn" href={latest.href} target={ext(latest.href) ? '_blank' : undefined} rel={ext(latest.href) ? 'noopener' : undefined}>
+                  <span>{latest.cta}</span><svg viewBox="0 0 24 24" aria-hidden="true" set:html={ni.arrow} />
+                </a>
+              </div>
+            )}
           </article>
-        ))}
+        )}
+
+        {earlier.length > 0 && (
+          <div class="nb-earlier nb-o3">
+            <h2 class="nb-h">Earlier notices</h2>
+            {years.map((y) => (
+              <div class="nb-year">
+                <p class="nb-year-label">{y}</p>
+                <ol class="nb-timeline">
+                  {earlier.filter((n) => n.when!.getUTCFullYear() === y).map((n) => (
+                    <li class={`nb-item cat-${n.cat}`} id={n.id}>
+                      <span class="nb-node" aria-hidden="true"><svg viewBox="0 0 24 24" set:html={cats[n.cat].icon} /></span>
+                      <article class="nb-card">
+                        <div class="nb-meta">
+                          <time class="nb-date" datetime={n.iso}><svg viewBox="0 0 24 24" aria-hidden="true" set:html={ni.calendar} />{n.date}</time>
+                          <span class="nb-cat">{cats[n.cat].label}</span>
+                        </div>
+                        <h3>{n.title}</h3>
+                        <p>{n.body}</p>
+                        {n.href && (
+                          <div class="nb-actions">
+                            <a class="nb-link" href={n.href} target={ext(n.href) ? '_blank' : undefined} rel={ext(n.href) ? 'noopener' : undefined}>
+                              <span>{n.cta}</span><svg viewBox="0 0 24 24" aria-hidden="true" set:html={ni.arrow} />
+                            </a>
+                          </div>
+                        )}
+                      </article>
+                    </li>
+                  ))}
+                </ol>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      <aside class="nb-side">
+        {ongoing.length > 0 && (
+          <div class="nb-ongoing nb-o2">
+            <p class="nb-live"><svg viewBox="0 0 24 24" aria-hidden="true" set:html={ni.ongoing} />Ongoing</p>
+            {ongoing.map((n) => (
+              <article class={`nb-on cat-${n.cat}`} id={n.id}>
+                <span class="nb-cat">{cats[n.cat].label}</span>
+                <h3>{n.title}</h3>
+                <p>{n.body}</p>
+                {n.href && (
+                  <a class="nb-link" href={n.href}><span>{n.cta}</span><svg viewBox="0 0 24 24" aria-hidden="true" set:html={ni.arrow} /></a>
+                )}
+              </article>
+            ))}
+          </div>
+        )}
+        <div class="nb-follow nb-o4">
+          <span class="nb-follow-ico"><svg viewBox="0 0 24 24" aria-hidden="true" set:html={ni.megaphone} /></span>
+          <h3>Stay informed</h3>
+          <p>Notices are also shared on the Facebook page of the municipality.</p>
+          <a class="nb-fb" href={contact.facebook} target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true" set:html={ni.facebook} /><span>Follow on Facebook</span></a>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="alt" id="projects">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">Projects</p>
+        <h2>Projects under way</h2>
+        <p class="lead">Water, sanitation, housing and health schemes being delivered in Mirik.</p>
+      </div>
+      <div class="pj-grid">
+        {projects.map((p) => {
+          const cs = study(p.title);
+          return (
+            <article class={`pj-card tone-${cs?.tone ?? 'lake'}`}>
+              <figure class="pj-media">
+                {cs?.photo
+                  ? <img src={cs.photo.src} alt={cs.photo.alt} width="1400" height="930" loading="lazy" style={`object-position:${cs.photo.pos ?? 'center'}`} />
+                  : <span class="pj-noimg" aria-hidden="true"></span>}
+                {cs && <span class="pj-status"><i aria-hidden="true"></i>{cs.status}</span>}
+                <span class="pj-figure">{p.figure}</span>
+              </figure>
+              <div class="pj-body">
+                <h3>{p.title}</h3>
+                <p>{p.text}</p>
+                {cs && (
+                  <a class="pj-go" href={`/notices/projects/${cs.slug}/`}>
+                    <span>Read the case study</span><svg viewBox="0 0 24 24" aria-hidden="true" set:html={ni.arrow} />
+                  </a>
+                )}
+              </div>
+              {cs?.photo && (
+                <p class="pj-credit"><span>Photo</span>: <a href={cs.photo.url} target="_blank" rel="noopener">{cs.photo.credit}</a>, <a href={cs.photo.licenseUrl} target="_blank" rel="noopener">{cs.photo.license}</a></p>
+              )}
+            </article>
+          );
+        })}
+      </div>
+
+      <div class="scheme-head">
+        <div>
+          <p class="eyebrow">Programmes and schemes</p>
+          <h3 id="schemes">Special projects and schemes</h3>
+        </div>
+        <p>National missions and local action for better everyday services in Mirik.</p>
+      </div>
+      <section class="scheme-feature" aria-label="Featured programme">
+        <div class="scheme-feature-copy">
+          <p class="scheme-kicker">Featured programme</p>
+          <h4>AMRUT 2.0</h4>
+          <p class="scheme-full-name">Atal Mission for Rejuvenation and Urban Transformation</p>
+          <p>{schemes[0].text}</p>
+          <dl class="scheme-facts">
+            <div><dt>Rs 199 crore</dt><dd>Water supply project approved for Mirik</dd></div>
+            <div><dt>135 litres</dt><dd>Daily water-supply target per resident</dd></div>
+          </dl>
+          <a class="scheme-project-link" href="/notices/projects/piped-water/">Read the project overview <span aria-hidden="true">→</span></a>
+        </div>
+        <figure class="scheme-feature-image">
+          <img src={schemeVisuals.amrut.image} alt={schemeVisuals.amrut.alt} style={`object-position:${schemeVisuals.amrut.pos}`} />
+          <figcaption>Water supply in the Darjeeling hills</figcaption>
+        </figure>
+      </section>
+      <div class="schemes scheme-directory">
+        {schemes.slice(1).map((s) => {
+          const visual = schemeVisuals[s.id];
+          return (
+            <article id={s.id} class={`scheme-directory-card scheme-${s.id}`}>
+              <figure>
+                <img src={visual.image} alt={visual.alt} loading="lazy" style={visual.pos ? `object-position:${visual.pos}` : undefined} />
+              </figure>
+              <div>
+                <p class="scheme-kicker">{s.short}</p>
+                <h4>{s.name}</h4>
+                <p>{s.text}</p>
+                <a class="scheme-directory-link" href={`/notices/projects/${schemeDetailSlug[s.id]}/`}>Read the programme overview <span aria-hidden="true">→</span></a>
+              </div>
+            </article>
+          );
+        })}
       </div>
     </div>
   </section>
 </Layout>
+
+<script>
+  // Notice board: fade cards in as they scroll into view.
+  const board = document.querySelector<HTMLElement>('.nb-sec');
+  if (board) {
+    const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const items = Array.from(board.querySelectorAll<HTMLElement>('.nb-feature, .nb-item, .nb-ongoing, .nb-follow'));
+    if (!still && 'IntersectionObserver' in window) {
+      board.classList.add('nb-anim');
+      const io = new IntersectionObserver((entries) => {
+        entries.filter((e) => e.isIntersecting).forEach((e, n) => {
+          const el = e.target as HTMLElement;
+          el.style.setProperty('--d', `${n * 90}ms`);
+          el.classList.add('in');
+          io.unobserve(el);
+        });
+      }, { threshold: 0.12 });
+      items.forEach((el) => io.observe(el));
+    }
+  }
+</script>

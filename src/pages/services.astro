@@ -1,78 +1,438 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import PageHead from '../components/PageHead.astro';
-import { services, projects, schemes } from '../data/site';
----
-<Layout title="Services and Projects | Mirik Municipality">
-  <PageHead slug="services" title="Services and Projects" lead="How to apply for municipal services, and the water, sanitation and housing projects under way in Mirik." />
+import '../styles/services-grievances.css';
+import { services, contact, emergency, wards } from '../data/site';
 
-  <section class="alt" id="services">
+// Icon and colour tone for each service card, keyed by title in site.ts.
+// Icons: Hugeicons free set, Stroke Rounded (MIT licence, https://hugeicons.com). The SVG shapes are
+// copied inline so the site stays dependency-free; the name after each entry is the Hugeicons icon.
+const look: Record<string, { tone: string; icon: string }> = {
+  'Trade Licence': { tone: 'orange', icon: '<path d="M3.5 9.99976V14.9998C3.5 17.8282 3.5 19.2424 4.37868 20.1211C5.25736 20.9998 6.67157 20.9998 9.5 20.9998H14.5C17.3284 20.9998 18.7426 20.9998 19.6213 20.1211C20.5 19.2424 20.5 17.8282 20.5 14.9998V9.99976"/><path d="M8 17.9998H16"/><path d="M17 7.50159C17 8.8823 15.8807 9.99973 14.5 9.99973C13.1193 9.99973 12 8.88044 12 7.49973C12 8.88044 10.8807 9.99973 9.5 9.99973C8.11929 9.99973 7 8.88044 7 7.49973C7 8.88044 5.82654 9.99973 4.379 9.99973C3.59983 9.99973 2.90007 9.67543 2.41999 9.16063C1.59461 8.27555 2.12559 6.97378 2.81446 5.98818L3.202 5.45827C4.08384 4.25246 4.52476 3.64956 5.16491 3.32469C5.80507 2.99983 6.552 2.99993 8.04586 3.00013L15.9551 3.00119C17.4485 3.00138 18.1952 3.00148 18.8351 3.32634C19.475 3.65119 19.9158 4.2539 20.7974 5.45933L21.1855 5.99004C21.8744 6.97565 22.4054 8.27742 21.58 9.16249C21.0999 9.67729 20.4001 10.0016 19.621 10.0016C18.1734 10.0016 17 8.8823 17 7.50159Z"/>' }, // Store02Icon
+  'Birth and Death Registration': { tone: 'violet', icon: '<path d="M11.5 22C7.49306 22 5.48959 22 4.2448 20.5355C3 19.0711 3 16.714 3 12C3 7.28596 3 4.92893 4.2448 3.46447C5.48959 2 7.49306 2 11.5 2C15.5069 2 17.5104 2 18.7552 3.46447C19.7572 4.64332 19.9527 6.40054 19.9908 9.5"/><path d="M8 8H15M8 13H11"/><path d="M19.6092 18.1054C20.4521 17.4918 21 16.4974 21 15.375C21 13.511 19.489 12 17.625 12H17.375C15.511 12 14 13.511 14 15.375C14 16.4974 14.5479 17.4918 15.3908 18.1054M19.6092 18.1054C19.0523 18.5108 18.3666 18.75 17.625 18.75H17.375C16.6334 18.75 15.9477 18.5108 15.3908 18.1054M19.6092 18.1054L20.192 19.9404C20.4143 20.6403 20.5255 20.9903 20.4951 21.2082C20.4318 21.6617 20.0619 21.9984 19.6252 22C19.4154 22.0008 19.101 21.8358 18.4723 21.5059C18.2027 21.3644 18.0679 21.2936 17.93 21.252C17.649 21.1673 17.351 21.1673 17.07 21.252C16.9321 21.2936 16.7973 21.3644 16.5277 21.5059C15.899 21.8358 15.5846 22.0008 15.3748 22C14.9381 21.9984 14.5682 21.6617 14.5049 21.2082C14.4745 20.9903 14.5857 20.6403 14.808 19.9404L15.3908 18.1054"/>' }, // Certificate01Icon
+  'Building Plan Sanction': { tone: 'blue', icon: '<path d="M16 10L18.1494 10.6448C19.5226 11.0568 20.2092 11.2628 20.6046 11.7942C21 12.3256 21 13.0425 21 14.4761V22"/><path d="M8 9L11 9M8 13L11 13"/><path d="M12 22V19C12 18.0572 12 17.5858 11.7071 17.2929C11.4142 17 10.9428 17 10 17H9C8.05719 17 7.58579 17 7.29289 17.2929C7 17.5858 7 18.0572 7 19V22"/><path d="M2 22L22 22"/><path d="M3 22V6.71724C3 4.20649 3 2.95111 3.79118 2.32824C4.58237 1.70537 5.74742 2.04355 8.07752 2.7199L13.0775 4.17122C14.4836 4.57937 15.1867 4.78344 15.5933 5.33965C16 5.89587 16 6.65344 16 8.16857V22"/>' }, // Building03Icon
+  'Mutation': { tone: 'leaf', icon: '<path d="M2 7H4.86503C5.59174 7 6.28868 6.64031 6.80255 6.00005C7.53643 5.08565 8.62195 4.76636 9.60655 5.17529L11 5.75402M2 15.9668H3.62068C4.78017 15.9668 5.35991 15.9668 5.90812 16.1213C5.93477 16.1288 5.96134 16.1366 5.98782 16.1446C6.53259 16.3101 7.01496 16.6209 7.97971 17.2427C9.86787 18.4596 10.812 19.0681 11.8407 18.994C11.8892 18.9905 11.9376 18.9858 11.9859 18.9801C13.0096 18.8577 13.8119 18.0821 15.4166 16.5308L17 15"/><path d="M22 7.23384H19.4832C18.4174 7.23384 17.6649 6.65468 16.9003 5.88258C16.4051 5.38247 15.7731 5.08772 15.1088 5.04713C14.366 5.00175 13.5053 4.93785 12.784 5.13601C11.9811 5.35656 11.451 5.96063 10.8902 6.59196L9.44309 8.22111C8.8523 8.88621 8.8523 9.96455 9.44309 10.6297C9.953 11.2037 10.7519 11.2928 11.3519 10.8424C11.7837 10.5184 12.2743 9.99506 12.7831 9.83025C13.3557 9.64476 13.7109 10.0615 14.0354 10.4999L16.3556 13.6344C17.2167 14.7976 17.6472 15.3793 18.2358 15.6896C18.8244 16 19.4969 16 20.842 16H22"/>' }, // Agreement01Icon
+  'Property (Holding) Tax': { tone: 'green', icon: '<path d="M5 9V19M9 9V19"/><path d="M15 9V12M19 9V12"/><path d="M20.875 21.75H20.75M15.375 16.25H15.25M21 16L15 22M21 21.75C21 21.8881 20.8881 22 20.75 22C20.6119 22 20.5 21.8881 20.5 21.75C20.5 21.6119 20.6119 21.5 20.75 21.5C20.8881 21.5 21 21.6119 21 21.75ZM15.5 16.25C15.5 16.3881 15.3881 16.5 15.25 16.5C15.1119 16.5 15 16.3881 15 16.25C15 16.1119 15.1119 16 15.25 16C15.3881 16 15.5 16.1119 15.5 16.25Z"/><path d="M21.3518 9H2.64822C2.29022 9 2 8.70651 2 8.34447C2 8.12259 2.11099 7.91577 2.29495 7.79485L8.73007 3.56485C10.3171 2.52162 11.1107 2 12 2C12.8893 2 13.6829 2.52162 15.2699 3.56485L21.7051 7.79485C21.889 7.91577 22 8.12259 22 8.34447C22 8.70651 21.7098 9 21.3518 9Z"/><path d="M11 22H3.64814C2.64867 22 2.14893 22 2.02456 21.6913C1.9002 21.3827 2.25356 21.0194 2.9603 20.2929L3.64814 19.5858C3.92929 19.2968 4.06987 19.1522 4.24863 19.0761C4.4274 19 4.62621 19 5.02382 19H11"/><path d="M12.125 5.75H12M12.25 5.75C12.25 5.88807 12.1381 6 12 6C11.8619 6 11.75 5.88807 11.75 5.75C11.75 5.61193 11.8619 5.5 12 5.5C12.1381 5.5 12.25 5.61193 12.25 5.75Z"/>' }, // TaxesIcon
+  'Water Connection': { tone: 'lake', icon: '<path d="M12.5 5.5H10.5C9.55719 5.5 9.08579 5.5 8.79289 5.79289C8.5 6.08579 8.5 6.55719 8.5 7.5V9.5C8.5 10.4428 8.5 10.9142 8.79289 11.2071C9.08579 11.5 9.55719 11.5 10.5 11.5H12.5C13.4428 11.5 13.9142 11.5 14.2071 11.2071C14.5 10.9142 14.5 10.4428 14.5 9.5V7.5C14.5 6.55719 14.5 6.08579 14.2071 5.79289C13.9142 5.5 13.4428 5.5 12.5 5.5Z"/><path d="M13 11.5H10V21.5H13V11.5Z"/><path d="M7.5 21.5H15.5"/><path d="M14.5 7H18.5C20.1569 7 21.5 8.34315 21.5 10V12.5H18.5V10H14.5V7Z"/><path d="M14.5 2.5H9.09949C7.83781 2.5 7.20696 2.5 6.70992 2.82302C6.21288 3.14603 5.95667 3.7225 5.44425 4.87545L2.5 11.5"/><path d="M20 15.5L20.5582 14.9991C20.4159 14.8406 20.213 14.75 20 14.75C19.787 14.75 19.5841 14.8406 19.4418 14.9991L20 15.5ZM20.75 18C20.75 18.4142 20.4142 18.75 20 18.75V20.25C21.2426 20.25 22.25 19.2426 22.25 18H20.75ZM20 18.75C19.5858 18.75 19.25 18.4142 19.25 18H17.75C17.75 19.2426 18.7574 20.25 20 20.25V18.75ZM19.25 18C19.25 18.003 19.2507 17.969 19.2771 17.8886C19.3022 17.8119 19.343 17.7162 19.4012 17.6031C19.5182 17.3759 19.6824 17.1227 19.8589 16.8772C20.0335 16.6345 20.2097 16.4137 20.3431 16.2528C20.4094 16.1727 20.4644 16.1084 20.5023 16.0646C20.5212 16.0428 20.5358 16.0262 20.5454 16.0153C20.5502 16.0099 20.5537 16.0059 20.5559 16.0035C20.557 16.0023 20.5577 16.0015 20.5581 16.001C20.5583 16.0008 20.5584 16.0007 20.5584 16.0007C20.5584 16.0007 20.5584 16.0007 20.5584 16.0007C20.5584 16.0007 20.5583 16.0008 20.5583 16.0008C20.5583 16.0008 20.5582 16.0009 20 15.5C19.4418 14.9991 19.4417 14.9992 19.4417 14.9992C19.4416 14.9993 19.4415 14.9994 19.4415 14.9994C19.4414 14.9996 19.4412 14.9997 19.441 14.9999C19.4407 15.0003 19.4403 15.0008 19.4397 15.0014C19.4387 15.0026 19.4373 15.0042 19.4355 15.0061C19.432 15.0101 19.4271 15.0156 19.4209 15.0226C19.4085 15.0367 19.3909 15.0568 19.3688 15.0822C19.3246 15.1332 19.2625 15.2059 19.1882 15.2955C19.0403 15.4739 18.8415 15.7228 18.6411 16.0015C18.4426 16.2774 18.2318 16.5975 18.0675 16.9166C17.9157 17.2115 17.75 17.6053 17.75 18H19.25ZM20 15.5C19.4418 16.0009 19.4417 16.0008 19.4417 16.0008C19.4417 16.0008 19.4416 16.0007 19.4416 16.0007C19.4416 16.0007 19.4416 16.0007 19.4416 16.0007C19.4416 16.0007 19.4417 16.0008 19.4419 16.001C19.4423 16.0015 19.443 16.0023 19.4441 16.0035C19.4463 16.0059 19.4498 16.0099 19.4546 16.0153C19.4642 16.0262 19.4788 16.0428 19.4977 16.0646C19.5356 16.1084 19.5906 16.1727 19.6569 16.2528C19.7903 16.4137 19.9665 16.6345 20.1411 16.8772C20.3176 17.1227 20.4818 17.3759 20.5988 17.6031C20.657 17.7162 20.6978 17.8119 20.7229 17.8886C20.7493 17.969 20.75 18.003 20.75 18H22.25C22.25 17.6053 22.0843 17.2115 21.9325 16.9166C21.7682 16.5975 21.5574 16.2774 21.3589 16.0015C21.1585 15.7228 20.9597 15.4739 20.8118 15.2955C20.7375 15.2059 20.6754 15.1332 20.6312 15.0822C20.6091 15.0568 20.5915 15.0367 20.5791 15.0226C20.5729 15.0156 20.568 15.0101 20.5645 15.0061C20.5627 15.0042 20.5613 15.0026 20.5603 15.0014C20.5597 15.0008 20.5593 15.0003 20.559 14.9999C20.5588 14.9997 20.5586 14.9996 20.5585 14.9994C20.5585 14.9994 20.5584 14.9993 20.5583 14.9992C20.5583 14.9992 20.5582 14.9991 20 15.5Z" fill="currentColor"/><path d="M11.5 2.5V5.5"/>' }, // WaterPumpIcon
+  'Tenders': { tone: 'pine', icon: '<path d="M18 6C17.9531 4.44655 17.7797 3.51998 17.1377 2.87868C16.2581 2 14.8423 2 12.0108 2H8.0065C5.17501 2 3.75926 2 2.87963 2.87868C2 3.75736 2 5.17157 2 8V16C2 18.8284 2 20.2426 2.87963 21.1213C3.75926 22 5.17501 22 8.0065 22H12.0108C14.8423 22 16.2581 22 17.1377 21.1213C17.7797 20.48 17.9531 19.5535 18 18"/><path d="M20.2419 11.7419L21.419 10.5648C21.6894 10.2944 21.8246 10.1592 21.8969 10.0134C22.0344 9.73584 22.0344 9.41003 21.8969 9.13252C21.8246 8.98666 21.6894 8.85145 21.419 8.58104C21.1485 8.31062 21.0133 8.17542 20.8675 8.10314C20.59 7.96562 20.2642 7.96562 19.9866 8.10314C19.8408 8.17542 19.7056 8.31062 19.4352 8.58104L18.2581 9.7581M20.2419 11.7419L14.9757 17.0081L12 18L12.9919 15.0243L18.2581 9.7581M20.2419 11.7419L18.2581 9.7581"/><path d="M5 19H6L7.25 16.5L8.5 19H9.5"/><path d="M6 6H14"/><path d="M6 10H12"/>' }, // ContractsIcon
+  'Grievances': { tone: 'rose', icon: '<path d="M17.0004 7L17.0049 5.50488M17.0504 9.90037H17.0004M17.1004 9.90037C17.1004 9.9556 17.0556 10.0004 17.0004 10.0004C16.9452 10.0004 16.9004 9.9556 16.9004 9.90037C16.9004 9.84514 16.9452 9.80037 17.0004 9.80037C17.0556 9.80037 17.1004 9.84514 17.1004 9.90037Z"/><path d="M17 12.5667C19.7611 12.5667 22 10.4249 22 7.78336C22 5.14178 19.7611 3 17 3C14.2389 3 12 5.14178 12 7.78336C12 9.05254 12.5167 10.2058 13.3594 11.0616C13.545 11.25 13.6689 11.5074 13.6189 11.7724C13.5364 12.2056 13.3494 12.6097 13.0756 12.9465C13.796 13.0805 14.5451 12.9598 15.1875 12.6182L15.1881 12.6179C15.4148 12.4973 15.5282 12.437 15.6083 12.4248C15.6884 12.4126 15.8032 12.4341 16.0327 12.4772C16.3516 12.5371 16.6753 12.5671 17 12.5667Z"/><path d="M10 13C10 14.6569 8.65685 16 7 16C5.34315 16 4 14.6569 4 13C4 11.3431 5.34315 10 7 10C8.65685 10 10 11.3431 10 13Z"/><path d="M12 21C12 18.2386 9.76142 16 7 16C4.23858 16 2 18.2386 2 21"/>' }, // ComplaintIcon
+};
+const fallback = { tone: 'lake', icon: '<circle cx="12" cy="12" r="10"/><path d="M12 16V12"/><path d="M12.125 8.25H12M12.25 8.25C12.25 8.11193 12.1381 8 12 8C11.8619 8 11.75 8.11193 11.75 8.25C11.75 8.38807 11.8619 8.5 12 8.5C12.1381 8.5 12.25 8.38807 12.25 8.25Z"/>' }; // InformationCircleIcon
+const arrow = { in: '<path d="M18.5 12L4.99997 12"/><path d="M13 18C13 18 19 13.5811 19 12C19 10.4188 13 6 13 6"/>', out: '<path d="M9 6.65032C9 6.65032 15.9383 6.10759 16.9154 7.08463C17.8924 8.06167 17.3496 15 17.3496 15M16.5 7.5L6.5 17.5"/>' }; // ArrowRight02Icon, ArrowUpRight01Icon
+const isExternal = (href: string) => !(href.startsWith('/') || href.startsWith('#'));
+
+// Grievances section. Hugeicons free set (Stroke Rounded, MIT), inlined like the service card icons.
+const gi: Record<string, string> = {
+  pulse: '<path d="M2 12H6L7.5 8L9.5 15L13 6L15.5 18L18 12H22"/>', // Pulse01Icon
+  flash: '<path d="M5.22576 11.3294L12.224 2.34651C12.7713 1.64397 13.7972 2.08124 13.7972 3.01707V9.96994C13.7972 10.5305 14.1995 10.985 14.6958 10.985H18.0996C18.8729 10.985 19.2851 12.0149 18.7742 12.6706L11.776 21.6535C11.2287 22.356 10.2028 21.9188 10.2028 20.9829V14.0301C10.2028 13.4695 9.80048 13.015 9.3042 13.015H5.90035C5.12711 13.015 4.71494 11.9851 5.22576 11.3294Z"/>', // FlashIcon
+  siren: '<path d="M4.99219 17V10C4.99219 6.13401 8.12619 3 11.9922 3C15.8582 3 18.9922 6.13401 18.9922 10V17"/><path d="M11.4922 6.5C9.83533 6.5 8.49219 7.84315 8.49219 9.5"/><path d="M2.99219 19C2.99219 17.8954 3.88762 17 4.99219 17H18.9922C20.0968 17 20.9922 17.8954 20.9922 19C20.9922 20.1046 20.0968 21 18.9922 21H4.99219C3.88762 21 2.99219 20.1046 2.99219 19Z"/>', // SirenIcon
+  call: '<path d="M9.1585 5.71217L8.75584 4.80619C8.49256 4.21382 8.36092 3.91762 8.16405 3.69095C7.91732 3.40688 7.59571 3.19788 7.23592 3.08779C6.94883 2.99994 6.6247 2.99994 5.97645 2.99994C5.02815 2.99994 4.554 2.99994 4.15597 3.18223C3.68711 3.39696 3.26368 3.86322 3.09497 4.35054C2.95175 4.76423 2.99278 5.18937 3.07482 6.03964C3.94815 15.0901 8.91006 20.052 17.9605 20.9254C18.8108 21.0074 19.236 21.0484 19.6496 20.9052C20.137 20.7365 20.6032 20.3131 20.818 19.8442C21.0002 19.4462 21.0002 18.972 21.0002 18.0237C21.0002 17.3755 21.0002 17.0514 20.9124 16.7643C20.8023 16.4045 20.5933 16.0829 20.3092 15.8361C20.0826 15.6393 19.7864 15.5076 19.194 15.2443L18.288 14.8417C17.6465 14.5566 17.3257 14.414 16.9998 14.383C16.6878 14.3533 16.3733 14.3971 16.0813 14.5108C15.7762 14.6296 15.5066 14.8543 14.9672 15.3038C14.4304 15.7511 14.162 15.9748 13.834 16.0946C13.5432 16.2009 13.1588 16.2402 12.8526 16.1951C12.5071 16.1442 12.2426 16.0028 11.7135 15.7201C10.0675 14.8404 9.15977 13.9327 8.28011 12.2867C7.99738 11.7576 7.85602 11.4931 7.80511 11.1476C7.75998 10.8414 7.79932 10.457 7.90554 10.1662C8.02536 9.83822 8.24905 9.5698 8.69643 9.03294C9.14586 8.49362 9.37058 8.22396 9.48939 7.91885C9.60309 7.62688 9.64686 7.31234 9.61719 7.00042C9.58618 6.67446 9.44362 6.3537 9.1585 5.71217Z"/>', // Call02Icon
+  mail: '<path d="M2 6L8.91302 9.91697C11.4616 11.361 12.5384 11.361 15.087 9.91697L22 6"/><path d="M2.01577 13.4756C2.08114 16.5412 2.11383 18.0739 3.24496 19.2094C4.37608 20.3448 5.95033 20.3843 9.09883 20.4634C11.0393 20.5122 12.9607 20.5122 14.9012 20.4634C18.0497 20.3843 19.6239 20.3448 20.7551 19.2094C21.8862 18.0739 21.9189 16.5412 21.9842 13.4756C22.0053 12.4899 22.0053 11.5101 21.9842 10.5244C21.9189 7.45886 21.8862 5.92609 20.7551 4.79066C19.6239 3.65523 18.0497 3.61568 14.9012 3.53657C12.9607 3.48781 11.0393 3.48781 9.09882 3.53656C5.95033 3.61566 4.37608 3.65521 3.24495 4.79065C2.11382 5.92608 2.08114 7.45885 2.01576 10.5244C1.99474 11.5101 1.99475 12.4899 2.01577 13.4756Z"/>', // Mail01Icon
+  facebook: '<path d="M2.5 12C2.5 7.52166 2.5 5.28249 3.89124 3.89124C5.28249 2.5 7.52166 2.5 12 2.5C16.4783 2.5 18.7175 2.5 20.1088 3.89124C21.5 5.28249 21.5 7.52166 21.5 12C21.5 16.4783 21.5 18.7175 20.1088 20.1088C18.7175 21.5 16.4783 21.5 12 21.5C7.52166 21.5 5.28249 21.5 3.89124 20.1088C2.5 18.7175 2.5 16.4783 2.5 12Z"/><path d="M16.9265 8.02637H13.9816C12.9378 8.02637 12.0894 8.86847 12.0817 9.91229L11.9964 21.4268M10.082 14.0017H14.8847"/>', // Facebook01Icon
+  clock: '<circle cx="12" cy="12" r="10"/><path d="M12 8V12L14 14"/>', // Clock01Icon
+  task: '<path d="M13.5 2H8.5C7.67157 2 7 2.67157 7 3.5C7 4.32843 7.67157 5 8.5 5H13.5C14.3284 5 15 4.32843 15 3.5C15 2.67157 14.3284 2 13.5 2Z"/><path d="M7 15H10.4286M7 11H15"/><path d="M19 11.9995L19 9.48263C19 6.65424 19 5.24004 18.1213 4.36137C17.48 3.72007 16.5535 3.54681 15 3.5M11 21.9995L9 21.9995C6.17158 21.9995 4.75737 21.9995 3.87869 21.1208C3.00001 20.2421 3.00001 18.8279 3 15.9995L3.00001 9.48269C3.00001 6.65425 3 5.24004 3.87868 4.36136C4.51997 3.72007 5.44651 3.54681 6.9999 3.5"/><path d="M15.7367 21.6527L14 22L14.3473 20.2633C14.4179 19.9106 14.5913 19.5866 14.8456 19.3323L18.9111 15.2668C19.2668 14.9111 19.8437 14.9111 20.1995 15.2668L20.7332 15.8005C21.0889 16.1563 21.0889 16.7332 20.7332 17.0889L16.6677 21.1544C16.4134 21.4087 16.0894 21.5821 15.7367 21.6527Z"/>', // TaskEdit01Icon
+  drains: '<path d="M17.4776 9.00915C17.485 9.00911 17.4925 9.00909 17.5 9.00909C19.9853 9.00909 22 11.0269 22 13.5159C22 15.8512 20.2265 17.7716 17.9548 18M17.4776 9.00915C17.4924 8.8442 17.5 8.67716 17.5 8.50834C17.5 5.46617 15.0376 3 12 3C9.12324 3 6.76233 5.21197 6.52042 8.03032M17.4776 9.00915C17.3753 10.1453 16.9286 11.182 16.2428 12.0136M6.52042 8.03032C3.98398 8.27205 2 10.4116 2 13.0152C2 15.4378 3.71776 17.536 6 18M6.52042 8.03032C6.67826 8.01527 6.83823 8.00758 7 8.00758C8.12582 8.00758 9.16474 8.38023 10.0005 9.00909"/><path d="M9.5 18.5034C9.5 17.2482 10.5532 16.0077 11.2924 15.2917C11.6939 14.9028 12.3061 14.9028 12.7076 15.2917C13.4468 16.0077 14.5 17.2482 14.5 18.5034C14.5 19.7341 13.5533 21 12 21C10.4467 21 9.5 19.7341 9.5 18.5034Z"/>', // CloudBigRainIcon
+  garbage: '<circle cx="17" cy="18" r="2"/><circle cx="7" cy="18" r="2"/><path d="M11 9V12"/><path d="M7 10V12"/><path d="M17 4H15M15 4H9.48528C8.25903 4 7.6459 4 7.09459 4.22836C6.54328 4.45672 6.10973 4.89027 5.24264 5.75736L3.46446 7.53554C2.74189 8.25811 2.3806 8.6194 2.1903 9.07883C2 9.53825 2 10.0492 2 11.0711V13C2 15.357 2 16.5355 2.73223 17.2678C3.2191 17.7546 3.90328 17.9178 5 17.9724M15 4V8C15 9.88562 15 10.8284 15.5858 11.4142C16.1716 12 17.1144 12 19 12H22V13C22 15.357 22 16.5355 21.2678 17.2678C20.7809 17.7546 20.0967 17.9178 19 17.9724M9 18H15"/><path d="M15 7H16.6998C18.0581 7 18.7373 7 19.29 7.35371C19.8427 7.70742 20.1647 8.34811 20.8087 9.6295L22 12"/>', // GarbageTruckIcon
+  water: '<path d="M3.5 13.678C3.5 9.49387 7.08079 5.35907 9.59413 2.97222C10.9591 1.67593 13.0409 1.67593 14.4059 2.97222C16.9192 5.35907 20.5 9.49387 20.5 13.678C20.5 17.7804 17.2812 22 12 22C6.71878 22 3.5 17.7804 3.5 13.678Z"/><path d="M16 14C16 16.2091 14.2091 18 12 18"/>', // DropletIcon
+  lights: '<path d="M17.2916 16C18.9525 14.5341 20 12.3894 20 10C20 5.58173 16.4182 2 12 2C7.58173 2 4 5.58173 4 10C4 12.3894 5.04751 14.5341 6.70836 16"/><path d="M12 11V16"/><path d="M8.5 19H15.5"/><path d="M10 22H14"/>', // BulbIcon
+  dumping: '<path d="M3 5H8.42963C9.09834 5 9.7228 4.6658 10.0937 4.1094L10.9063 2.8906C11.2772 2.3342 11.9017 2 12.5704 2H17.0585C17.9193 2 18.6836 2.55086 18.9558 3.36754L19.5 5M21 5H8"/><path d="M19.5 5L18.8803 14.906C18.8588 15.2333 18.8387 15.5385 18.8185 15.8235M4.5 5L5.10461 14.8966C5.25945 17.3107 5.33688 18.5177 5.97868 19.3857C6.296 19.8149 6.7048 20.1771 7.17905 20.4493C8.1383 21 9.42312 21 11.9927 21H14.5"/><path d="M20 19C20 17.3431 18.6569 16 17 16C15.3431 16 14 17.3431 14 19C14 20.6569 15.3431 22 17 22C18.6569 22 20 20.6569 20 19Z"/>', // WasteIcon
+  other: '<path d="M21 12C21 11.1716 20.3284 10.5 19.5 10.5C18.6716 10.5 18 11.1716 18 12C18 12.8284 18.6716 13.5 19.5 13.5C20.3284 13.5 21 12.8284 21 12Z"/><path d="M13.5 12C13.5 11.1716 12.8284 10.5 12 10.5C11.1716 10.5 10.5 11.1716 10.5 12C10.5 12.8284 11.1716 13.5 12 13.5C12.8284 13.5 13.5 12.8284 13.5 12Z"/><path d="M6 12C6 11.1716 5.32843 10.5 4.5 10.5C3.67157 10.5 3 11.1716 3 12C3 12.8284 3.67157 13.5 4.5 13.5C5.32843 13.5 6 12.8284 6 12Z"/>', // MoreHorizontalCircle01Icon
+  phone: '<path d="M13.5 2H10.5C8.14298 2 6.96447 2 6.23223 2.73223C5.5 3.46447 5.5 4.64298 5.5 7V17C5.5 19.357 5.5 20.5355 6.23223 21.2678C6.96447 22 8.14298 22 10.5 22H13.5C15.857 22 17.0355 22 17.7678 21.2678C18.5 20.5355 18.5 19.357 18.5 17V7C18.5 4.64298 18.5 3.46447 17.7678 2.73223C17.0355 2 15.857 2 13.5 2Z"/><path d="M12.125 19H12M12.25 19C12.25 19.1381 12.1381 19.25 12 19.25C11.8619 19.25 11.75 19.1381 11.75 19C11.75 18.8619 11.8619 18.75 12 18.75C12.1381 18.75 12.25 18.8619 12.25 19Z"/>', // SmartPhone01Icon
+  ward: '<path d="M22 10V9.21749C22 7.27787 22 6.30807 21.4142 5.7055C20.8284 5.10294 19.8856 5.10294 18 5.10294H15.9214C15.004 5.10294 14.9964 5.10116 14.1715 4.68834L10.8399 3.02114C9.44884 2.32504 8.75332 1.97699 8.01238 2.00118C7.27143 2.02537 6.59877 2.41808 5.25345 3.20351L4.02558 3.92037C3.03739 4.49729 2.54329 4.78576 2.27164 5.26564C2 5.74553 2 6.32993 2 7.49873V15.7157C2 17.2514 2 18.0193 2.34226 18.4467C2.57001 18.731 2.88916 18.9222 3.242 18.9856C3.77226 19.0808 4.42148 18.7018 5.71987 17.9437C6.60156 17.429 7.45011 16.8944 8.50487 17.0394C9.38869 17.1608 10.21 17.7185 11 18.1138"/><path d="M8 2L8 17"/><path d="M15 5V9.5"/><path d="M18.3083 21.6835C18.0915 21.8865 17.8017 22 17.5001 22C17.1985 22 16.9087 21.8865 16.6919 21.6835C14.7063 19.813 12.0455 17.7235 13.3431 14.6898C14.0447 13.0496 15.7289 12 17.5001 12C19.2713 12 20.9555 13.0496 21.6571 14.6898C22.9531 17.7196 20.2988 19.8194 18.3083 21.6835Z"/><path d="M17.625 16.5H17.5M17.75 16.5C17.75 16.6381 17.6381 16.75 17.5 16.75C17.3619 16.75 17.25 16.6381 17.25 16.5C17.25 16.3619 17.3619 16.25 17.5 16.25C17.6381 16.25 17.75 16.3619 17.75 16.5Z"/>', // MapsLocation01Icon
+  location: '<path d="M13.6177 21.367C13.1841 21.773 12.6044 22 12.0011 22C11.3978 22 10.8182 21.773 10.3845 21.367C6.41302 17.626 1.09076 13.4469 3.68627 7.37966C5.08963 4.09916 8.45834 2 12.0011 2C15.5439 2 18.9126 4.09916 20.316 7.37966C22.9082 13.4393 17.599 17.6389 13.6177 21.367Z"/><path d="M15.5 11C15.5 12.933 13.933 14.5 12 14.5C10.067 14.5 8.5 12.933 8.5 11C8.5 9.067 10.067 7.5 12 7.5C13.933 7.5 15.5 9.067 15.5 11Z"/>', // Location01Icon
+  issue: '<path d="M16.5 2V5M7.5 2V5M12 2V5"/><path d="M13 3.5H11C7.70017 3.5 6.05025 3.5 5.02513 4.52513C4 5.55025 4 7.20017 4 10.5V15C4 18.2998 4 19.9497 5.02513 20.9749C6.05025 22 7.70017 22 11 22H13C16.2998 22 17.9497 22 18.9749 20.9749C20 19.9497 20 18.2998 20 15V10.5C20 7.20017 20 5.55025 18.9749 4.52512C17.9497 3.5 16.2998 3.5 13 3.5Z"/><path d="M8 15H12M8 11H16"/>', // Note01Icon
+  photo: '<path d="M12.6974 3.5H11.303C10.5884 3.5 10.2311 3.5 9.91067 3.612C9.71499 3.68039 9.53113 3.77879 9.36568 3.90367C9.09474 4.10816 8.89655 4.40544 8.50018 5L8.50017 5.00001C8.29717 5.30453 7.99794 5.75337 7.87867 5.87871C7.58314 6.18927 7.19563 6.39666 6.77329 6.47029C6.60284 6.5 6.41985 6.5 6.05387 6.5C5.07379 6.5 4.58376 6.5 4.18307 6.61342C3.18074 6.89716 2.39734 7.68055 2.1136 8.68289C2.00018 9.08357 2.00018 9.57361 2.00018 10.5537V14.5C2.00018 17.3284 2.00018 18.7426 2.87886 19.6213C3.75754 20.5 5.17176 20.5 8.00018 20.5H16.0002C18.8286 20.5 20.2428 20.5 21.1215 19.6213C22.0002 18.7426 22.0002 17.3284 22.0002 14.5V10.5537C22.0002 9.57361 22.0002 9.08357 21.8868 8.68289C21.603 7.68055 20.8196 6.89716 19.8173 6.61342C19.4166 6.5 18.9266 6.5 17.9465 6.5C17.5805 6.5 17.3975 6.5 17.2271 6.47029C16.8047 6.39666 16.4172 6.18927 16.1217 5.87871C16.0024 5.75336 15.7032 5.30451 15.5002 5C15.1038 4.40544 14.9056 4.10816 14.6347 3.90367C14.4692 3.77879 14.2854 3.68039 14.0897 3.612C13.7693 3.5 13.412 3.5 12.6974 3.5Z"/><path d="M16.0002 13C16.0002 15.2091 14.2093 17 12.0002 17C9.79104 17 8.00018 15.2091 8.00018 13C8.00018 10.7909 9.79104 9 12.0002 9C14.2093 9 16.0002 10.7909 16.0002 13Z"/><path d="M19.1252 9.5H19.0002M19.2502 9.5C19.2502 9.63807 19.1383 9.75 19.0002 9.75C18.8621 9.75 18.7502 9.63807 18.7502 9.5C18.7502 9.36193 18.8621 9.25 19.0002 9.25C19.1383 9.25 19.2502 9.36193 19.2502 9.5Z"/>', // Camera01Icon
+  alert: '<circle cx="12" cy="12" r="10"/><path d="M12 8V12"/><path d="M12.125 15.75H12M12.25 15.75C12.25 15.8881 12.1381 16 12 16C11.8619 16 11.75 15.8881 11.75 15.75C11.75 15.6119 11.8619 15.5 12 15.5C12.1381 15.5 12.25 15.6119 12.25 15.75Z"/>', // AlertCircleIcon
+  check: '<path d="M22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12Z"/><path d="M8 12.5L10.5 15L16 9"/>', // CheckmarkCircle02Icon
+  search: '<path d="M17 17L21 21"/><path d="M19 11C19 6.58172 15.4183 3 11 3C6.58172 3 3 6.58172 3 11C3 15.4183 6.58172 19 11 19C15.4183 19 19 15.4183 19 11Z"/>', // Search01Icon
+  award: '<path d="M15.9349 21.033C16.1789 21.5331 15.699 22 15.1239 22H8.87606C8.30096 22 7.82107 21.5331 8.06509 21.033C8.63149 19.8722 10.1793 19 12 19C13.8207 19 15.3685 19.8722 15.9349 21.033Z"/><path d="M12 16L11.9883 19"/><path d="M17.9866 4.49139C17.992 4.30176 17.9963 4.11477 17.9997 3.93095C18.0194 2.86463 17.1162 2.00002 16.0093 2.00002L7.99052 2C6.88381 2 5.98074 2.86438 6.00031 3.93054C6.00358 4.10833 6.00768 4.28907 6.01283 4.47231C6.05734 6.05627 6.18024 7.82593 6.51875 9.47415C7.18043 12.6958 8.66606 16 12.0001 16C15.3341 16 16.8193 12.6958 17.481 9.47415C17.8181 7.83255 17.9415 6.07048 17.9866 4.49139Z"/><path d="M18 4.5L19.4447 4.68748C20.9062 4.87714 22 6.122 22 7.59578C22 8.99373 21.0133 10.1973 19.6425 10.4715L17.5 11"/><path d="M6 4.5L4.55527 4.68748C3.09375 4.87714 2 6.122 2 7.59578C2 8.99373 2.98673 10.1973 4.35754 10.4715L6.5 11"/>', // Award01Icon
+  layers: '<path d="M8.64298 3.14559L6.93816 3.93362C4.31272 5.14719 3 5.75397 3 6.75C3 7.74603 4.31272 8.35281 6.93817 9.56638L8.64298 10.3544C10.2952 11.1181 11.1214 11.5 12 11.5C12.8786 11.5 13.7048 11.1181 15.357 10.3544L17.0618 9.56638C19.6873 8.35281 21 7.74603 21 6.75C21 5.75397 19.6873 5.14719 17.0618 3.93362L15.357 3.14559C13.7048 2.38186 12.8786 2 12 2C11.1214 2 10.2952 2.38186 8.64298 3.14559Z"/><path d="M20.788 11.0972C20.9293 11.2959 21 11.5031 21 11.7309C21 12.7127 19.6873 13.3109 17.0618 14.5072L15.357 15.284C13.7048 16.0368 12.8786 16.4133 12 16.4133C11.1214 16.4133 10.2952 16.0368 8.64298 15.284L6.93817 14.5072C4.31272 13.3109 3 12.7127 3 11.7309C3 11.5031 3.07067 11.2959 3.212 11.0972"/><path d="M20.3767 16.2661C20.7922 16.5971 21 16.927 21 17.3176C21 18.2995 19.6873 18.8976 17.0618 20.0939L15.357 20.8707C13.7048 21.6236 12.8786 22 12 22C11.1214 22 10.2952 21.6236 8.64298 20.8707L6.93817 20.0939C4.31272 18.8976 3 18.2995 3 17.3176C3 16.927 3.20778 16.5971 3.62334 16.2661"/>', // Layers01Icon
+  calendar: '<path d="M16 2V6M8 2V6"/><path d="M13 4H11C7.22876 4 5.34315 4 4.17157 5.17157C3 6.34315 3 8.22876 3 12V14C3 17.7712 3 19.6569 4.17157 20.8284C5.34315 22 7.22876 22 11 22H13C16.7712 22 18.6569 22 19.8284 20.8284C21 19.6569 21 17.7712 21 14V12C21 8.22876 21 6.34315 19.8284 5.17157C18.6569 4 16.7712 4 13 4Z"/><path d="M3 10H21"/><path d="M12.1258 14H12.0008M12.1258 18H12.0008M7.625 14H7.5M7.625 18H7.5M16.625 14H16.5M12.2508 14C12.2508 14.1381 12.1389 14.25 12.0008 14.25C11.8628 14.25 11.7508 14.1381 11.7508 14C11.7508 13.8619 11.8628 13.75 12.0008 13.75C12.1389 13.75 12.2508 13.8619 12.2508 14ZM12.2508 18C12.2508 18.1381 12.1389 18.25 12.0008 18.25C11.8628 18.25 11.7508 18.1381 11.7508 18C11.7508 17.8619 11.8628 17.75 12.0008 17.75C12.1389 17.75 12.2508 17.8619 12.2508 18ZM7.75 14C7.75 14.1381 7.63807 14.25 7.5 14.25C7.36193 14.25 7.25 14.1381 7.25 14C7.25 13.8619 7.36193 13.75 7.5 13.75C7.63807 13.75 7.75 13.8619 7.75 14ZM7.75 18C7.75 18.1381 7.63807 18.25 7.5 18.25C7.36193 18.25 7.25 18.1381 7.25 18C7.25 17.8619 7.36193 17.75 7.5 17.75C7.63807 17.75 7.75 17.8619 7.75 18ZM16.75 14C16.75 14.1381 16.6381 14.25 16.5 14.25C16.3619 14.25 16.25 14.1381 16.25 14C16.25 13.8619 16.3619 13.75 16.5 13.75C16.6381 13.75 16.75 13.8619 16.75 14Z"/>', // Calendar03Icon
+  mountain: '<path d="M16 20H2L5.22457 10.7557C6.79555 6.25189 7.58104 4 9 4C10.3373 4 11.1119 6 12.5116 10"/><path d="M6 20H22L17.4066 12.6585C15.8806 10.2195 15.1176 9 14 9C12.8824 9 12.1194 10.2195 10.5934 12.6585L9.12837 15"/>', // MountainIcon
+  wind: '<path d="M2 5.94145C5.5 9.37313 10.5755 7.90241 11.7324 5.94145C11.9026 5.65301 12 5.31814 12 4.96096C12 3.87795 11.1046 3 10 3C8.89543 3 8 3.87795 8 4.96096"/><path d="M17 8.92814C17 7.31097 18.1193 6 19.5 6C20.8807 6 22 7.31097 22 8.92814C22 9.6452 21.7799 10.3021 21.4146 10.8111C19.3463 14.1915 9.2764 12.9164 4 11.8563"/><path d="M13.0854 19.8873C13.2913 20.5356 13.8469 21 14.5 21C15.3284 21 16 20.2528 16 19.331C16 19.0176 15.9224 18.7244 15.7873 18.4738C14.4999 15.9925 7.99996 14.3239 2 18.7746"/><path d="M19 15.5H21"/>', // FastWindIcon
+  ring: '<path d="M9 9L5 5M16 12H22M12 16V22"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="10"/>', // ChartRingIcon
+  chevron: '<path d="M18 9.00005C18 9.00005 13.5811 15 12 15C10.4188 15 6 9 6 9"/>', // ArrowDown01Icon
+};
+// Problem types, as listed on the Grievance page.
+const grvTypes = [
+  { label: 'Broken drains', tone: 'lake', icon: gi.drains },
+  { label: 'Missed garbage collection', tone: 'green', icon: gi.garbage },
+  { label: 'Water supply', tone: 'blue', icon: gi.water },
+  { label: 'Street lights', tone: 'orange', icon: gi.lights },
+  { label: 'Illegal dumping', tone: 'rose', icon: gi.dumping },
+  { label: 'Anything else', tone: 'violet', icon: gi.other },
+];
+// Details the grievance form asks for (see GrievanceForm.astro). Labels match the form so they share translations.
+const grvFields = [
+  { label: 'Phone number', text: 'So the office can contact you. You can add a WhatsApp number too.', need: true, icon: gi.phone },
+  { label: 'Ward', text: 'Choose your ward from the list.', need: true, icon: gi.ward },
+  { label: 'Location or holding number', text: 'A road name, landmark or holding number, so the spot can be found.', need: true, icon: gi.location },
+  { label: 'Issue / Subject / Problem', text: 'A short title, then what is wrong. Up to 300 characters.', need: true, icon: gi.issue },
+  { label: 'Photo', text: 'A clear photo helps the office see the problem.', need: false, icon: gi.photo },
+];
+const sos = emergency[0];
+const fbLabel = contact.facebook.replace(/^https?:\/\/(www\.)?/, '');
+// ---- DEMO grievance dashboard ----
+// DEMO: every number and case below is made up to show the layout. The grievance form has no online
+// endpoint yet (contact.grievanceEndpoint), so no real figures exist. Replace with real data once cases
+// are stored, and keep the "Demo data" label on the page until then. Do not move these into site.ts.
+const toneColor: Record<string, string> = { lake: 'var(--lake)', green: 'var(--green)', blue: '#2f6fd0', orange: '#e0821b', violet: '#5a4fcf' };
+const demoStats = [
+  { label: 'Active', value: '23', icon: gi.alert, tone: 'orange' },
+  { label: 'Pending', value: '9', icon: gi.clock, tone: 'blue' },
+  { label: 'Resolved', value: '486', icon: gi.check, tone: 'green' },
+  { label: 'Avg. resolution', value: '3.8', unit: 'days', icon: gi.flash, tone: 'amber' },
+];
+const demoPeriods = [
+  { id: '30d', label: 'Last 30 days', cats: [
+    { label: 'Water supply', n: 16, trend: '+12%', tone: 'blue' },
+    { label: 'Broken drains', n: 14, trend: '+5%', tone: 'lake' },
+    { label: 'Missed garbage collection', n: 11, trend: '-2%', tone: 'green' },
+    { label: 'Street lights', n: 8, trend: '0%', tone: 'orange' },
+    { label: 'Anything else', n: 5, trend: '-4%', tone: 'violet' },
+  ] },
+  { id: '12m', label: 'Last 12 months', cats: [
+    { label: 'Water supply', n: 189, trend: '+15%', tone: 'blue' },
+    { label: 'Broken drains', n: 162, trend: '+8%', tone: 'lake' },
+    { label: 'Missed garbage collection', n: 131, trend: '-6%', tone: 'green' },
+    { label: 'Street lights', n: 97, trend: '+2%', tone: 'orange' },
+    { label: 'Anything else', n: 58, trend: '-3%', tone: 'violet' },
+  ] },
+].map((p) => {
+  const total = p.cats.reduce((a, c) => a + c.n, 0);
+  const max = Math.max(...p.cats.map((c) => c.n));
+  let at = 0;
+  // Donut: one conic-gradient stop per category, with a thin gap between segments.
+  const ring = p.cats.map((c) => { const a = at, b = at + (c.n / total) * 100; at = b; return `${toneColor[c.tone]} ${a.toFixed(2)}% ${(b - 0.8).toFixed(2)}%, transparent ${(b - 0.8).toFixed(2)}% ${b.toFixed(2)}%`; }).join(', ');
+  return { ...p, total, ring, cats: p.cats.map((c) => ({ ...c, w: Math.round((c.n / max) * 100), dir: c.trend.startsWith('+') ? 'up' : c.trend.startsWith('-') ? 'down' : 'flat' })) };
+});
+const demoConditions = [
+  { label: 'Water stress', note: 'Low supply in 3 wards', value: 64, tone: 'blue', icon: gi.water },
+  { label: 'Landslide watch', note: 'Monsoon alert', value: 38, tone: 'orange', icon: gi.mountain },
+  { label: 'Air quality', note: 'Good', value: 22, tone: 'green', icon: gi.wind },
+];
+// Share of cases resolved on time and average days, per ward (demo). Wards come from site.ts.
+const demoWardScores: Record<string, [number, number]> = { I: [94, 1.9], III: [91, 2.1], IV: [88, 2.4], II: [85, 2.8], VI: [83, 3.0], V: [80, 3.3], VII: [78, 3.6], IX: [74, 4.1], VIII: [71, 4.4] };
+const demoRanking = wards
+  .map((w) => ({ no: w.no, short: w.short ?? '', pct: demoWardScores[w.no]?.[0] ?? 0, days: (demoWardScores[w.no]?.[1] ?? 0).toFixed(1) }))
+  .sort((a, b) => b.pct - a.pct);
+const demoCases = [
+  { id: 'GRV-1048', status: 'critical', ago: '2', unit: 'hours ago', ward: 'III', text: 'Drain overflowing onto the road on Thana Line after heavy rain last night.', team: 'Public works section', priority: 'High' },
+  { id: 'GRV-1046', status: 'progress', ago: '5', unit: 'hours ago', ward: 'IV', text: 'No piped water in Deosay Dara for two days. A tanker has been requested.', team: 'Water supply section', priority: 'Medium' },
+  { id: 'GRV-1041', status: 'resolved', ago: '1', unit: 'day ago', ward: 'I', text: 'Street light not working on the path to the school. The bulb has been replaced.', team: 'Electrical section', priority: 'Low' },
+  { id: 'GRV-1039', status: 'critical', ago: '3', unit: 'days ago', ward: 'VIII', text: 'Garbage dumped beside a stream that flows into the lake. Needs clearing before the rain.', team: 'Conservancy section', priority: 'High' },
+];
+const statusLabel: Record<string, string> = { critical: 'Critical', progress: 'In progress', resolved: 'Resolved' };
+---
+<Layout title="Services & Grievances | Mirik Municipality">
+  <PageHead slug="services" title="Services & Grievances" lead="How to apply for municipal services, and how to report a problem in your ward." />
+
+  <section class="alt svc-sec" id="services">
     <div class="wrap">
       <div class="section-head">
         <p class="eyebrow">Citizen Services</p>
         <h2>Apply online or at the office</h2>
         <p class="lead">Most municipal services in West Bengal run on state portals. Use the links below from anywhere, or visit the office at Thana Line.</p>
       </div>
-      <div class="cards">
-        {services.map((s) => (
-          <article class="card">
-            <span class={s.online ? 'tag' : 'tag office'}>{s.online ? 'Online' : 'At the office'}</span>
-            <h3>{s.title}</h3>
-            <p>{s.text}</p>
-            {s.link && (
-              <a class="go" href={s.link} target={s.link.startsWith('/') || s.link.startsWith('#') ? undefined : '_blank'} rel="noopener">{s.linkLabel}</a>
-            )}
-          </article>
-        ))}
+      <div class="svc-grid">
+        {services.map((s) => {
+          const l = look[s.title] ?? fallback;
+          const href = s.link || '/contact/';
+          const ext = isExternal(href);
+          return (
+            <article class={`svc-card tone-${l.tone}`}>
+              <svg class="svc-mark" viewBox="0 0 24 24" aria-hidden="true" set:html={l.icon} />
+              <div class="svc-top">
+                <span class="svc-ico"><svg viewBox="0 0 24 24" aria-hidden="true" set:html={l.icon} /></span>
+                <span class={s.online ? 'svc-tag on' : 'svc-tag'}><i aria-hidden="true"></i>{s.online ? 'Online' : 'At the office'}</span>
+              </div>
+              <h3>{s.title}</h3>
+              <p>{s.text}</p>
+              <a class={s.title === 'Birth and Death Registration' ? 'svc-go is-long' : 'svc-go'} href={href} target={ext ? '_blank' : undefined} rel={ext ? 'noopener' : undefined}>
+                <span>{s.link ? s.linkLabel : 'Office address and hours'}</span>
+                <svg viewBox="0 0 24 24" aria-hidden="true" set:html={ext ? arrow.out : arrow.in} />
+              </a>
+            </article>
+          );
+        })}
       </div>
     </div>
   </section>
 
-  <section id="projects">
+  <section id="grievances">
     <div class="wrap">
-      <div class="section-head">
-        <p class="eyebrow">Projects</p>
-        <h2>Projects under way</h2>
-        <p class="lead">Water, sanitation, housing and health schemes being delivered in Mirik.</p>
+      <div class="grvx-top">
+        <div class="section-head">
+          <p class="eyebrow grvx-eyebrow"><svg viewBox="0 0 24 24" aria-hidden="true" set:html={gi.pulse} />Grievances</p>
+          <h2>Report a problem in your ward</h2>
+          <p class="lead">Tell the Municipality Office what is wrong and where. A clear location and a photo help the office act quickly.</p>
+        </div>
+        <ul class="grvx-stats">
+          {demoStats.map((s) => (
+            <li class={`grvx-stat tone-${s.tone}`}>
+              <span class="grvx-stat-h"><svg viewBox="0 0 24 24" aria-hidden="true" set:html={s.icon} /><span>{s.label}</span></span>
+              <b>{s.value}{s.unit && <small>{s.unit}</small>}</b>
+            </li>
+          ))}
+        </ul>
       </div>
-      <div class="grid-3">
-        {projects.map((p) => (
-          <article class="card project">
-            <div class="figure">{p.figure}</div>
-            <h3>{p.title}</h3>
-            <p>{p.text}</p>
-          </article>
-        ))}
-      </div>
+      <p class="grvx-demo-note"><span class="grvx-demo-badge">Demo data</span><span>The online grievance system is not live yet, so the figures and cases below are examples, not real reports.</span></p>
 
-      <h3 id="schemes" style="margin-top:48px">Special projects and schemes</h3>
-      <div class="schemes">
-        {schemes.map((s, i) => (
-          <details id={s.id} open={i === 0}>
-            <summary>{s.short} <span>{s.name}</span></summary>
-            <div class="body"><p>{s.text}</p></div>
-          </details>
-        ))}
-      </div>
-    </div>
-  </section>
-  <section class="alt" id="faq">
-    <div class="wrap">
-      <div class="section-head">
-        <p class="eyebrow">FAQ</p>
-        <h2>Common questions</h2>
-        <p class="lead">Quick answers about applying, paying and getting help.</p>
-      </div>
-      <div class="schemes faq">
-        <details><summary>How do I apply for a trade licence?</summary><div class="body"><p>Apply online on the state e-District portal. You register first with your mobile number and an OTP. Renewals are done there too.</p></div></details>
-        <details><summary>How do I register a birth or death?</summary><div class="body"><p>Use the state Janma-Mrityu Tathya portal. Once the record is registered, you can download the certificate online.</p></div></details>
-        <details><summary>Where do I submit a building plan?</summary><div class="body"><p>Building plans are submitted and tracked on the state Online Building Permission System (OBPS).</p></div></details>
-        <details><summary>How do I apply for a mutation?</summary><div class="body"><p>Apply at the Municipality Office. Take your holding number and the papers that show who owns the property.</p></div></details>
-        <details><summary>How do I pay holding tax?</summary><div class="body"><p>Holding tax is assessed and paid through the Municipality Office. Take your holding number with you.</p></div></details>
-        <details><summary>How do I report a problem in my ward?</summary><div class="body"><p>Use the Grievance button at the top of any page, or email or call the office. Give your ward and the exact location so the office can act quickly.</p></div></details>
-        <details><summary>When is the office open?</summary><div class="body"><p>Monday to Friday, 10:00 AM to 5:30 PM. The office is closed on government holidays.</p></div></details>
-        <details><summary>Who do I call in an emergency?</summary><div class="body"><p>Dial 112 for any emergency. Police is 100, fire is 101 and ambulance is 108. The Emergency page lists more numbers.</p></div></details>
+      <div class="grvx-grid">
+        <div class="grvx-main">
+          <div class="grvx-panel grvx-overview o-2">
+            <div class="grvx-ov-head">
+              <div>
+                <h3><svg viewBox="0 0 24 24" aria-hidden="true" set:html={gi.pulse} />Grievance overview</h3>
+                <p>Cases by category and local conditions</p>
+              </div>
+              <div class="grvx-select">
+                <select aria-label="Time period" data-period-select>
+                  {demoPeriods.map((p) => <option value={p.id}>{p.label}</option>)}
+                </select>
+                <svg viewBox="0 0 24 24" aria-hidden="true" set:html={gi.chevron} />
+              </div>
+            </div>
+            {demoPeriods.map((p, i) => (
+              <div class="grvx-breakdown" data-period={p.id} hidden={i !== 0}>
+                <div class="grvx-donut-col">
+                  <p class="grvx-mini">Issue categories</p>
+                  <div class="grvx-donut" style={`--ring: conic-gradient(${p.ring})`}>
+                    <div><b>{p.total}</b><small>Total cases</small></div>
+                  </div>
+                </div>
+                <ul class="grvx-bars">
+                  {p.cats.map((c) => (
+                    <li class={`tone-${c.tone}`} style={`--w:${c.w}%`}>
+                      <div class="grvx-bar-row">
+                        <span class="grvx-dot" aria-hidden="true"></span>
+                        <span class="grvx-bar-l">{c.label}</span>
+                        <b>{c.n}</b>
+                        <em class={`grvx-trend ${c.dir}`}>{c.trend}</em>
+                      </div>
+                      <div class="grvx-bar" aria-hidden="true"><i></i></div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+            <div class="grvx-cond">
+              <div class="grvx-cond-head">
+                <p class="grvx-mini">Local conditions</p>
+                <span class="grvx-live"><span class="grvx-live-dots" aria-hidden="true"><i></i><i></i><i></i></span>Active monitoring</span>
+              </div>
+              <ul class="grvx-cond-grid">
+                {demoConditions.map((c) => (
+                  <li class={`tone-${c.tone}`} style={`--w:${c.value}%`}>
+                    <div class="grvx-cond-top">
+                      <span class="grvx-cond-ico"><svg viewBox="0 0 24 24" aria-hidden="true" set:html={c.icon} /></span>
+                      <b>{c.value}%</b>
+                    </div>
+                    <strong>{c.label}</strong>
+                    <small>{c.note}</small>
+                    <div class="grvx-bar" aria-hidden="true"><i></i></div>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+
+          <div class="grvx-cases o-5">
+            <div class="grvx-panel grvx-filter">
+              <label class="grvx-search">
+                <svg viewBox="0 0 24 24" aria-hidden="true" set:html={gi.search} />
+                <input type="search" placeholder="Search by keyword, ward or case ID" aria-label="Search by keyword, ward or case ID" data-case-search />
+              </label>
+              <p class="grvx-filter-heading">Few Important issues that we are currently working on</p>
+            </div>
+            <ul class="grvx-case-list">
+              {demoCases.map((c) => (
+                <li class={`grvx-panel grvx-case s-${c.status}`} data-status={c.status}>
+                  <div class="grvx-case-top">
+                    <span class="grvx-case-id"><i aria-hidden="true"></i>{c.id}</span>
+                    <span class="grvx-status">{statusLabel[c.status]}</span>
+                    <span class="grvx-case-meta">
+                      <span><svg viewBox="0 0 24 24" aria-hidden="true" set:html={gi.calendar} /><span>{c.ago}</span> <span>{c.unit}</span></span>
+                      <span class="grvx-case-ward"><svg viewBox="0 0 24 24" aria-hidden="true" set:html={gi.location} /><span>Ward</span> <span>{c.ward}</span></span>
+                    </span>
+                  </div>
+                  <div class="grvx-case-body">
+                    <div>
+                      <p class="grvx-mini">Issue description</p>
+                      <blockquote>{c.text}</blockquote>
+                    </div>
+                    <div class="grvx-esc">
+                      <p class="grvx-mini">Escalation status</p>
+                      <dl>
+                        <div><dt>Assigned</dt><dd>{c.team}</dd></div>
+                        <div><dt>Priority</dt><dd class={`p-${c.priority.toLowerCase()}`}>{c.priority}</dd></div>
+                      </dl>
+                    </div>
+                  </div>
+                </li>
+              ))}
+            </ul>
+            <p class="grvx-empty" hidden>No cases match your search.</p>
+          </div>
+
+          <div class="grvx-panel o-6">
+            <div class="grvx-ph">
+              <span class="grvx-ph-ico"><svg viewBox="0 0 24 24" aria-hidden="true" set:html={gi.pulse} /></span>
+              <div><h3>What you can report</h3><p>Common problems the office can act on</p></div>
+            </div>
+            <ul class="grvx-types">
+              {grvTypes.map((t) => (
+                <li class={`grvx-type tone-${t.tone}`}>
+                  <span class="grvx-ti"><svg viewBox="0 0 24 24" aria-hidden="true" set:html={t.icon} /></span>
+                  <span>{t.label}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div class="grvx-panel o-7">
+            <div class="grvx-ph">
+              <span class="grvx-ph-ico"><svg viewBox="0 0 24 24" aria-hidden="true" set:html={gi.task} /></span>
+              <div><h3>What to include</h3><p>The form asks for these details</p></div>
+            </div>
+            <ul class="grvx-fields">
+              {grvFields.map((f) => (
+                <li>
+                  <span class="grvx-fi"><svg viewBox="0 0 24 24" aria-hidden="true" set:html={f.icon} /></span>
+                  <div>
+                    <div class="grvx-frow"><strong>{f.label}</strong><span class={f.need ? 'grvx-chip req' : 'grvx-chip'}>{f.need ? 'Required' : 'Optional'}</span></div>
+                    <p>{f.text}</p>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+        <aside class="grvx-side">
+          <div class="grvx-cta o-1">
+            <span class="grvx-cta-ico"><svg viewBox="0 0 24 24" aria-hidden="true" set:html={gi.flash} /></span>
+            <h3>Report a new issue</h3>
+            <p>Give your ward and the exact location, and attach a photo if you can.</p>
+            <a class="grvx-btn" href="/grievance/">Submit grievance</a>
+          </div>
+          <div class="grvx-panel grvx-rank o-3">
+            <h3 class="grvx-side-h"><svg viewBox="0 0 24 24" aria-hidden="true" set:html={gi.award} />Ward response ranking</h3>
+            <p class="grvx-side-sub">Cases resolved on time</p>
+            <ol class="grvx-rank-list">
+              {demoRanking.map((r, i) => (
+                <li hidden={i > 2}>
+                  <span class="grvx-rank-n">#{i + 1}</span>
+                  <div class="grvx-rank-w"><strong><span>Ward</span> <span>{r.no}</span></strong>{r.short && <small>{r.short}</small>}</div>
+                  <div class="grvx-rank-v"><b>{r.pct}%</b><small><span>{r.days}</span> <span>days</span></small></div>
+                </li>
+              ))}
+            </ol>
+            <button type="button" class="grvx-more" aria-expanded="false"><span>View all wards</span><span hidden>Show fewer</span></button>
+          </div>
+          <div class="grvx-panel grvx-insights o-4">
+            <h3 class="grvx-side-h"><svg viewBox="0 0 24 24" aria-hidden="true" set:html={gi.layers} />Quick insights</h3>
+            <div class="grvx-ins"><small>Most reported</small><strong>{demoPeriods[0].cats[0].label}</strong></div>
+            <div class="grvx-ins"><small>Fastest ward</small><strong><span>Ward</span> <span>{demoRanking[0].no}</span></strong>{demoRanking[0].short && <em>{demoRanking[0].short}</em>}</div>
+          </div>
+          <div class="grvx-panel grvx-reach o-8">
+            <h3>Other ways to reach the office</h3>
+            <ul class="grvx-contacts">
+              {contact.phones.map((p) => (
+                <li><span class="grvx-ci"><svg viewBox="0 0 24 24" aria-hidden="true" set:html={gi.call} /></span><div><small>{p.label}</small><a href={`tel:${p.tel}`}>{p.display}</a></div></li>
+              ))}
+              <li><span class="grvx-ci"><svg viewBox="0 0 24 24" aria-hidden="true" set:html={gi.mail} /></span><div><small>Email</small><a href={`mailto:${contact.email}`}>{contact.email}</a></div></li>
+              <li><span class="grvx-ci"><svg viewBox="0 0 24 24" aria-hidden="true" set:html={gi.facebook} /></span><div><small>Facebook</small><a href={contact.facebook} target="_blank" rel="noopener">{fbLabel}</a></div></li>
+              <li><span class="grvx-ci"><svg viewBox="0 0 24 24" aria-hidden="true" set:html={gi.clock} /></span><div><small>Office hours</small><span>{contact.hours}</span></div></li>
+            </ul>
+          </div>
+          <a class="grvx-sos o-9" href="/emergency/">
+            <span class="grvx-sos-ico"><svg viewBox="0 0 24 24" aria-hidden="true" set:html={gi.siren} /></span>
+            <span class="grvx-sos-t"><span>In an emergency, dial</span> <strong>{sos.number}</strong></span>
+            <svg class="grvx-sos-go" viewBox="0 0 24 24" aria-hidden="true" set:html={arrow.in} />
+          </a>
+        </aside>
       </div>
     </div>
   </section>
 </Layout>
+
+<script>
+  // Service cards: fade up one after another when scrolled into view, and a soft glow that follows the pointer.
+  const grid = document.querySelector<HTMLElement>('.svc-grid');
+  const cards = grid ? Array.from(grid.querySelectorAll<HTMLElement>('.svc-card')) : [];
+  const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (grid && !still && 'IntersectionObserver' in window) {
+    grid.classList.add('svc-anim');
+    const io = new IntersectionObserver((entries) => {
+      // Stagger only the cards that arrive together, so later rows don't wait for earlier ones.
+      entries.filter((e) => e.isIntersecting).forEach((e, n) => {
+        const c = e.target as HTMLElement;
+        c.style.setProperty('--d', `${n * 80}ms`);
+        c.classList.add('in');
+        io.unobserve(c);
+      });
+    }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+    cards.forEach((c) => io.observe(c));
+  }
+
+  if (!still && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+    cards.forEach((c) => {
+      c.addEventListener('pointermove', (e) => {
+        const r = c.getBoundingClientRect();
+        c.style.setProperty('--mx', `${e.clientX - r.left}px`);
+        c.style.setProperty('--my', `${e.clientY - r.top}px`);
+      });
+    });
+  }
+
+  // Grievance dashboard (demo data).
+  const overview = document.querySelector<HTMLElement>('.grvx-overview');
+  if (overview) {
+    // Bars grow in when the panel first scrolls into view.
+    if (!still && 'IntersectionObserver' in window) {
+      overview.classList.add('grvx-anim');
+      const io = new IntersectionObserver((entries) => {
+        if (!entries.some((e) => e.isIntersecting)) return;
+        overview.classList.add('in');
+        io.disconnect();
+      }, { threshold: 0.2 });
+      io.observe(overview);
+    }
+    // Time period switch: show the matching breakdown.
+    overview.querySelector<HTMLSelectElement>('[data-period-select]')?.addEventListener('change', (e) => {
+      const id = (e.target as HTMLSelectElement).value;
+      overview.querySelectorAll<HTMLElement>('[data-period]').forEach((b) => { b.hidden = b.dataset.period !== id; });
+    });
+  }
+
+  // Case list search.
+  const cases = document.querySelector<HTMLElement>('.grvx-cases');
+  if (cases) {
+    const rows = Array.from(cases.querySelectorAll<HTMLElement>('.grvx-case'));
+    const search = cases.querySelector<HTMLInputElement>('[data-case-search]');
+    const empty = cases.querySelector<HTMLElement>('.grvx-empty');
+    const apply = () => {
+      const q = (search?.value ?? '').trim().toLowerCase();
+      let shown = 0;
+      rows.forEach((r) => {
+        const ok = !q || (r.textContent ?? '').toLowerCase().includes(q);
+        r.hidden = !ok;
+        if (ok) shown++;
+      });
+      if (empty) empty.hidden = shown > 0;
+    };
+    search?.addEventListener('input', apply);
+  }
+
+  // Ward ranking: show all wards or only the top three.
+  document.querySelectorAll<HTMLButtonElement>('.grvx-more').forEach((btn) => {
+    const extra = Array.from(btn.parentElement?.querySelectorAll<HTMLElement>('.grvx-rank-list li') ?? []).slice(3);
+    const [more, less] = Array.from(btn.children) as HTMLElement[];
+    btn.addEventListener('click', () => {
+      const open = btn.getAttribute('aria-expanded') !== 'true';
+      extra.forEach((li) => { li.hidden = !open; });
+      btn.setAttribute('aria-expanded', String(open));
+      if (more && less) { more.hidden = open; less.hidden = !open; }
+    });
+  });
+</script>

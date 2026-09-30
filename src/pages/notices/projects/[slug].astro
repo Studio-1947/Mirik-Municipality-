@@ -1,0 +1,253 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import '../../../styles/project-case-study.css';
+import { caseStudies, type CaseStudy } from '../../../data/case-studies';
+
+export function getStaticPaths() {
+  return caseStudies.map((cs) => ({ params: { slug: cs.slug }, props: { cs } }));
+}
+interface Props { cs: CaseStudy; }
+const { cs } = Astro.props;
+
+// Icons: Hugeicons free set (Stroke Rounded, MIT), inlined as SVG like the Services page.
+const ic: Record<string, string> = {
+  water: '<path d="M12.5 5.5H10.5C9.55719 5.5 9.08579 5.5 8.79289 5.79289C8.5 6.08579 8.5 6.55719 8.5 7.5V9.5C8.5 10.4428 8.5 10.9142 8.79289 11.2071C9.08579 11.5 9.55719 11.5 10.5 11.5H12.5C13.4428 11.5 13.9142 11.5 14.2071 11.2071C14.5 10.9142 14.5 10.4428 14.5 9.5V7.5C14.5 6.55719 14.5 6.08579 14.2071 5.79289C13.9142 5.5 13.4428 5.5 12.5 5.5Z"/><path d="M13 11.5H10V21.5H13V11.5Z"/><path d="M7.5 21.5H15.5"/><path d="M14.5 7H18.5C20.1569 7 21.5 8.34315 21.5 10V12.5H18.5V10H14.5V7Z"/><path d="M14.5 2.5H9.09949C7.83781 2.5 7.20696 2.5 6.70992 2.82302C6.21288 3.14603 5.95667 3.7225 5.44425 4.87545L2.5 11.5"/><path d="M20 15.5L20.5582 14.9991C20.4159 14.8406 20.213 14.75 20 14.75C19.787 14.75 19.5841 14.8406 19.4418 14.9991L20 15.5ZM20.75 18C20.75 18.4142 20.4142 18.75 20 18.75V20.25C21.2426 20.25 22.25 19.2426 22.25 18H20.75ZM20 18.75C19.5858 18.75 19.25 18.4142 19.25 18H17.75C17.75 19.2426 18.7574 20.25 20 20.25V18.75ZM19.25 18C19.25 18.003 19.2507 17.969 19.2771 17.8886C19.3022 17.8119 19.343 17.7162 19.4012 17.6031C19.5182 17.3759 19.6824 17.1227 19.8589 16.8772C20.0335 16.6345 20.2097 16.4137 20.3431 16.2528C20.4094 16.1727 20.4644 16.1084 20.5023 16.0646C20.5212 16.0428 20.5358 16.0262 20.5454 16.0153C20.5502 16.0099 20.5537 16.0059 20.5559 16.0035C20.557 16.0023 20.5577 16.0015 20.5581 16.001C20.5583 16.0008 20.5584 16.0007 20.5584 16.0007C20.5584 16.0007 20.5584 16.0007 20.5584 16.0007C20.5584 16.0007 20.5583 16.0008 20.5583 16.0008C20.5583 16.0008 20.5582 16.0009 20 15.5C19.4418 14.9991 19.4417 14.9992 19.4417 14.9992C19.4416 14.9993 19.4415 14.9994 19.4415 14.9994C19.4414 14.9996 19.4412 14.9997 19.441 14.9999C19.4407 15.0003 19.4403 15.0008 19.4397 15.0014C19.4387 15.0026 19.4373 15.0042 19.4355 15.0061C19.432 15.0101 19.4271 15.0156 19.4209 15.0226C19.4085 15.0367 19.3909 15.0568 19.3688 15.0822C19.3246 15.1332 19.2625 15.2059 19.1882 15.2955C19.0403 15.4739 18.8415 15.7228 18.6411 16.0015C18.4426 16.2774 18.2318 16.5975 18.0675 16.9166C17.9157 17.2115 17.75 17.6053 17.75 18H19.25ZM20 15.5C19.4418 16.0009 19.4417 16.0008 19.4417 16.0008C19.4417 16.0008 19.4416 16.0007 19.4416 16.0007C19.4416 16.0007 19.4416 16.0007 19.4416 16.0007C19.4416 16.0007 19.4417 16.0008 19.4419 16.001C19.4423 16.0015 19.443 16.0023 19.4441 16.0035C19.4463 16.0059 19.4498 16.0099 19.4546 16.0153C19.4642 16.0262 19.4788 16.0428 19.4977 16.0646C19.5356 16.1084 19.5906 16.1727 19.6569 16.2528C19.7903 16.4137 19.9665 16.6345 20.1411 16.8772C20.3176 17.1227 20.4818 17.3759 20.5988 17.6031C20.657 17.7162 20.6978 17.8119 20.7229 17.8886C20.7493 17.969 20.75 18.003 20.75 18H22.25C22.25 17.6053 22.0843 17.2115 21.9325 16.9166C21.7682 16.5975 21.5574 16.2774 21.3589 16.0015C21.1585 15.7228 20.9597 15.4739 20.8118 15.2955C20.7375 15.2059 20.6754 15.1332 20.6312 15.0822C20.6091 15.0568 20.5915 15.0367 20.5791 15.0226C20.5729 15.0156 20.568 15.0101 20.5645 15.0061C20.5627 15.0042 20.5613 15.0026 20.5603 15.0014C20.5597 15.0008 20.5593 15.0003 20.559 14.9999C20.5588 14.9997 20.5586 14.9996 20.5585 14.9994C20.5585 14.9994 20.5584 14.9993 20.5583 14.9992C20.5583 14.9992 20.5582 14.9991 20 15.5Z" fill="currentColor"/><path d="M11.5 2.5V5.5"/>', // WaterPumpIcon
+  lake: '<path d="M2 12.1932C2.68524 13.2443 3.57104 13.2443 4.27299 12.1932C6.52985 8.7408 8.67954 14.6764 10.273 12.2321C12.703 8.56944 14.4508 14.9218 16.273 12.1932C18.6492 8.5582 20.1295 14.5776 22 12.5842"/><path d="M2 6.1932C2.68524 7.24434 3.57104 7.24434 4.27299 6.1932C6.52985 2.7408 8.67954 8.67642 10.273 6.23213C12.703 2.56944 14.4508 8.92184 16.273 6.1932C18.6492 2.5582 20.1295 8.57758 22 6.58418"/><path d="M2 18.1932C2.68524 19.2443 3.57104 19.2443 4.27299 18.1932C6.52985 14.7408 8.67954 20.6764 10.273 18.2321C12.703 14.5694 14.4508 20.9218 16.273 18.1932C18.6492 14.5582 20.1295 20.5776 22 18.5842"/>', // WavesIcon
+  landslide: '<path d="M16 20H2L5.22457 10.7557C6.79555 6.25189 7.58104 4 9 4C10.3373 4 11.1119 6 12.5116 10"/><path d="M6 20H22L17.4066 12.6585C15.8806 10.2195 15.1176 9 14 9C12.8824 9 12.1194 10.2195 10.5934 12.6585L9.12837 15"/>', // MountainIcon
+  check: '<path d="M22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12Z"/><path d="M8 12.5L10.5 15L16 9"/>', // CheckmarkCircle02Icon
+  alert: '<path d="M13.9248 21H10.0752C5.44476 21 3.12955 21 2.27636 19.4939C1.42317 17.9879 2.60736 15.9914 4.97574 11.9985L6.90057 8.75333C9.17559 4.91778 10.3131 3 12 3C13.6869 3 14.8244 4.91777 17.0994 8.75332L19.0243 11.9985C21.3926 15.9914 22.5768 17.9879 21.7236 19.4939C20.8704 21 18.5552 21 13.9248 21Z"/><path d="M12 9V13"/><path d="M12.125 16.75H12M12.25 16.75C12.25 16.8881 12.1381 17 12 17C11.8619 17 11.75 16.8881 11.75 16.75C11.75 16.6119 11.8619 16.5 12 16.5C12.1381 16.5 12.25 16.6119 12.25 16.75Z"/>', // Alert02Icon
+  out: '<path d="M9 6.65032C9 6.65032 15.9383 6.10759 16.9154 7.08463C17.8924 8.06167 17.3496 15 17.3496 15M16.5 7.5L6.5 17.5"/>', // ArrowUpRight01Icon
+  arrow: '<path d="M18.5 12L4.99997 12"/><path d="M13 18C13 18 19 13.5811 19 12C19 10.4188 13 6 13 6"/>', // ArrowRight02Icon
+  back: '<path d="M5.5 12.002H19"/><path d="M10.9999 18.002C10.9999 18.002 4.99998 13.583 4.99997 12.0019C4.99996 10.4208 11 6.00195 11 6.00195"/>', // ArrowLeft02Icon
+  calendar: '<path d="M16 2V6M8 2V6"/><path d="M13 4H11C7.22876 4 5.34315 4 4.17157 5.17157C3 6.34315 3 8.22876 3 12V14C3 17.7712 3 19.6569 4.17157 20.8284C5.34315 22 7.22876 22 11 22H13C16.7712 22 18.6569 22 19.8284 20.8284C21 19.6569 21 17.7712 21 14V12C21 8.22876 21 6.34315 19.8284 5.17157C18.6569 4 16.7712 4 13 4Z"/><path d="M3 10H21"/><path d="M12.1258 14H12.0008M12.1258 18H12.0008M7.625 14H7.5M7.625 18H7.5M16.625 14H16.5M12.2508 14C12.2508 14.1381 12.1389 14.25 12.0008 14.25C11.8628 14.25 11.7508 14.1381 11.7508 14C11.7508 13.8619 11.8628 13.75 12.0008 13.75C12.1389 13.75 12.2508 13.8619 12.2508 14ZM12.2508 18C12.2508 18.1381 12.1389 18.25 12.0008 18.25C11.8628 18.25 11.7508 18.1381 11.7508 18C11.7508 17.8619 11.8628 17.75 12.0008 17.75C12.1389 17.75 12.2508 17.8619 12.2508 18ZM7.75 14C7.75 14.1381 7.63807 14.25 7.5 14.25C7.36193 14.25 7.25 14.1381 7.25 14C7.25 13.8619 7.36193 13.75 7.5 13.75C7.63807 13.75 7.75 13.8619 7.75 14ZM7.75 18C7.75 18.1381 7.63807 18.25 7.5 18.25C7.36193 18.25 7.25 18.1381 7.25 18C7.25 17.8619 7.36193 17.75 7.5 17.75C7.63807 17.75 7.75 17.8619 7.75 18ZM16.75 14C16.75 14.1381 16.6381 14.25 16.5 14.25C16.3619 14.25 16.25 14.1381 16.25 14C16.25 13.8619 16.3619 13.75 16.5 13.75C16.6381 13.75 16.75 13.8619 16.75 14Z"/>', // Calendar03Icon
+  people: '<path d="M18.4995 20.5C18.2663 17.5685 15.8417 15.2477 12.808 15.0521L11.9995 15C11.7107 15.0076 11.4416 15.0178 11.1877 15.0298C8.18075 15.1723 5.7304 17.5974 5.49951 20.5"/><path d="M15.2495 9.25C15.2495 11.0449 13.7944 12.5 11.9995 12.5C10.2046 12.5 8.74952 11.0449 8.74952 9.25C8.74952 7.45507 10.2046 6 11.9995 6C13.7944 6 15.2495 7.45507 15.2495 9.25Z"/><path d="M5.50249 8.5C5.17908 7.99485 4.99158 7.39432 4.99158 6.75C4.99158 4.95507 6.44665 3.5 8.24157 3.5C8.68752 3.5 9.1125 3.58982 9.49939 3.75235"/><path d="M18.4963 8.5C18.8197 7.99485 19.0072 7.39432 19.0072 6.75C19.0072 4.95507 17.5521 3.5 15.7572 3.5C15.3113 3.5 14.8863 3.58982 14.4994 3.75235"/><path d="M22.0007 17.9996C21.8208 15.7374 19.9995 13.5 17.9995 13"/><path d="M1.99927 17.9996C2.17923 15.7374 4.00049 13.5 6.00049 13"/>', // UserGroupIcon
+  news: '<path d="M10.5 8H18.5M10.5 12H13M18.5 12H16M10.5 16H13M18.5 16H16"/><path d="M7 7.5H6C4.11438 7.5 3.17157 7.5 2.58579 8.08579C2 8.67157 2 9.61438 2 11.5V18C2 19.3807 3.11929 20.5 4.5 20.5C5.88071 20.5 7 19.3807 7 18V7.5Z"/><path d="M16 3.5H11C10.07 3.5 9.60504 3.5 9.22354 3.60222C8.18827 3.87962 7.37962 4.68827 7.10222 5.72354C7 6.10504 7 6.57003 7 7.5V18C7 19.3807 5.88071 20.5 4.5 20.5H16C18.8284 20.5 20.2426 20.5 21.1213 19.6213C22 18.7426 22 17.3284 22 14.5V9.5C22 6.67157 22 5.25736 21.1213 4.37868C20.2426 3.5 18.8284 3.5 16 3.5Z"/>', // News01Icon
+  info: '<circle cx="12" cy="12" r="10"/><path d="M12 16V12"/><path d="M12.125 8.25H12M12.25 8.25C12.25 8.11193 12.1381 8 12 8C11.8619 8 11.75 8.11193 11.75 8.25C11.75 8.38807 11.8619 8.5 12 8.5C12.1381 8.5 12.25 8.38807 12.25 8.25Z"/>', // InformationCircleIcon
+  target: '<path d="M17 12C17 14.7614 14.7614 17 12 17C9.23858 17 7 14.7614 7 12C7 9.23858 9.23858 7 12 7"/><path d="M14 2.20004C13.3538 2.06886 12.6849 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12C22 11.3151 21.9311 10.6462 21.8 10"/><path d="M12.0303 11.9625L16.5832 7.4096M19.7404 4.34462L19.1872 2.35748C19.0853 2.03011 18.6914 1.89965 18.4259 2.11662C16.9898 3.29018 15.4254 4.87091 16.703 7.36419C19.2771 8.56455 20.7466 6.94584 21.8733 5.5853C22.0975 5.3146 21.9623 4.90767 21.6247 4.81005L19.7404 4.34462Z"/>', // Target02Icon
+};
+// Tone colours reuse existing accents: blue (services cards), lake, alert.
+const tones: Record<CaseStudy['tone'], [string, string]> = {
+  blue: ['#2f6fd0', '#e3eefc'],
+  lake: ['var(--lake)', 'var(--lake-soft)'],
+  orange: ['var(--alert)', 'var(--alert-soft)'],
+};
+const [accent, soft] = tones[cs.tone];
+// Sources are numbered in the order listed; facts link to them as [n].
+const srcNo = (id?: string) => (id ? cs.sources.findIndex((s) => s.id === id) + 1 : 0);
+const ext = (href: string) => /^https?:/.test(href);
+const others = caseStudies.filter((o) => o.slug !== cs.slug);
+const hasDemo = [cs.facts, cs.scope, cs.progress, cs.timeline].some((list) => list.some((x) => 'demo' in x && x.demo));
+const toc = [
+  ['overview', 'Overview'],
+  ['why', 'Why it matters'],
+  ['scope', 'What the project covers'],
+  ...(cs.progress.length ? [['progress', 'Progress']] : []),
+  ['timeline', 'Timeline'],
+  ['you', 'What this means for you'],
+  ['sources', 'Sources'],
+];
+---
+<Layout title={`${cs.title} | Mirik Municipality`}>
+  <div class={cs.photo ? 'pagehead plain cs-head has-photo' : 'pagehead plain cs-head'} style={`--accent:${accent};--accent-soft:${soft}`}>
+    {cs.photo && <img class="cs-head-photo" src={cs.photo.src} alt="" width="1400" height="930" style={`object-position:${cs.photo.pos ?? 'center'}`} />}
+    <svg class="cs-head-mark" viewBox="0 0 24 24" aria-hidden="true" set:html={ic[cs.icon]} />
+    <div class="wrap ph-in">
+      <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a> <span>/</span> <a href="/notices/">Notices</a> <span>/</span> <a href="/notices/#projects">Projects</a></nav>
+      <p class="eyebrow">Case study</p>
+      <h1>{cs.title}</h1>
+      <p class="lead">{cs.tagline}</p>
+      <div class="cs-head-meta">
+        <span class="cs-status"><i aria-hidden="true"></i>{cs.status}</span>
+        <span class="cs-updated"><svg viewBox="0 0 24 24" aria-hidden="true" set:html={ic.calendar} /><span>Last updated</span> <span>{cs.updated}</span></span>
+      </div>
+    </div>
+  </div>
+
+  <section class="cs-sec" style={`--c:${accent};--c-soft:${soft}`}>
+    <div class="wrap">
+      <ul class="cs-facts" aria-label="Key figures">
+        {cs.facts.map((f) => (
+          <li>
+            <b>{f.value}</b>
+            <span>{f.label}</span>
+            {f.demo ? <em class="cs-demo">Demo</em> : f.src && <sup class="cs-ref"><a href={`#src-${srcNo(f.src)}`}>{srcNo(f.src)}</a></sup>}
+          </li>
+        ))}
+      </ul>
+
+      <div class="cs-grid">
+        <div class="cs-main">
+          <section id="overview" class="cs-block" aria-labelledby="h-overview">
+            <h2 id="h-overview">Overview</h2>
+            {cs.summary.map((p) => <p class="cs-lede">{p}</p>)}
+            {cs.photo && (
+              <figure class="cs-figure">
+                <img src={cs.photo.src} alt={cs.photo.alt} width="1400" height="930" loading="lazy" />
+                <figcaption>
+                  <span>{cs.photo.caption}</span>
+                  <small><span>Photo</span>: <a href={cs.photo.url} target="_blank" rel="noopener">{cs.photo.credit}</a>, <a href={cs.photo.licenseUrl} target="_blank" rel="noopener">{cs.photo.license}</a>, <span>via Wikimedia Commons</span></small>
+                </figcaption>
+              </figure>
+            )}
+            {cs.related && (
+              <aside class="cs-related">
+                <svg viewBox="0 0 24 24" aria-hidden="true" set:html={ic.info} />
+                <div><strong>{cs.related.title}</strong><p>{cs.related.text}{cs.related.src && <sup class="cs-ref"><a href={`#src-${srcNo(cs.related.src)}`}>{srcNo(cs.related.src)}</a></sup>}</p></div>
+              </aside>
+            )}
+          </section>
+
+          <section id="why" class="cs-block" aria-labelledby="h-why">
+            <h2 id="h-why">Why it matters</h2>
+            <div class="cs-why">
+              {cs.problem.map((p, i) => (
+                <article>
+                  <span class="cs-why-n" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+                  <h3>{p.title}</h3>
+                  <p>{p.text}{p.src && <sup class="cs-ref"><a href={`#src-${srcNo(p.src)}`}>{srcNo(p.src)}</a></sup>}</p>
+                </article>
+              ))}
+            </div>
+          </section>
+
+          <section id="scope" class="cs-block" aria-labelledby="h-scope">
+            <h2 id="h-scope">What the project covers</h2>
+            <ul class="cs-scope">
+              {cs.scope.map((s) => (
+                <li class={s.demo ? 'is-demo' : undefined}>
+                  <span class="cs-scope-ico"><svg viewBox="0 0 24 24" aria-hidden="true" set:html={s.demo ? ic.target : ic.check} /></span>
+                  <div>
+                    <h3>{s.title}{s.demo && <em class="cs-demo">Demo</em>}</h3>
+                    <p>{s.text}{s.src && <sup class="cs-ref"><a href={`#src-${srcNo(s.src)}`}>{srcNo(s.src)}</a></sup>}</p>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </section>
+
+          {cs.progress.length > 0 && <section id="progress" class="cs-block" aria-labelledby="h-progress">
+            <h2 id="h-progress">Progress</h2>
+            <div class="cs-progress">
+              {cs.progress.map((p) => (
+                <div class="cs-bar" style={`--w:${p.value}%`}>
+                  <div class="cs-bar-row"><span>{p.label}{p.demo && <em class="cs-demo">Demo</em>}</span><b>{p.value}%</b></div>
+                  <div class="cs-bar-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow={p.value} aria-label={p.label}><i></i></div>
+                  {p.note && <small>{p.note}</small>}
+                </div>
+              ))}
+              {hasDemo && <p class="cs-demo-note"><em class="cs-demo">Demo</em><span>Items marked Demo are examples, not published figures. They will be replaced when the office shares real data.</span></p>}
+            </div>
+          </section>}
+
+          <section id="timeline" class="cs-block" aria-labelledby="h-timeline">
+            <h2 id="h-timeline">Timeline</h2>
+            <ol class="cs-timeline">
+              {cs.timeline.map((t) => (
+                <li class={`is-${t.state}`}>
+                  <span class="cs-dot" aria-hidden="true"></span>
+                  <div class="cs-t-card">
+                    <div class="cs-t-top">
+                      <time>{t.date}</time>
+                      <span class="cs-t-state">{t.state === 'done' ? 'Done' : t.state === 'now' ? 'Now' : 'Next'}</span>
+                      {t.demo && <em class="cs-demo">Demo</em>}
+                    </div>
+                    <h3>{t.title}</h3>
+                    <p>{t.text}{t.src && <sup class="cs-ref"><a href={`#src-${srcNo(t.src)}`}>{srcNo(t.src)}</a></sup>}</p>
+                  </div>
+                </li>
+              ))}
+            </ol>
+          </section>
+
+          {cs.challenges.length > 0 && (
+            <section class="cs-block cs-challenges" aria-labelledby="h-challenges">
+              <h2 id="h-challenges"><svg viewBox="0 0 24 24" aria-hidden="true" set:html={ic.alert} />Challenges</h2>
+              <ul>
+                {cs.challenges.map((c) => (
+                  <li><strong>{c.title}</strong><p>{c.text}{c.src && <sup class="cs-ref"><a href={`#src-${srcNo(c.src)}`}>{srcNo(c.src)}</a></sup>}</p></li>
+                ))}
+              </ul>
+            </section>
+          )}
+
+          <section id="you" class="cs-block" aria-labelledby="h-you">
+            <h2 id="h-you">What this means for you</h2>
+            <ul class="cs-you">
+              {cs.residents.map((r) => (
+                <li>
+                  <svg viewBox="0 0 24 24" aria-hidden="true" set:html={ic.check} />
+                  <div>
+                    <p>{r.text}</p>
+                    {r.href && <a href={r.href}><span>{r.cta}</span><svg viewBox="0 0 24 24" aria-hidden="true" set:html={ic.arrow} /></a>}
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </section>
+
+          <section id="sources" class="cs-block" aria-labelledby="h-sources">
+            <h2 id="h-sources">Sources</h2>
+            <ol class="cs-sources">
+              {cs.sources.map((s, i) => (
+                <li id={`src-${i + 1}`}>
+                  <span class="cs-src-n">{i + 1}</span>
+                  <a href={s.url} target={ext(s.url) ? '_blank' : undefined} rel={ext(s.url) ? 'noopener' : undefined}>{s.label}{ext(s.url) && <svg viewBox="0 0 24 24" aria-hidden="true" set:html={ic.out} />}</a>
+                </li>
+              ))}
+            </ol>
+            <p class="cs-src-note">News reports are summarised in our own words. If you find an error, tell the Municipality Office.</p>
+          </section>
+        </div>
+
+        <aside class="cs-side">
+          <nav class="cs-card cs-toc" aria-labelledby="h-toc">
+            <p class="cs-side-h" id="h-toc">On this page</p>
+            <ul>{toc.map(([id, label]) => <li><a href={`#${id}`}>{label}</a></li>)}</ul>
+          </nav>
+          <div class="cs-card">
+            <p class="cs-side-h"><svg viewBox="0 0 24 24" aria-hidden="true" set:html={ic.people} />Who is involved</p>
+            <ul class="cs-agencies">
+              {cs.agencies.map((a) => <li><strong>{a.name}</strong><span>{a.role}</span></li>)}
+            </ul>
+          </div>
+          <a class="cs-card cs-cta" href="/grievance/">
+            <strong>Spotted a problem with this work?</strong>
+            <span>Report it with the grievance form.</span>
+            <span class="cs-cta-go"><span>Report a problem</span><svg viewBox="0 0 24 24" aria-hidden="true" set:html={ic.arrow} /></span>
+          </a>
+        </aside>
+      </div>
+
+      <nav class="cs-more" aria-labelledby="h-more">
+        <h2 id="h-more">Other projects</h2>
+        <div class="cs-more-grid">
+          {others.map((o) => (
+            <a class={`cs-more-card tone-${o.tone}`} href={`/notices/projects/${o.slug}/`}>
+              <span class="cs-more-ico"><svg viewBox="0 0 24 24" aria-hidden="true" set:html={ic[o.icon]} /></span>
+              <span class="cs-more-t"><strong>{o.title}</strong><span>{o.tagline}</span></span>
+              <svg class="cs-more-go" viewBox="0 0 24 24" aria-hidden="true" set:html={ic.arrow} />
+            </a>
+          ))}
+          <a class="cs-more-card cs-back" href="/notices/#projects">
+            <span class="cs-more-ico"><svg viewBox="0 0 24 24" aria-hidden="true" set:html={ic.back} /></span>
+            <span class="cs-more-t"><strong>All projects</strong><span>Back to the Notices page</span></span>
+          </a>
+        </div>
+      </nav>
+    </div>
+  </section>
+</Layout>
+
+<script>
+  // Case study: progress bars fill when they scroll into view.
+  const bars = document.querySelector<HTMLElement>('.cs-progress');
+  if (bars && !window.matchMedia('(prefers-reduced-motion: reduce)').matches && 'IntersectionObserver' in window) {
+    bars.classList.add('cs-anim');
+    const io = new IntersectionObserver((entries) => {
+      if (!entries.some((e) => e.isIntersecting)) return;
+      bars.classList.add('in');
+      io.disconnect();
+    }, { threshold: 0.3 });
+    io.observe(bars);
+  }
+</script>

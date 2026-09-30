@@ -280,6 +280,7 @@ export const fines = [
   { title: 'Public urination', offence: 'Urinating or defecating in public', amount: 'Rs 200', image: '/images/clean-mirik/fine-urinating-in-public.webp' },
   { title: 'Plastic bags', offence: 'Using banned plastic carry bags', amount: 'Rs 200', image: '/images/clean-mirik/fine-plastic-carry-bags.webp' },
   { title: 'Illegal dumping', offence: 'Illegal dumping of garbage', amount: 'Rs 200', image: '/images/clean-mirik/fine-illegal-garbage-dumping.webp' },
+  { title: 'Unauthorised parking', offence: 'Parking in a non-parking zone', amount: 'Rs 500', image: '/images/clean-mirik/fine-unauthorised-parking.webp' },
 ];
 
 // Bin colours under the Mirik Solid Waste Management Bye-Laws, 2023.
