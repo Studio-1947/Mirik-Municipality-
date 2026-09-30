@@ -1,5 +1,7 @@
 ---
 import '../styles/global.css';
+import '../styles/scroll-top.css';
+import '../styles/footer.css';
 import { meta, contact, sources, emergency } from '../data/site';
 import { pages, sections } from '../data/nav';
 import GrievanceForm from '../components/GrievanceForm.astro';
@@ -146,6 +148,12 @@ const year = new Date().getFullYear();
       <a href="/emergency/">SOS</a>
     </nav>
 
+    <button class="scroll-top" type="button" aria-label="Scroll to top" title="Scroll to top" hidden>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 14 6-6 6 6" /></svg>
+      <span>Top</span>
+    </button>
+
+    <footer class="site big">
     <footer class="site big" id="contact">
       <div class="wrap f-brandrow">
         <div class="f-id">
@@ -325,12 +333,17 @@ const year = new Date().getFullYear();
       // Turn the header into a floating glass pill once the page is scrolled.
       const header = document.querySelector('header.site');
       const subnav = document.querySelector('.subnav');
+      const scrollTop = document.querySelector<HTMLButtonElement>('.scroll-top');
       const onScroll = () => {
         header?.classList.toggle('scrolled', window.scrollY > 40);
         subnav?.classList.toggle('stuck', subnav.getBoundingClientRect().top <= (window.innerWidth <= 760 ? 78 : 86));
+        if (scrollTop) scrollTop.hidden = window.scrollY < 420;
       };
       onScroll();
       window.addEventListener('scroll', onScroll, { passive: true });
+      scrollTop?.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+      });
 
       // Dropdowns: chevron toggles (touch/keyboard); hover and focus also open them on desktop.
       const closeAll = (except?: Element | null) =>

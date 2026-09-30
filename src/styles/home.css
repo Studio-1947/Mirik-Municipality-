@@ -1,0 +1,328 @@
+/* Home page styles (hero, grievance ticket, quick services). Loaded after global.css from index.astro. */
+/* ---- Home hero: soft, moving transition into the page surface ---- */
+.herox { isolation: isolate; }
+.herox::after {
+  content: '';
+  position: absolute;
+  z-index: 1;
+  right: -18%;
+  bottom: -5%;
+  left: -18%;
+  height: 48%;
+  pointer-events: none;
+  background:
+    radial-gradient(70% 54% at 52% 18%, rgba(255,255,255,.24), transparent 72%),
+    linear-gradient(to bottom, transparent 0%, rgba(255,255,255,.16) 34%, var(--paper) 100%);
+  filter: blur(1px);
+  animation: hero-bottom-mist 16s ease-in-out infinite alternate;
+}
+.herox-in { z-index: 2; }
+@keyframes hero-bottom-mist {
+  from { transform: translate3d(-2%, 1.5%, 0) scale(1); opacity: .82; }
+  to { transform: translate3d(2%, -1%, 0) scale(1.06); opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) { .herox::after { animation: none; } }
+
+/* ---- Grievance page: future ticket and update placeholder ---- */
+.grv-ticket {
+  position: relative;
+  margin-top: 1.5rem;
+  padding: 1.4rem;
+  overflow: hidden;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 1rem;
+  box-shadow: 0 12px 28px rgba(15,50,40,.1);
+}
+.grv-ticket::before,
+.grv-ticket::after {
+  content: '';
+  position: absolute;
+  top: 42%;
+  z-index: 2;
+  width: 1.25rem;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--paper);
+  border: 1px solid var(--line);
+}
+.grv-ticket::before { left: -.7rem; }
+.grv-ticket::after { right: -.7rem; }
+.grv-ticket-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; padding-bottom: 1rem; border-bottom: 1px dashed var(--line); }
+.grv-ticket-eyebrow { margin: 0 0 .3rem; color: var(--green-deep); font-size: .75rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+.grv-ticket h2 { margin: 0; font-size: 1.2rem; }
+.grv-ticket-tag { flex: none; padding: .3rem .55rem; border-radius: 999px; background: var(--pine-soft); color: var(--pine-deep); font-size: .75rem; font-weight: 700; }
+.grv-ticket-id { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: 1rem 0; border-bottom: 1px dashed var(--line); }
+.grv-ticket-id span { color: var(--muted); font-size: .85rem; }
+.grv-ticket-id strong { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .95rem; letter-spacing: .08em; }
+.grv-ticket-status { display: flex; gap: .7rem; padding: 1rem 0; }
+.grv-ticket-dot { flex: none; width: .7rem; height: .7rem; margin-top: .3rem; border-radius: 50%; background: var(--lake); box-shadow: 0 0 0 .25rem var(--lake-soft); }
+.grv-ticket-status strong { font-size: .9rem; }
+.grv-ticket-status p, .grv-ticket-note { margin: .3rem 0 0; color: var(--muted); font-size: .84rem; line-height: 1.5; }
+.grv-ticket-steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: .4rem; margin: 0; padding: 1rem 0; list-style: none; border-top: 1px dashed var(--line); border-bottom: 1px dashed var(--line); counter-reset: ticket-step; }
+.grv-ticket-steps li { display: grid; gap: .4rem; color: var(--muted); font-size: .75rem; line-height: 1.25; }
+.grv-ticket-steps li::before { counter-increment: ticket-step; content: counter(ticket-step); display: grid; place-items: center; width: 1.35rem; height: 1.35rem; border-radius: 50%; background: var(--pine-soft); color: var(--pine-deep); font-size: .7rem; font-weight: 700; }
+.grv-ticket-note { margin-top: 1rem; }
+@media (max-width: 640px) {
+  .grv-ticket { padding: 1.15rem; }
+  .grv-ticket-head { flex-direction: column; }
+  .grv-ticket-tag { align-self: flex-start; }
+}
+
+/* Home hero: grievance update ticket on the open right side */
+.hero-ticket {
+  position: absolute;
+  z-index: 2;
+  top: clamp(8.25rem, 17vh, 10.75rem);
+  right: max(1.5rem, calc((100vw - var(--max)) / 2));
+  width: min(22rem, calc(100vw - 3rem));
+  margin: 0;
+  color: #fff;
+  background: linear-gradient(145deg, rgba(14,42,50,.78), rgba(14,42,50,.5));
+  border-color: rgba(255,255,255,.42);
+  box-shadow: 0 18px 44px rgba(4,24,30,.28), inset 0 1px 0 rgba(255,255,255,.3);
+  -webkit-backdrop-filter: blur(16px) saturate(1.25);
+  backdrop-filter: blur(16px) saturate(1.25);
+}
+.hero-ticket::before, .hero-ticket::after { background: rgba(15,47,56,.82); border-color: rgba(255,255,255,.32); }
+.hero-ticket .grv-ticket-head, .hero-ticket .grv-ticket-id, .hero-ticket .grv-ticket-steps { border-color: rgba(255,255,255,.27); }
+.hero-ticket .grv-ticket-eyebrow { color: #b9ead0; }
+.hero-ticket h2, .hero-ticket .grv-ticket-status strong { color: #fff; }
+.hero-ticket .grv-ticket-tag { background: rgba(255,255,255,.18); color: #fff; }
+.hero-ticket .grv-ticket-id span, .hero-ticket .grv-ticket-status p, .hero-ticket .grv-ticket-steps li { color: rgba(255,255,255,.78); }
+.hero-ticket .grv-ticket-dot { background: #7fd1a3; box-shadow: 0 0 0 .25rem rgba(127,209,163,.2); }
+.hero-ticket .grv-ticket-steps li::before { background: rgba(255,255,255,.16); color: #fff; }
+@media (max-width: 1000px) { .hero-ticket { display: none; } }
+
+/* Home ticket: compact, aligned with the hero message rather than the navbar. */
+.hero-ticket {
+  top: clamp(13.5rem, 30vh, 19rem);
+  width: min(20.5rem, calc(100vw - 3rem));
+  padding: 0;
+  border-radius: 1.25rem;
+  background: linear-gradient(155deg, rgba(8,38,48,.9), rgba(13,66,69,.72));
+  box-shadow: 0 20px 48px rgba(3,24,31,.32), inset 0 1px 0 rgba(255,255,255,.3);
+}
+.hero-ticket .grv-ticket-head { padding: 1.15rem 1.25rem .9rem; }
+.hero-ticket h2 { font-size: 1.35rem; letter-spacing: -.02em; }
+.hero-ticket .grv-ticket-id { padding: .8rem 1.25rem; }
+.hero-ticket .grv-ticket-status { margin: 0; padding: .95rem 1.25rem; background: rgba(255,255,255,.09); }
+.hero-ticket .grv-ticket-steps { padding: .95rem 1.25rem 1.1rem; }
+.hero-ticket .grv-ticket-steps li { font-size: .72rem; }
+.hero-ticket::before, .hero-ticket::after { top: 48%; background: rgba(9,50,58,.95); }
+
+/* A true ticket silhouette: side notches, perforation and layered glass. */
+.hero-ticket {
+  overflow: visible;
+  border: 1px solid rgba(255,255,255,.52);
+  border-radius: 1.5rem;
+  background:
+    linear-gradient(135deg, rgba(255,255,255,.2), transparent 34%),
+    linear-gradient(155deg, rgba(13,61,73,.88), rgba(8,34,44,.72));
+  box-shadow: 0 24px 60px rgba(3,22,30,.34), inset 0 1px 0 rgba(255,255,255,.48), inset 0 -1px 0 rgba(255,255,255,.1);
+  -webkit-backdrop-filter: blur(24px) saturate(1.5);
+  backdrop-filter: blur(24px) saturate(1.5);
+}
+.hero-ticket::before,
+.hero-ticket::after {
+  top: 50%;
+  width: 1.65rem;
+  background: rgba(247,245,239,.96);
+  border: 0;
+  box-shadow: inset 0 0 0 1px rgba(8,34,44,.15);
+}
+.hero-ticket::before { left: -.84rem; }
+.hero-ticket::after { right: -.84rem; }
+.hero-ticket .grv-ticket-head {
+  position: relative;
+  overflow: hidden;
+  border-radius: 1.45rem 1.45rem 0 0;
+}
+.hero-ticket .grv-ticket-head::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(90% 100% at 0% 0%, rgba(255,255,255,.22), transparent 64%);
+}
+.hero-ticket .grv-ticket-id {
+  position: relative;
+  border-top: 1px dashed rgba(255,255,255,.38);
+  border-bottom: 0;
+}
+.hero-ticket .grv-ticket-id::before,
+.hero-ticket .grv-ticket-id::after {
+  content: '';
+  position: absolute;
+  top: -1px;
+  width: .45rem;
+  height: .45rem;
+  border-radius: 50%;
+  background: rgba(247,245,239,.96);
+}
+.hero-ticket .grv-ticket-id::before { left: -.23rem; }
+.hero-ticket .grv-ticket-id::after { right: -.23rem; }
+.hero-ticket .grv-ticket-status {
+  border-top: 1px dashed rgba(255,255,255,.25);
+  border-bottom: 1px dashed rgba(255,255,255,.28);
+  background: linear-gradient(90deg, rgba(255,255,255,.12), rgba(255,255,255,.05));
+}
+.hero-ticket .grv-ticket-steps { border-top: 0; border-bottom: 0; }
+
+/* Home ticket: perforated admission-ticket edge and detachable update stub. */
+.hero-ticket {
+  overflow: hidden;
+  padding-right: 3.75rem;
+  border-radius: 0;
+  -webkit-mask:
+    linear-gradient(#000 0 0) center / calc(100% - 1.25rem) 100% no-repeat,
+    radial-gradient(circle at 0 .75rem, transparent 0 .5rem, #000 .53rem) left top / .75rem 1.5rem repeat-y,
+    radial-gradient(circle at 100% .75rem, transparent 0 .5rem, #000 .53rem) right top / .75rem 1.5rem repeat-y;
+  mask:
+    linear-gradient(#000 0 0) center / calc(100% - 1.25rem) 100% no-repeat,
+    radial-gradient(circle at 0 .75rem, transparent 0 .5rem, #000 .53rem) left top / .75rem 1.5rem repeat-y,
+    radial-gradient(circle at 100% .75rem, transparent 0 .5rem, #000 .53rem) right top / .75rem 1.5rem repeat-y;
+}
+.hero-ticket::before,
+.hero-ticket::after { display: none; }
+.hero-ticket .grv-ticket-head { border-radius: 0; padding-right: .9rem; }
+.hero-ticket .grv-ticket-id,
+.hero-ticket .grv-ticket-status,
+.hero-ticket .grv-ticket-steps { padding-right: .9rem; }
+.hero-ticket-stub {
+  position: absolute;
+  z-index: 3;
+  top: 1rem;
+  right: 1rem;
+  bottom: 1rem;
+  width: 2rem;
+  border-left: 3px dotted rgba(255,255,255,.64);
+  background: repeating-linear-gradient(to bottom, rgba(255,255,255,.88) 0 .12rem, transparent .12rem .27rem, rgba(255,255,255,.48) .27rem .33rem, transparent .33rem .48rem);
+  background-position: right center;
+  background-repeat: no-repeat;
+  background-size: .85rem 100%;
+  opacity: .78;
+}
+
+/* Wide landscape ticket: balances the home hero rather than competing with it. */
+.hero-ticket {
+  top: clamp(14.5rem, 29vh, 18rem);
+  width: min(31rem, calc(100vw - 3rem));
+  padding-right: 4.75rem;
+}
+.hero-ticket .grv-ticket-head {
+  align-items: center;
+  padding: .85rem 1.15rem .7rem;
+}
+.hero-ticket .grv-ticket-eyebrow { margin-bottom: .15rem; font-size: .68rem; }
+.hero-ticket h2 { font-size: 1.16rem; white-space: nowrap; }
+.hero-ticket .grv-ticket-tag { padding: .28rem .5rem; font-size: .7rem; }
+.hero-ticket .grv-ticket-id { padding: .55rem 1.15rem; }
+.hero-ticket .grv-ticket-status { gap: .6rem; padding: .7rem 1.15rem; }
+.hero-ticket .grv-ticket-status p { margin-top: .12rem; font-size: .78rem; white-space: nowrap; }
+.hero-ticket .grv-ticket-steps { gap: .8rem; padding: .65rem 1.15rem .75rem; }
+.hero-ticket .grv-ticket-steps li { grid-template-columns: auto 1fr; align-items: center; column-gap: .35rem; row-gap: 0; font-size: .68rem; }
+.hero-ticket .grv-ticket-steps li::before { grid-row: 1 / span 2; }
+.hero-ticket-stub { top: .75rem; right: 1.15rem; bottom: .75rem; width: 2.35rem; }
+@media (max-width: 1000px) { .hero-ticket { display: none; } }
+@media (min-width: 1001px) and (max-width: 1240px) {
+  .hero-ticket {
+    display: block;
+    top: clamp(13.5rem, 27vh, 16rem);
+    right: 1rem;
+    width: min(24rem, calc(100vw - 37rem));
+    padding-right: 3.9rem;
+  }
+  .hero-ticket h2 { font-size: 1.05rem; }
+  .hero-ticket .grv-ticket-status p { font-size: .72rem; }
+  .hero-ticket-stub { right: .8rem; width: 1.85rem; }
+}
+
+/* Keep the quick-service panel in the first viewport on compact displays. */
+.quick-sec { margin-top: clamp(-7rem, -10svh, -3.4rem); }
+@media (max-height: 820px) and (min-width: 1241px) {
+  .hero-ticket { top: clamp(9.5rem, 24vh, 12.5rem); width: min(28rem, calc(100vw - 3rem)); }
+  .quick-card { padding: 1.25rem 1.5rem 1.4rem; }
+  .quick-card .row-head { margin-bottom: .9rem; }
+  .quick-card .row-head h2 { font-size: 1.65rem; }
+  .q { padding: .85rem; }
+}
+@media (max-width: 760px) {
+  .quick-sec { margin-top: -4.5rem; }
+  .quick-card { padding: 1.1rem 0 1.25rem; border-radius: 1.25rem; }
+  .quick-card .row-head { padding: 0 1rem; margin-bottom: .9rem; }
+  .quick-card .row-head h2 { font-size: clamp(1.45rem, 7vw, 1.8rem); }
+  .quick-card .more { font-size: .82rem; }
+  .quick-card .more span[aria-hidden="true"] { width: 2rem; height: 2rem; }
+  .quick {
+    display: flex;
+    grid-template-columns: none;
+    gap: .75rem;
+    padding: 0 1rem .35rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+  .quick::-webkit-scrollbar { display: none; }
+  .quick .q { flex: 0 0 min(15.5rem, 76vw); min-height: 10.5rem; scroll-snap-align: start; }
+}
+
+
+/* ---- Home hero: compact phone composition ---- */
+@media (max-width: 760px) {
+  .herox { min-height: 0; }
+  .herox-in { padding-top: 7.25rem; padding-bottom: 5rem; }
+  .herox h1 { font-size: clamp(2.35rem, 11vw, 3.35rem); line-height: 1.02; margin-bottom: .9rem; }
+  .eyebrow-l { margin-bottom: .75rem; font-size: .7rem; letter-spacing: .12em; }
+  .herox-lead { font-size: 1rem; line-height: 1.48; }
+  .herox .btns { display: grid; grid-template-columns: 1fr 1fr; gap: .65rem; margin-top: 1.35rem; }
+  .herox .btns .btn { min-width: 0; justify-content: center; padding: .85rem .6rem; font-size: .86rem; }
+  .quick-sec { margin-top: -2.75rem; }
+}
+
+/* Mobile: keep the grievance ticket in the hero flow, below the actions. */
+@media (max-width: 1000px) {
+  .herox { display: block; }
+  .herox .hero-ticket {
+    display: block;
+    visibility: visible;
+    opacity: 1;
+    position: relative;
+    z-index: 3;
+    top: auto;
+    right: auto;
+    bottom: auto;
+    left: auto;
+    width: min(31rem, calc(100% - 2rem));
+    margin: 0 auto;
+  }
+}
+@media (max-width: 760px) {
+  .herox-in { padding-bottom: 1.5rem; }
+  .hero-ticket {
+    width: calc(100% - 2rem);
+    padding-right: 3.85rem;
+    margin-bottom: 1.25rem;
+  }
+  .hero-ticket .grv-ticket-head { padding: .8rem .9rem .65rem; }
+  .hero-ticket h2 { font-size: 1.05rem; }
+  .hero-ticket .grv-ticket-id { padding: .55rem .9rem; }
+  .hero-ticket .grv-ticket-status { padding: .65rem .9rem; }
+  .hero-ticket .grv-ticket-status p { white-space: normal; font-size: .72rem; }
+  .hero-ticket .grv-ticket-steps { gap: .4rem; padding: .6rem .9rem .7rem; }
+  .hero-ticket .grv-ticket-steps li { font-size: .62rem; }
+  .hero-ticket-stub { right: .72rem; width: 1.8rem; }
+  .quick-sec { margin-top: -1.25rem; }
+}
+
+/* Desktop ticket: align to the centre of the hero copy and give its updates room. */
+@media (min-width: 1001px) {
+  .hero-ticket .grv-ticket-head { padding: 1.15rem 1.35rem .95rem; }
+  .hero-ticket .grv-ticket-id { padding: .8rem 1.35rem; }
+  .hero-ticket .grv-ticket-status { gap: .75rem; padding: .9rem 1.35rem; }
+  .hero-ticket .grv-ticket-steps { gap: .95rem; padding: .85rem 1.35rem .95rem; }
+}
+@media (max-height: 820px) and (min-width: 1241px) {
+  .hero-ticket { top: clamp(13rem, 34vh, 18rem); }
+}
+

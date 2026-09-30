@@ -1,0 +1,58 @@
+/* Site footer layout. Loaded after global.css from Layout.astro; wins over the older layered footer rules. */
+footer.site.big { padding-top: 96px; }
+
+/* Brand row: name + blurb on the left, quick links wrapping neatly on the right. */
+footer.site.big .f-brandrow { display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: 1.25rem 3rem; padding-bottom: 1.75rem; margin-bottom: 0; }
+footer.site.big .f-id { flex: 1 1 22rem; max-width: 30rem; }
+footer.site.big ul.f-links { flex: 1 1 24rem; display: flex; flex-wrap: wrap; justify-content: flex-end; gap: .55rem .5rem; max-width: 40rem; margin: 0; padding: 0; }
+footer.site.big ul.f-links a { display: inline-block; padding: .4rem .85rem; border: 1px solid rgba(255,255,255,.16); border-radius: 999px; background: rgba(255,255,255,.04); font-size: .88rem; white-space: nowrap; transition: background .2s ease, border-color .2s ease; }
+footer.site.big ul.f-links a:hover { background: rgba(255,255,255,.14); border-color: rgba(255,255,255,.4); }
+
+/* Main area: three panels, no divider lines. */
+footer.site.big .f-main {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr) minmax(0, .9fr);
+  grid-template-areas: "contact help grv" "contact help social";
+  gap: 1.25rem;
+  padding-top: 1.75rem;
+  padding-bottom: 2.5rem;
+}
+footer.site.big .f-main > .f-col { padding: 1.4rem 1.5rem; border: 1px solid rgba(255,255,255,.14); border-left: 1px solid rgba(255,255,255,.14); border-radius: 1.1rem; background: rgba(255,255,255,.05); min-width: 0; }
+footer.site.big .f-main > .f-col:first-child, footer.site.big .f-main > .f-col:last-child { padding: 1.4rem 1.5rem; }
+footer.site.big .f-main > .f-contact { grid-area: contact; }
+footer.site.big .f-main > .f-help { grid-area: help; }
+footer.site.big .f-main > .f-grv { grid-area: grv; padding: 0; background: none; border: 0; }
+footer.site.big .f-main > .f-social-col { grid-area: social; align-self: start; }
+footer.site.big .f-col h3 { margin: 0 0 1rem; }
+footer.site.big .f-col h3.f-sub { margin-top: 1.5rem; }
+footer.site.big .f-contact p { margin: 0; }
+footer.site.big .f-contact ul.fc-list { margin-top: .75rem; }
+footer.site.big .f-contact .fc-row { overflow-wrap: anywhere; }
+footer.site.big .f-help .f-sos-list { max-width: none; }
+footer.site.big .f-grv .f-square { max-width: none; width: 100%; height: 100%; margin: 0; padding: 1.4rem 1.5rem; box-sizing: border-box; }
+footer.site.big .f-social-col .f-socials { flex-direction: row; flex-wrap: wrap; align-items: center; gap: .55rem; }
+
+/* Bottom bar. */
+footer.site.big .f-base .base { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .75rem 2rem; padding-top: 1.6rem; padding-bottom: 2.4rem; }
+
+/* Tablet: two columns. */
+@media (max-width: 1100px) {
+  footer.site.big .f-main { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-areas: "contact help" "grv social"; }
+  footer.site.big .f-grv .f-square { height: auto; }
+  footer.site.big .f-social-col { align-self: stretch; }
+  footer.site.big ul.f-links { justify-content: flex-start; }
+}
+
+/* Phone: one column, everything stacked and centred-safe. */
+@media (max-width: 700px) {
+  footer.site.big { padding-top: 64px; }
+  footer.site.big .f-brandrow { gap: 1.1rem; padding-bottom: 1.25rem; }
+  footer.site.big .f-id, footer.site.big ul.f-links { flex-basis: 100%; max-width: none; }
+  footer.site.big ul.f-links a { padding: .45rem .8rem; font-size: .85rem; }
+  footer.site.big .f-main { grid-template-columns: minmax(0, 1fr); grid-template-areas: "contact" "help" "grv" "social"; gap: 1rem; padding-bottom: 1.75rem; }
+  footer.site.big .f-main > .f-col, footer.site.big .f-main > .f-col:first-child, footer.site.big .f-main > .f-col:last-child { padding: 1.15rem 1.1rem; }
+  footer.site.big .f-main > .f-grv { padding: 0; }
+  footer.site.big .f-grv .f-square { padding: 1.15rem 1.1rem; }
+  footer.site.big .f-base .base { flex-direction: column; align-items: flex-start; gap: .6rem; padding-top: 1.25rem; padding-bottom: 5.5rem; }
+}
+@media (prefers-reduced-motion: reduce) { footer.site.big ul.f-links a { transition: none; } }

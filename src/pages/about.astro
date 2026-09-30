@@ -1,14 +1,41 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import '../styles/about.css';
 import PageHead from '../components/PageHead.astro';
 import { meta, demographics, history, attractions, gettingHere, transportNote, health, education } from '../data/site';
 
-// Thumbnails: a photo where we have one, otherwise a coloured tile with an icon.
+// Locally served thumbnails keep the guide quick to load and work offline after deployment.
 const photoFor: Record<string, string> = {
   'Sumendu Lake': '/images/lake.jpg',
   'Indreni Pul and Savitri Pushpaudyan': '/images/garden.jpg',
   'Bokar Monastery': '/images/monastery.jpg',
+  'Rameetay Dara': '/images/rameetay-dara.jpg',
+  'Debisthan': '/images/debisthan.jpg',
+  'Tingling View Point': '/images/tingling-view-point.jpg',
   'Tea gardens': '/images/tea.jpg',
+  'Orange orchards': '/images/orange-orchards.jpg',
+  'Rai Dhap': '/images/rai-dhap.jpg',
+  'Mirik Church (UCNI)': '/images/mirik-church-ucni.webp',
+};
+const healthPhotoFor: Record<string, { src: string; alt: string }> = {
+  'Mirik Rural Hospital': { src: '/images/health-mirik-rural-hospital.jpg', alt: 'Entrance to Mirik BPHC' },
+  'Soureni Bustee PHC': { src: '/images/health-soureni-bustee.jpg', alt: 'Community health meeting in rural West Bengal' },
+  'Duptin PHC': { src: '/images/health-duptin.jpg', alt: 'Rural medical camp registration' },
+  'Panighatta PHC': { src: '/images/health-panighatta.jpg', alt: 'Community health camp in West Bengal' },
+};
+const schoolPhotoFor: Record<string, { src: string; alt: string }> = {
+  'Mirik College (affiliated to the University of North Bengal)': { src: '/images/school-mirik-college.jpg', alt: 'Mirik College campus' },
+  'Mirik Higher Secondary School': { src: '/images/school-mirik-higher-secondary.jpg', alt: 'Students at Mirik Higher Secondary School' },
+  'Don Bosco School': { src: '/images/school-don-bosco.jpg', alt: 'Don Bosco School campus in Mirik' },
+  'Snowdrops School': { src: '/images/school-snowdrops.jpg', alt: 'Snowdrops School building in Mirik' },
+  'Orange Lake School': { src: '/images/school-orange-lake.jpg', alt: 'Orange Lake School classroom in Mirik' },
+  'Glenmore International School': { src: '/images/school-glenmore.png', alt: 'Glenmore International School entrance in Mirik' },
+  'Brindavan Boarding School': { src: '/images/school-brindavan.jpg', alt: 'Brindavan Boarding School classroom in Mirik' },
+  'Lewis English School': { src: '/images/school-lewis.jpg', alt: 'Lewis English School assembly in Mirik' },
+  'Green Lawn School': { src: '/images/school-green-lawn.jpg', alt: 'Green Lawn School student gathering in Mirik' },
+  'Woodlands Academy': { src: '/images/school-woodlands.jpg', alt: 'Hillside school campus' },
+  'Pinehall Academy': { src: '/images/school-pinehall.jpg', alt: 'Pinehall Academy student award event in Mirik' },
+  'Temple of Wisdom': { src: '/images/school-temple-wisdom.jpg', alt: 'Learning space in Mirik' },
 };
 const kindFor: Record<string, string> = {
   'Sumendu Lake': 'lake', 'Indreni Pul and Savitri Pushpaudyan': 'garden', 'Bokar Monastery': 'monastery', 'Rameetay Dara': 'view',
@@ -37,8 +64,8 @@ const destOverride: Record<string, string> = {
 const dirUrl = (n: string) => `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent((destOverride[n] ?? cleanName(n)) + ', Mirik, Darjeeling, West Bengal')}`;
 const fromUrl = (place: string) => `https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(cleanName(place))}&destination=${encodeURIComponent('Mirik, Darjeeling, West Bengal')}`;
 const places = attractions.map((a) => ({ name: a.name, text: a.text, note: (a as any).note as string | undefined, kind: kindFor[a.name] ?? 'view', photo: photoFor[a.name] }));
-const clinics = health.map((h) => ({ name: h.name, text: h.detail, kind: 'hospital' }));
-const schools = education.map((e) => ({ name: e, text: '', kind: 'school' }));
+const clinics = health.map((h) => ({ name: h.name, text: h.detail, kind: 'hospital', photo: healthPhotoFor[h.name] }));
+const schools = education.map((e) => ({ name: e, text: '', kind: 'school', photo: schoolPhotoFor[e] }));
 ---
 <Layout title="A lake town built on a marsh | Mirik Municipality">
   <PageHead slug="about" title="A lake town built on a marsh" lead="A short history of Mirik, who lives here, and a guide for visitors and residents." />
@@ -110,7 +137,7 @@ const schools = education.map((e) => ({ name: e, text: '', kind: 'school' }));
             <article class="pcard">
               <div class="pthumb">
                 {x.photo
-                  ? <img src={x.photo} alt={x.name} loading="lazy" />
+                  ? <img src={x.photo} alt={x.name} width="800" height="600" loading="lazy" />
                   : <span class="part" style={`background:linear-gradient(145deg, ${kinds[x.kind].g[0]}, ${kinds[x.kind].g[1]})`} aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d={kinds[x.kind].path} /></svg></span>}
               </div>
               <div class="pbody">
@@ -142,8 +169,12 @@ const schools = education.map((e) => ({ name: e, text: '', kind: 'school' }));
         <h3 id="health" class="tg-h">Health care</h3>
         <div class="pgrid small">
           {clinics.map((x) => (
-            <article class="pcard compact">
-              <div class="pthumb"><span class="part" style={`background:linear-gradient(145deg, ${kinds.hospital.g[0]}, ${kinds.hospital.g[1]})`} aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d={kinds.hospital.path} /></svg></span></div>
+            <article class="pcard compact health-card">
+              <div class="pthumb">
+                {x.photo
+                  ? <img src={x.photo.src} alt={x.photo.alt} width="800" height="600" loading="lazy" />
+                  : <span class="part" style={`background:linear-gradient(145deg, ${kinds.hospital.g[0]}, ${kinds.hospital.g[1]})`} aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d={kinds.hospital.path} /></svg></span>}
+              </div>
               <div class="pbody"><h4>{x.name}</h4><p>{x.text}</p><a class="pdir" href={dirUrl(x.name)} target="_blank" rel="noopener">Get directions <span aria-hidden="true">&rarr;</span></a></div>
             </article>
           ))}
@@ -152,8 +183,12 @@ const schools = education.map((e) => ({ name: e, text: '', kind: 'school' }));
         <h3 id="schools" class="tg-h">Schools and college</h3>
         <div class="pgrid small">
           {schools.map((x) => (
-            <article class="pcard compact">
-              <div class="pthumb"><span class="part" style={`background:linear-gradient(145deg, ${kinds.school.g[0]}, ${kinds.school.g[1]})`} aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d={kinds.school.path} /></svg></span></div>
+            <article class="pcard compact school-card">
+              <div class="pthumb">
+                {x.photo
+                  ? <img src={x.photo.src} alt={x.photo.alt} width="800" height="600" loading="lazy" />
+                  : <span class="part" style={`background:linear-gradient(145deg, ${kinds.school.g[0]}, ${kinds.school.g[1]})`} aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d={kinds.school.path} /></svg></span>}
+              </div>
               <div class="pbody"><h4>{x.name}</h4><a class="pdir" href={dirUrl(x.name)} target="_blank" rel="noopener">Get directions <span aria-hidden="true">&rarr;</span></a></div>
             </article>
           ))}
