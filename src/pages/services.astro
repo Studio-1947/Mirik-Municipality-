@@ -137,7 +137,7 @@ const statusLabel: Record<string, string> = { critical: 'Critical', progress: 'I
       <div class="svc-grid">
         {services.map((s) => {
           const l = look[s.title] ?? fallback;
-          const href = s.link || '/contact/';
+          const href = s.link || '#contact';
           const ext = isExternal(href);
           return (
             <article class={`svc-card tone-${l.tone}`}>
