@@ -7,7 +7,7 @@ const [accent, soft] = accents[slug];
 ---
 <div class="pagehead plain" style={`--accent:${accent};--accent-soft:${soft}`}>
   <div class="wrap ph-in">
-    <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a> <span>/</span> {page.label}</nav>
+    {/* <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a> <span>/</span> {page.label}</nav> */}
     <p class="eyebrow">{eyebrow ?? page.label}</p>
     <h1>{title}</h1>
     {lead && <p class="lead">{lead}</p>}

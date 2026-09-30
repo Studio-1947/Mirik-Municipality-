@@ -1039,6 +1039,17 @@ export const extra: Record<string, [string, string]> = {
   // ---- Clean Mirik page: Unauthorised parking fine card ----
   "Unauthorised parking": ["अनाधिकृत पार्किङ", "অননুমোদিত পার্কিং"],
   "Parking in a non-parking zone": ["पार्किङ क्षेत्र बाहिर गाडी राख्नु", "নো-পার্কিং জোনে গাড়ি রাখা"],
+  // ---- Clean Mirik page: responsible-tourism card ----
+  "Responsible Tourism": ["जिम्मेवार पर्यटन", "দায়িত্বশীল পর্যটন"],
+  "Protect Mirik. Preserve what brings people here.": ["मिरिकको रक्षा गरौं। मानिसहरूलाई यहाँ ल्याउने कुराको संरक्षण गरौं।", "মিরিককে রক্ষা করুন। যা মানুষকে এখানে টেনে আনে, তা সংরক্ষণ করুন।"],
+  "Mirik’s lake, forests, tea gardens and mountain landscapes are more than beautiful places. They support local livelihoods, businesses and the town’s tourism economy.": ["मिरिकको ताल, जङ्गल, चियाबारी र पहाडी दृश्य सुन्दर ठाउँ मात्र होइनन्। यिनले स्थानीय जीविका, व्यवसाय र सहरको पर्यटन अर्थतन्त्रलाई धानेका छन्।", "মিরিকের লেক, বন, চা-বাগান ও পাহাড়ি দৃশ্য শুধু সুন্দর জায়গা নয়। এগুলি স্থানীয় জীবিকা, ব্যবসা ও শহরের পর্যটন অর্থনীতিকে টিকিয়ে রাখে।"],
+  "Responsible tourism means enjoying Mirik while helping protect what makes it special. Every visitor can play a part through small, thoughtful actions.": ["जिम्मेवार पर्यटन भनेको मिरिकको आनन्द लिँदै यसलाई विशेष बनाउने कुराको रक्षामा सहयोग गर्नु हो। हरेक पाहुनाले साना, विचारशील कामबाट योगदान दिन सक्छन्।", "দায়িত্বশীল পর্যটন মানে মিরিক উপভোগ করার পাশাপাশি একে বিশেষ করে তোলে এমন জিনিসগুলি রক্ষায় সাহায্য করা। প্রত্যেক পর্যটক ছোট, বিবেচনাপূর্ণ কাজের মাধ্যমে ভূমিকা রাখতে পারেন।"],
+  "Keep the lake, roads and public spaces clean.": ["ताल, सडक र सार्वजनिक स्थान सफा राख्नुहोस्।", "লেক, রাস্তা ও জনসাধারণের জায়গা পরিষ্কার রাখুন।"],
+  "Use designated bins and avoid single-use plastic.": ["तोकिएका डस्टबिन प्रयोग गर्नुहोस् र एकपटके प्लास्टिकबाट बच्नुहोस्।", "নির্দিষ্ট বিন ব্যবহার করুন এবং একবার-ব্যবহারযোগ্য প্লাস্টিক এড়িয়ে চলুন।"],
+  "Respect local culture, nature and wildlife.": ["स्थानीय संस्कृति, प्रकृति र वन्यजन्तुको सम्मान गर्नुहोस्।", "স্থানীয় সংস্কৃতি, প্রকৃতি ও বন্যপ্রাণীকে সম্মান করুন।"],
+  "Support local shops, guides and businesses.": ["स्थानीय पसल, गाइड र व्यवसायलाई साथ दिनुहोस्।", "স্থানীয় দোকান, গাইড ও ব্যবসাকে সমর্থন করুন।"],
+  "Leave Mirik as beautiful as you found it.": ["मिरिकलाई जस्तो सुन्दर पाउनुभयो, त्यस्तै छोड्नुहोस्।", "মিরিককে যেমন সুন্দর পেয়েছেন, তেমনই রেখে যান।"],
+  "When we protect Mirik, we protect its tourism, its livelihoods and its future.": ["हामीले मिरिकको रक्षा गर्दा यसको पर्यटन, जीविका र भविष्यको रक्षा गर्छौं।", "আমরা যখন মিরিককে রক্ষা করি, তখন এর পর্যটন, জীবিকা ও ভবিষ্যৎকেও রক্ষা করি।"],
   // ---- Clean Mirik page: waste-management awareness card ----
   "Waste management": ["फोहोर व्यवस्थापन", "বর্জ্য ব্যবস্থাপনা"],
   "Waste is everyone's business": ["फोहोर सबैको जिम्मेवारी हो", "বর্জ্য সবার দায়িত্ব"],

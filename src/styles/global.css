@@ -589,7 +589,7 @@ header.site .menu summary { background: rgba(255,255,255,.16); color: #fff; bord
 /* Scrolled: floating liquid-glass pill */
 header.site.scrolled {
   top: 10px; left: 50%; right: auto; transform: translateX(-50%);
-  width: min(1320px, calc(100% - 24px)); border-radius: 999px;
+  width: min(var(--pill-w), calc(100% - 24px)); border-radius: 999px;
   background: linear-gradient(135deg, rgba(255,255,255,.62), rgba(255,255,255,.28));
   -webkit-backdrop-filter: blur(22px) saturate(1.8); backdrop-filter: blur(22px) saturate(1.8);
   border: 1px solid rgba(255,255,255,.65);
@@ -626,7 +626,7 @@ html { scroll-padding-top: 150px; }
 .brand strong { font-size: 1.4rem; letter-spacing: -.02em; white-space: nowrap; }
 
 /* Header brand on two lines: "Mirik" / "Municipality" */
-header.site .brand strong { display: block; width: min-content; white-space: normal; font-size: 1.22rem; line-height: 1.02; letter-spacing: -.02em; }
+header.site .brand strong { display: block; width: min-content; white-space: normal; font-size: .96rem; line-height: 1.02; letter-spacing: -.02em; }
 
 /* Navbar dropdowns */
 nav.main li.has-sub { position: relative; display: flex; align-items: center; }
@@ -1280,7 +1280,7 @@ ul.tips li::before { content: ''; position: absolute; left: 16px; top: 17px; wid
   header.site .wrap { padding: 0 12px; gap: 8px; }
   header.site .brand { gap: 7px; }
   .brand .emblem, header.site.scrolled .brand .emblem { height: 30px; }
-  header.site .brand strong { font-size: 1.02rem; }
+  header.site .brand strong { font-size: .9rem; }
   header.site .tools { gap: 6px; }
   header.site .lang select { padding: 6px 20px 6px 9px; font-size: .78rem; }
   header.site .sos-btn { padding: 8px 10px; }
@@ -1288,12 +1288,12 @@ ul.tips li::before { content: ''; position: absolute; left: 16px; top: 17px; wid
   header.site.scrolled .wrap { padding: 0 10px; }
 }
 @media (max-width: 370px) {
-  header.site .brand strong { font-size: .94rem; }
+  header.site .brand strong { font-size: .84rem; }
   header.site .wrap { padding: 0 10px; gap: 6px; }
   header.site .lang select { padding-right: 18px; font-size: .74rem; }
 }
 @media (max-width: 340px) {
-  header.site .brand strong { font-size: .84rem; }
+  header.site .brand strong { font-size: .78rem; }
   .brand .emblem, header.site.scrolled .brand .emblem { height: 26px; }
   header.site .sos-btn { padding: 7px 8px; }
   header.site .menu summary { padding: 7px 9px; font-size: .8rem; }
@@ -1690,7 +1690,7 @@ svg.growth { max-height: 160px; }
 @media (max-width: 760px) { .wardmap-sec { padding: 56px 0; } }
 
 /* Glass boxes match the navbar pill width */
-.glass-box, .wm-glass { width: min(1320px, calc(100vw - 24px)); max-width: none; margin-left: calc(50% - min(660px, 50vw - 12px)); box-sizing: border-box; }
+.glass-box, .wm-glass { width: min(var(--pill-w), calc(100vw - 24px)); max-width: none; margin-left: calc(50% - min(var(--pill-w) / 2, 50vw - 12px)); box-sizing: border-box; }
 @media (min-width: 1000px) { .glass-box { padding-left: 44px; padding-right: 44px; } .wm-glass { padding-left: 40px; padding-right: 40px; } }
 
 /* No bold anywhere: heaviest weight is semibold */
@@ -1965,7 +1965,7 @@ header.site nav.main a[aria-current="page"]:hover { background: none; color: #b6
 header.site.scrolled nav.main a[aria-current="page"]:hover { background: none; color: var(--green); }
 
 /* Administrator card: navbar width, more details, appointment button */
-.featured { width: min(1320px, calc(100vw - 24px)); margin-left: calc(50% - min(660px, 50vw - 12px)); box-sizing: border-box; grid-template-columns: minmax(260px, 420px) 1fr; padding: 28px; gap: 48px; align-items: start; }
+.featured { width: min(var(--pill-w), calc(100vw - 24px)); margin-left: calc(50% - min(var(--pill-w) / 2, 50vw - 12px)); box-sizing: border-box; grid-template-columns: minmax(260px, 420px) 1fr; padding: 28px; gap: 48px; align-items: start; }
 @media (min-width: 1000px) { .featured { padding: 32px 44px 32px 32px; } }
 .f-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 28px 40px; margin: 6px 0 22px; }
 .f-h { font-size: .74rem; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin: 0 0 10px; font-family: inherit; font-weight: 600; }
@@ -2080,3 +2080,26 @@ header.site.scrolled .lang select {
   background-size: 12px 12px;
   background-position: right 12px center;
 }
+
+/* Width of the scrolled navbar pill, shared by the cards that line up with it.
+   From 1500px the Emergency button shows its label, so the pill grows to keep its side padding. */
+:root { --pill-w: 1320px; }
+@media (min-width: 1500px) { :root { --pill-w: 1360px; } }
+
+/* Scrolled navbar: the brand sits the same visual distance from the left, top and bottom edges.
+   Height comes from padding (not min-height) so the top and bottom gaps are exact. The left gap is
+   larger in numbers because the pill's round end curves in towards the text; on the right the pill-shaped
+   Grievance button gets the same gap as its top and bottom, so the two round ends curve together. */
+header.site.scrolled { --pill-gap: 11px; }
+header.site.scrolled .wrap { min-height: 0; padding: var(--pill-gap) var(--pill-gap) var(--pill-gap) 20px; }
+@media (max-width: 760px) { header.site.scrolled { --pill-gap: 10px; } }
+
+/* Navbar links keep the same box on every page, so the row never shifts when the active page changes:
+   the active link keeps the normal padding and weight and is marked by colour alone. */
+header.site nav.main a[aria-current="page"],
+header.site.scrolled nav.main a[aria-current="page"] { padding: 10px 8px; margin: 0; font-weight: 500; }
+header.site nav.main li.has-sub > a[aria-current="page"],
+header.site.scrolled nav.main li.has-sub > a[aria-current="page"] { padding-right: 2px; }
+header.site nav.main li.nav-administration > a[aria-current="page"], header.site nav.main li.nav-clean-mirik > a[aria-current="page"],
+header.site.scrolled nav.main li.nav-administration > a[aria-current="page"], header.site.scrolled nav.main li.nav-clean-mirik > a[aria-current="page"] { padding-right: 12px; }
+html { scrollbar-gutter: stable; }
