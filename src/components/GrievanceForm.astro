@@ -5,15 +5,23 @@ const { prefix = 'g' } = Astro.props;
 ---
 <form class="grv" data-endpoint={contact.grievanceEndpoint} data-email={contact.email} method="post" enctype="multipart/form-data" action={contact.grievanceEndpoint || undefined}>
   <div><label for={`${prefix}-name`}>Full name</label><input id={`${prefix}-name`} name="name" required autocomplete="name" /></div>
-  <div><label for={`${prefix}-phone`}>Phone number</label><input id={`${prefix}-phone`} name="phone" required inputmode="numeric" pattern="[0-9]{10}" maxlength="10" autocomplete="tel" /><div class="hint">10 digits</div></div>
+  <div><label for={`${prefix}-phone`}>Phone number</label><input id={`${prefix}-phone`} name="phone" required inputmode="numeric" pattern="[0-9]{10}" maxlength="10" data-digits title="10 digits" autocomplete="tel" /><div class="hint">10 digits</div></div>
   <fieldset class="full wa">
-    <legend>WhatsApp</legend>
+    <legend>
+      <svg class="wa-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 11.6a8.5 8.5 0 0 1-12.6 7.5L3.5 20.5l1.4-4.2A8.5 8.5 0 1 1 20.5 11.6z" /><path d="M9 8.6c0 3.3 2.6 6.2 6 6.4l1-1.5-2-1-1 .8a4.6 4.6 0 0 1-2.2-2.3l.8-1-1-2z" /></svg>
+      <span>WhatsApp</span>
+    </legend>
+    <!-- Native radios stay in the page (visually hidden) so keyboard, screen readers and form data work as before. -->
     <div class="wa-opts">
-      <label><input type="radio" name="wa_mode" value="same" checked /> <span>Same as phone number</span></label>
-      <label><input type="radio" name="wa_mode" value="other" /> <span>Different number</span></label>
-      <label><input type="radio" name="wa_mode" value="none" /> <span>I don't have WhatsApp</span></label>
+      <label class="wa-opt"><input type="radio" name="wa_mode" value="same" checked /><span class="wa-tick" aria-hidden="true"></span><span>Same as phone number</span></label>
+      <label class="wa-opt"><input type="radio" name="wa_mode" value="other" /><span class="wa-tick" aria-hidden="true"></span><span>Different number</span></label>
+      <label class="wa-opt"><input type="radio" name="wa_mode" value="none" /><span class="wa-tick" aria-hidden="true"></span><span>I don't have WhatsApp</span></label>
     </div>
-    <div class="wa-num" hidden><label for={`${prefix}-wa`}>WhatsApp number</label><input id={`${prefix}-wa`} name="whatsapp" inputmode="numeric" pattern="[0-9]{10}" maxlength="10" autocomplete="off" /><div class="hint">10 digits</div></div>
+    <div class="wa-num" hidden>
+      <label for={`${prefix}-wa`}>WhatsApp number</label>
+      <div class="wa-field"><span class="wa-cc" aria-hidden="true">+91</span><input id={`${prefix}-wa`} name="whatsapp" inputmode="numeric" pattern="[0-9]{10}" maxlength="10" data-digits title="10 digits" autocomplete="off" /></div>
+      <div class="hint">10 digits</div>
+    </div>
   </fieldset>
   <div>
     <label for={`${prefix}-ward`}>Ward</label>
@@ -34,6 +42,9 @@ const { prefix = 'g' } = Astro.props;
   <p class="form-msg" role="status"></p>
 </form>
 <script>
+  import { digitsOnly } from '../scripts/digits-only';
+  digitsOnly();
+
   document.querySelectorAll<HTMLFormElement>('form.grv').forEach((f) => {
     const modes = f.querySelectorAll<HTMLInputElement>('input[name="wa_mode"]');
     const wrap = f.querySelector<HTMLElement>('.wa-num');
@@ -47,3 +58,30 @@ const { prefix = 'g' } = Astro.props;
     sync();
   });
 </script>
+
+<style>
+  /* WhatsApp choice. Scoped to this component; the `form.grv` prefix keeps these ahead of the older
+     .wa-opts pill rules in global.css. Colours follow the form's dark glass (white text, #7fd1a3 accent). */
+  form.grv .wa legend { display: flex; align-items: center; gap: 7px; margin-bottom: 10px; }
+  .wa-ic { width: 17px; height: 17px; flex: none; color: #7fd1a3; }
+  form.grv .wa-opts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  form.grv .wa-opts .wa-opt { position: relative; display: flex; align-items: center; gap: 10px; margin: 0; min-height: 48px; padding: 10px 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,.28); background: rgba(255,255,255,.08); color: #fff; font-size: .86rem; font-weight: 500; line-height: 1.25; cursor: pointer; transition: background-color .15s ease, border-color .15s ease; }
+  form.grv .wa-opts .wa-opt:hover { background: rgba(255,255,255,.14); }
+  /* Hide the native radio but keep it focusable and announced */
+  form.grv .wa-opts .wa-opt input { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; padding: 0; opacity: 0; cursor: pointer; }
+  .wa-tick { flex: none; width: 18px; height: 18px; border-radius: 50%; border: 2px solid rgba(255,255,255,.55); display: grid; place-items: center; transition: background-color .15s ease, border-color .15s ease; }
+  .wa-tick::after { content: ''; width: 5px; height: 9px; margin-top: -2px; border: solid #0e2a32; border-width: 0 2px 2px 0; transform: rotate(45deg) scale(0); transition: transform .15s ease; }
+  form.grv .wa-opts .wa-opt:has(input:checked) { background: rgba(127,209,163,.2); border-color: #7fd1a3; }
+  .wa-opt:has(input:checked) .wa-tick { background: #7fd1a3; border-color: #7fd1a3; }
+  .wa-opt:has(input:checked) .wa-tick::after { transform: rotate(45deg) scale(1); }
+  form.grv .wa-opts .wa-opt:has(input:focus-visible) { outline: 2px solid #7fd1a3; outline-offset: 2px; }
+
+  form.grv .wa-num { margin-top: 12px; animation: wa-reveal .18s ease; }
+  .wa-field { display: flex; align-items: stretch; }
+  .wa-cc { display: grid; place-items: center; padding: 0 12px; border: 1px solid rgba(255,255,255,.3); border-right: 0; border-radius: 9px 0 0 9px; background: rgba(255,255,255,.18); color: #fff; font-weight: 600; font-size: .92rem; }
+  form.grv .wa-field input { border-radius: 0 9px 9px 0; min-width: 0; }
+  @keyframes wa-reveal { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
+
+  @media (max-width: 640px) { form.grv .wa-opts { grid-template-columns: 1fr; } }
+  @media (prefers-reduced-motion: reduce) { form.grv .wa-num { animation: none; } .wa-tick, .wa-tick::after, form.grv .wa-opts .wa-opt { transition: none; } }
+</style>
