@@ -76,7 +76,7 @@ export const administration = {
     role: 'Administrator',
     // Provided by the office in September 2026 (replaces the earlier June 2026 press report).
     name: 'Krishna Kanta Ghosh, WBCS',
-    photo: '/images/people/krishna-kanta-ghosh.jpg',
+    photo: '/images/people/krishna.jpeg',
     photoLarge: '/images/people/krishna-kanta-ghosh-large.jpg',
   },
   officers: [
@@ -410,15 +410,16 @@ export const sources = [
 
 // "Mirik Municipality Body" grid on the home page (8 cards).
 // First five names were supplied by the office (Sept 2026); the last three are placeholders.
-// Cards 2 to 8 currently use two STOCK sample portraits (public/images/people/sample-*.jpg). Replace with the officers' real photos before launch.
+// Real portraits supplied by the office are used where available. Replace the remaining
+// placeholder cards only when the office confirms the designation and portrait.
 // VERIFY: replace the placeholders (name: '') with real names, photos and designations from the office.
 export const body: { role: string; name: string; note?: string; tone: string; tel?: string; photo?: string }[] = [
   { role: 'Administrator', name: administration.administrator.name, tone: '#6a4c93', photo: administration.administrator.photo },
-  { role: 'Executive Officer', name: administration.officers[0].name, note: 'Also Nodal Officer, NULM', tone: '#1f4d3a', tel: administration.officers[0].tel , photo: '/images/people/staff-2.jpg' },
+  { role: 'Executive Officer', name: administration.officers[0].name, note: 'Also Nodal Officer, NULM', tone: '#1f4d3a', tel: administration.officers[0].tel , photo: '/images/people/ajay.jpeg' },
   { role: 'Finance Officer', name: administration.officers[1].name, tone: '#2f6f8f', tel: administration.officers[1].tel },
-  { role: 'Sub Assistant Engineer', name: 'Nimasang Tamang', tone: '#a2416b' , photo: '/images/people/staff-1.jpg' },
-  { role: 'Sub Assistant Engineer', name: 'Bhaskar Mothay', tone: '#b3471d', photo: '/images/people/bhaskar-mothay.jpg' },
+  { role: 'Sub Assistant Engineer', name: 'Nimasang Tamang', tone: '#a2416b' , photo: '/images/people/nimasang.jpeg' },
+  { role: 'Sub Assistant Engineer', name: 'Bhaskar Mothay', tone: '#b3471d', photo: '/images/people/bhaskar.jpeg' },
   { role: 'Chairperson', name: '', note: 'Vacant since 19 May 2026', tone: '#b07d12' , photo: '/images/people/sample-1.jpg' },
-  { role: 'Health Officer (CBPHCS)', name: 'Mahendra Pradhan', tone: '#2b7a5a', photo: '/images/people/mahendra-pradhan.jpg' }, // VERIFY role
-  { role: 'Head Clerk', name: 'Mamta Subba', tone: '#1f6b47', photo: '/images/people/mamta-subba.jpg' },
+  { role: 'Health Officer (CBPHCS)', name: 'Mahendra Pradhan', tone: '#2b7a5a', photo: '/images/people/mahendra.jpeg' }, // VERIFY role
+  { role: 'Head Clerk', name: 'Mamta Subba', tone: '#1f6b47', photo: '/images/people/mamta.jpeg' },
 ];
