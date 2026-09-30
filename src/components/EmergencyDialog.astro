@@ -1,0 +1,70 @@
+---
+// Emergency helplines pop-up. Rendered once in Layout.astro and opened by the header "Emergency Call" button
+// (that button is a normal link to /emergency/, so it still works without JavaScript).
+import { emergency } from '../data/site';
+---
+<dialog id="sos-dialog" aria-labelledby="sos-title">
+  <div class="dlg-card">
+    <div class="dlg-head">
+      <h2 id="sos-title">Emergency helplines</h2>
+      <button type="button" class="dlg-close" aria-label="Close">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" /></svg>
+      </button>
+    </div>
+    <p class="dlg-lead">Tap a service to call it.</p>
+    <ul class="sos-list">
+      {emergency.map((e) => (
+        <li>
+          <a class="sos-call" href={`tel:${e.number}`} aria-label={`Call ${e.label} ${e.number}`}>
+            <span class="sos-dept">{e.label}</span>
+            <b class="sos-num">{e.number}</b>
+            <span class="sos-go">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z" /></svg>
+              <span>Call</span>
+            </span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</dialog>
+
+<script>
+  // Header "Emergency Call" button opens the helplines pop-up instead of going to /emergency/.
+  const sos = document.getElementById('sos-dialog') as HTMLDialogElement | null;
+  const sosBtn = document.querySelector<HTMLAnchorElement>('header.site .sos-btn');
+  if (sos && sosBtn && typeof sos.showModal === 'function') {
+    sosBtn.addEventListener('click', (e) => {
+      if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
+      e.preventDefault();
+      sos.showModal();
+      document.body.classList.add('dlg-open');
+    });
+    sos.querySelector('.dlg-close')?.addEventListener('click', () => sos.close());
+    sos.addEventListener('click', (e) => { if (e.target === sos) sos.close(); });
+    sos.addEventListener('close', () => document.body.classList.remove('dlg-open'));
+  }
+</script>
+
+<style>
+  /* Scoped to this component. Card look (.dlg-card, .dlg-close) comes from global.css, shared with the grievance pop-up. */
+  dialog#sos-dialog { border: 0; padding: 0; background: transparent; max-width: min(460px, calc(100% - 24px)); width: 100%; max-height: calc(100dvh - 24px); overflow: visible; color: #fff; }
+  dialog#sos-dialog::backdrop { background: rgba(8,28,22,.55); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+  dialog#sos-dialog[open] { animation: dlg-in .22s ease; }
+  /* The card must not scroll: its glowing edge (::after) sits outside it and would add both scrollbars.
+     `clip` trims that glow to the rounded corners (like the grievance pop-up) without making the card scrollable.
+     Only the list scrolls, and only on screens too short to show every number. */
+  #sos-dialog .dlg-card { padding: 26px 24px 24px; overflow: clip; max-height: none; }
+  .sos-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; max-height: calc(100dvh - 190px); overflow-y: auto; overscroll-behavior: contain; }
+  .sos-call { display: grid; grid-template-columns: 1fr auto auto; align-items: center; gap: 14px; min-height: 52px; padding: 8px 8px 8px 16px; border-radius: 14px; background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.16); color: #fff; text-decoration: none; }
+  .sos-call:hover, .sos-call:focus-visible { background: rgba(255,255,255,.18); color: #fff; text-decoration: none; }
+  .sos-dept { font-weight: 500; }
+  .sos-num { font-size: 1.2rem; color: #ffb59a; font-variant-numeric: tabular-nums; }
+  .sos-go { display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; border-radius: 999px; background: var(--alert); font-weight: 600; font-size: .85rem; }
+  .sos-go svg { width: 14px; height: 14px; flex: none; }
+  .sos-list li:first-child .sos-call { background: var(--alert); border-color: transparent; }
+  .sos-list li:first-child .sos-num { color: #fff; }
+  .sos-list li:first-child .sos-go { background: #fff; color: var(--alert); }
+  @media (max-width: 400px) { #sos-dialog .dlg-card { padding: 20px 14px 16px; } .sos-call { gap: 10px; padding-left: 12px; } .sos-go > span { display: none; } .sos-go { padding: 9px; } }
+  @media (prefers-reduced-motion: reduce) { dialog#sos-dialog[open] { animation: none; } }
+</style>

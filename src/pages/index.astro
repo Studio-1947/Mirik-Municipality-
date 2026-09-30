@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import '../styles/home.css';
 import blockMapRaw from '../assets/mirik-block-map.svg?raw';
 import Avatar from '../components/Avatar.astro';
 import { notices, facts, body, contact, wards, demographics } from '../data/site';
@@ -135,6 +136,32 @@ const artPaths: Record<string, string> = {
         <a class="btn outline" href="/notices/">Latest Notices <span aria-hidden="true">&rarr;</span></a>
       </div>
     </div>
+    <aside class="grv-ticket hero-ticket" aria-labelledby="hero-ticket-title">
+      <span class="hero-ticket-stub" aria-hidden="true"></span>
+      <div class="grv-ticket-head">
+        <div>
+          <p class="grv-ticket-eyebrow">Grievance updates</p>
+          <h2 id="hero-ticket-title">Streetlight repair</h2>
+        </div>
+        <span class="grv-ticket-tag">Ward III</span>
+      </div>
+      <div class="grv-ticket-id">
+        <span>Case reference</span>
+        <strong>MM-2026-0187</strong>
+      </div>
+      <div class="grv-ticket-status">
+        <span class="grv-ticket-dot" aria-hidden="true"></span>
+        <div>
+          <strong>Inspection scheduled</strong>
+          <p>Field team assigned · 30 September 2026</p>
+        </div>
+      </div>
+      <ol class="grv-ticket-steps" aria-label="Grievance progress">
+        <li>28 Sep<br />Submitted</li>
+        <li>30 Sep<br />Field visit</li>
+        <li>02 Oct<br />Update due</li>
+      </ol>
+    </aside>
   </section>
 
   <section class="quick-sec">

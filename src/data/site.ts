@@ -273,21 +273,29 @@ export const schemes = [
 ];
 
 // Cleanliness rules in force from 1 September 2026 (all WB municipalities).
+// `title` is the short card heading and `image` the illustration on the Clean Mirik page; `offence` is the official wording.
 export const fines = [
-  { offence: 'Spitting in public', amount: 'Rs 100' },
-  { offence: 'Throwing garbage or littering on the road', amount: 'Rs 200' },
-  { offence: 'Urinating or defecating in public', amount: 'Rs 200' },
-  { offence: 'Using banned plastic carry bags', amount: 'Rs 200' },
-  { offence: 'Illegal dumping of garbage', amount: 'Rs 200' },
+  { title: 'Spitting', offence: 'Spitting in public', amount: 'Rs 100', image: '/images/clean-mirik/fine-spitting-in-public.webp' },
+  { title: 'Littering', offence: 'Throwing garbage or littering on the road', amount: 'Rs 200', image: '/images/clean-mirik/fine-littering-on-road.webp' },
+  { title: 'Public urination', offence: 'Urinating or defecating in public', amount: 'Rs 200', image: '/images/clean-mirik/fine-urinating-in-public.webp' },
+  { title: 'Plastic bags', offence: 'Using banned plastic carry bags', amount: 'Rs 200', image: '/images/clean-mirik/fine-plastic-carry-bags.webp' },
+  { title: 'Illegal dumping', offence: 'Illegal dumping of garbage', amount: 'Rs 200', image: '/images/clean-mirik/fine-illegal-garbage-dumping.webp' },
 ];
 
 // Bin colours under the Mirik Solid Waste Management Bye-Laws, 2023.
+// VERIFY: the `items` examples follow the national SWM Rules 2016 and Bio-Medical Waste Rules 2016,
+// not the Mirik bye-law text. Confirm with the office before launch. `icon` picks a drawing on the Clean Mirik page.
 export const bins = [
-  { colour: 'Green', hex: '#2e8b57', use: 'Biodegradable (kitchen and garden waste)' },
-  { colour: 'Blue', hex: '#2f6fb3', use: 'Non-biodegradable (plastic, paper, metal, glass)' },
-  { colour: 'Black', hex: '#2a2a2a', use: 'Hazardous waste' },
-  { colour: 'White', hex: '#f4f4f4', use: 'Biomedical waste' },
-  { colour: 'Yellow', hex: '#e8b923', use: 'COVID waste' },
+  { colour: 'Green', hex: '#2e8b57', use: 'Biodegradable (kitchen and garden waste)', image: '/images/clean-mirik/bin-green.webp',
+    items: [{ label: 'Food scraps', icon: 'food' }, { label: 'Vegetable peels', icon: 'peel' }, { label: 'Leaves and flowers', icon: 'leaf' }] },
+  { colour: 'Blue', hex: '#2f6fb3', use: 'Non-biodegradable (plastic, paper, metal, glass)', image: '/images/clean-mirik/bin-blue.webp',
+    items: [{ label: 'Plastic bottles', icon: 'bottle' }, { label: 'Paper and cardboard', icon: 'box' }, { label: 'Metal cans', icon: 'can' }, { label: 'Glass jars', icon: 'jar' }] },
+  { colour: 'Black', hex: '#2a2a2a', use: 'Hazardous waste', image: '/images/clean-mirik/bin-black.webp',
+    items: [{ label: 'Batteries', icon: 'battery' }, { label: 'Paint cans', icon: 'paint' }, { label: 'Tube lights and CFLs', icon: 'bulb' }] },
+  { colour: 'White', hex: '#f4f4f4', use: 'Biomedical waste', image: '/images/clean-mirik/bin-white.webp',
+    items: [{ label: 'Needles and syringes', icon: 'syringe' }, { label: 'Blades', icon: 'blade' }] },
+  { colour: 'Yellow', hex: '#e8b923', use: 'COVID waste', image: '/images/clean-mirik/bin-yellow.webp',
+    items: [{ label: 'Used masks', icon: 'mask' }, { label: 'Used gloves', icon: 'glove' }] },
 ];
 
 export const projects = [

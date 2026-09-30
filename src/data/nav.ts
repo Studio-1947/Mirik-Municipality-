@@ -67,10 +67,11 @@ export const sections: Record<string, { href: string; label: string }[]> = {
     { href: '#fines', label: 'Fines' },
     { href: '#segregation', label: 'Waste segregation' },
   ],
-  contact: [
-    { href: '#details', label: 'Contact details' },
-    { href: '#rti', label: 'Right to Information' },
-    { href: '#links', label: 'Useful links' },
-    { href: '#map', label: 'Map' },
-  ],
+  // Contact now scrolls to the footer, so it has no dropdown. Restore this if the Contact page comes back.
+  // contact: [
+  //   { href: '#details', label: 'Contact details' },
+  //   { href: '#rti', label: 'Right to Information' },
+  //   { href: '#links', label: 'Useful links' },
+  //   { href: '#map', label: 'Map' },
+  // ],
 };

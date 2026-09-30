@@ -1,4 +1,7 @@
 ---
+// PARKED: the Contact page is switched off. The underscore in the file name stops Astro building it.
+// The nav "Contact" link now scrolls to the footer (#contact) and /contact/ redirects to /#contact (astro.config.mjs).
+// To bring it back: rename to contact.astro, remove that redirect, and restore `contact` in `sections` (src/data/nav.ts).
 import Layout from '../layouts/Layout.astro';
 import PageHead from '../components/PageHead.astro';
 import { contact, links } from '../data/site';

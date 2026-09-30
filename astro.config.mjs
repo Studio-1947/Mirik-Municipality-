@@ -5,4 +5,5 @@ import { defineConfig } from 'astro/config';
 export default defineConfig({
   site: 'https://mirikmunicipality.example',
   redirects: { '/projects': '/notices/#projects', '/announcements': '/notices/', '/town-guide': '/about/#town-guide' },
+  redirects: { '/projects': '/services/#projects', '/announcements': '/notices/', '/town-guide': '/about/#town-guide', '/contact': '/#contact' },
 });
