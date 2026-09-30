@@ -168,7 +168,7 @@ const schools = education.map((e) => ({ name: e, text: '', kind: 'school', photo
         <h3 id="health" class="tg-h">Health care</h3>
         <div class="pgrid small">
           {clinics.map((x) => (
-            <article class="pcard compact">
+            <article class="pcard compact health-card">
               <div class="pthumb">
                 {x.photo
                   ? <img src={x.photo.src} alt={x.photo.alt} width="800" height="600" loading="lazy" />
@@ -182,7 +182,7 @@ const schools = education.map((e) => ({ name: e, text: '', kind: 'school', photo
         <h3 id="schools" class="tg-h">Schools and college</h3>
         <div class="pgrid small">
           {schools.map((x) => (
-            <article class="pcard compact">
+            <article class="pcard compact school-card">
               <div class="pthumb">
                 {x.photo
                   ? <img src={x.photo.src} alt={x.photo.alt} width="800" height="600" loading="lazy" />

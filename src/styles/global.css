@@ -2373,3 +2373,25 @@ form.grv select:focus { background-image: linear-gradient(45deg, transparent 50%
 @media (max-height: 820px) and (min-width: 1241px) {
   .hero-ticket { top: clamp(13rem, 34vh, 18rem); }
 }
+
+/* About guide: a consistent photo-led treatment for health and education cards. */
+#town-guide .pgrid.small { align-items: stretch; }
+#town-guide .pcard.compact { min-height: 100%; box-shadow: 0 4px 14px rgba(15,50,40,.045); }
+#town-guide .pcard.compact .pthumb { aspect-ratio: 16 / 8.4; background: #dbe8e2; }
+#town-guide .pcard.compact .pthumb::after { content: ''; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(180deg, transparent 52%, rgba(7,33,26,.14)); }
+#town-guide .pcard.compact .pthumb img { object-position: center; transform: scale(1.001); transition: transform .35s ease, filter .35s ease; }
+#town-guide .pcard.compact:hover .pthumb img { transform: scale(1.04); filter: saturate(1.06) contrast(1.02); }
+#town-guide .pcard.compact .pbody { gap: 9px; padding: 16px; }
+#town-guide .pcard.compact h4 { min-height: 2.45em; font-size: 1rem; line-height: 1.22; }
+#town-guide .pcard.compact .pdir { min-height: 2.6rem; padding-inline: 17px; }
+#town-guide .health-card .pdir { background: #a12b2b; }
+#town-guide .health-card .pdir:hover { background: #7c1e1e; }
+#town-guide .school-card .pdir { background: #3d358d; }
+#town-guide .school-card .pdir:hover { background: #2d276d; }
+@media (max-width: 600px) {
+  #town-guide .pcard.compact .pbody { padding: 14px; }
+  #town-guide .pcard.compact h4 { min-height: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  #town-guide .pcard.compact .pthumb img { transition: none; }
+}
