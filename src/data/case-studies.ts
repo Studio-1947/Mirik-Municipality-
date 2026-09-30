@@ -95,7 +95,7 @@ export const caseStudies: CaseStudy[] = [
       { name: 'Mirik Municipality', role: 'New tap connections and supply complaints' },
     ],
     residents: [
-      { text: 'Ask at the Municipality Office about a new tap connection. Take your holding number.', href: '/contact/', cta: 'Office address and hours' },
+      { text: 'Ask at the Municipality Office about a new tap connection. Take your holding number.', href: '#contact', cta: 'Office address and hours' },
       { text: 'Report leaks, low pressure or no supply with the grievance form.', href: '/grievance/', cta: 'Report a problem' },
       { text: 'Do not damage or tap into new pipelines. Report any damage you see.' },
     ],
@@ -254,7 +254,7 @@ export const caseStudies: CaseStudy[] = [
     residents: [
       { text: 'Keep the helpline numbers handy and read the landslide advice.', href: '/emergency/', cta: 'Emergency numbers' },
       { text: 'Report cracks in the ground, blocked drains or new slips near homes straight away.', href: '/grievance/', cta: 'Report a problem' },
-      { text: 'If your family lost documents in the landslides, ask at the office how to replace them.', href: '/contact/', cta: 'Office address and hours' },
+      { text: 'If your family lost documents in the landslides, ask at the office how to replace them.', href: '#contact', cta: 'Office address and hours' },
     ],
     challenges: [
       { title: 'Monsoon damage', text: 'Rain damaged the temporary bridge in June 2026, and the river is eroding the site of the permanent bridge.', src: 'nh2026' },
@@ -368,7 +368,7 @@ export const caseStudies: CaseStudy[] = [
       { name: 'Mirik Municipality', role: 'Local coordination; Executive Officer listed as nodal officer' },
     ],
     residents: [
-      { text: 'Ask the Municipality Office about the current local contact point for livelihood, training or vendor support.', href: '/contact/', cta: 'Office address and hours' },
+      { text: 'Ask the Municipality Office about the current local contact point for livelihood, training or vendor support.', href: '#contact', cta: 'Office address and hours' },
       { text: 'Street vendors can ask about local vending arrangements, identification and available support schemes.' },
       { text: 'If you are facing a municipal service issue affecting your work or neighbourhood, send a grievance with the location.', href: '/grievance/', cta: 'Report a problem' },
     ],
@@ -424,7 +424,7 @@ export const caseStudies: CaseStudy[] = [
       { name: 'Mirik Municipality', role: 'Ward surveys and local Housing for All planning' },
     ],
     residents: [
-      { text: 'Ask the Municipality Office whether there is a current PMAY-U application or survey process for Mirik.', href: '/contact/', cta: 'Office address and hours' },
+      { text: 'Ask the Municipality Office whether there is a current PMAY-U application or survey process for Mirik.', href: '#contact', cta: 'Office address and hours' },
       { text: 'Keep proof of identity, household details and property or tenancy documents ready if the office requests them.' },
       { text: 'Report an unsafe drain, broken water connection or other local service issue through the grievance form.', href: '/grievance/', cta: 'Report a problem' },
     ],
@@ -480,7 +480,7 @@ export const caseStudies: CaseStudy[] = [
     ],
     residents: [
       { text: 'For emergency care, call the emergency number or go to the nearest appropriate health facility.', href: '/emergency/', cta: 'Emergency numbers' },
-      { text: 'Ask the Municipality Office for the current local CBPHCS contact or clinic information.', href: '/contact/', cta: 'Office address and hours' },
+      { text: 'Ask the Municipality Office for the current local CBPHCS contact or clinic information.', href: '#contact', cta: 'Office address and hours' },
       { text: 'Report a sanitation, water or other municipal issue that is affecting your neighbourhood’s health.', href: '/grievance/', cta: 'Report a problem' },
     ],
     challenges: [
