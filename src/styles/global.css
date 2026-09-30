@@ -2042,10 +2042,10 @@ form.grv select:focus { background-image: linear-gradient(45deg, transparent 50%
 }
 
 /* Header tools: one colour family for EN pill, Emergency Call and Grievance.
-   Two shades of green — emergency uses the brighter --green, grievance --green-deep,
-   and the language pill a translucent green glass so all three read as a set. */
-header.site .sos-btn { background: var(--green); }
-header.site .sos-btn:hover { background: var(--green-deep); }
+   Emergency keeps the conventional alert rust (--alert) for urgency; grievance and the
+   language pill follow in deep green so the trio still reads as one set. */
+header.site .sos-btn { background: var(--alert); }
+header.site .sos-btn:hover { background: #8f3612; }
 header.site .cta-btn { background: var(--green-deep); }
 header.site .cta-btn:hover { background: var(--navy); }
 header.site .lang select { background-color: rgba(46,139,62,.32); border-color: rgba(255,255,255,.55); color: #fff; }
