@@ -2,28 +2,97 @@
 import Layout from '../layouts/Layout.astro';
 import PageHead from '../components/PageHead.astro';
 import { fines, bins } from '../data/site';
+
+// Small line drawings for the "what goes in" lists (24x24, drawn with the text colour).
+const icons: Record<string, string> = {
+  food: 'M3 11h18a9 9 0 0 1-18 0z M8 8c0-2 2-2 2-4 M13 8c0-2 2-2 2-4',
+  peel: 'M4 5c0 9 5 14 14 14 2 0 2-2 0-2-6 0-10-4-11-11 0-2-3-2-3-1z',
+  leaf: 'M5 19C5 10 11 5 20 4c0 9-5 15-14 15z M5 19l8-8',
+  bottle: 'M10 2h4v3l2 3v12a2 2 0 0 1-2 2h-4a2 2 0 0 1-2-2V8l2-3z M8 12h8',
+  box: 'M3 8l9-4 9 4v10l-9 4-9-4z M3 8l9 4 9-4 M12 12v10',
+  can: 'M6 5a6 2 0 0 1 12 0v14a6 2 0 0 1-12 0z M6 5a6 2 0 0 0 12 0',
+  jar: 'M8 3h8v3H8z M7 6h10l1 3v10a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V9z',
+  battery: 'M7 5h10v16H7z M10 2h4v3h-4z M12 10v5 M9.5 12.5h5',
+  paint: 'M4 8h16l-2 13H6z M4 8c0-2.5 16-2.5 16 0 M7 5c3-3 7-3 10 0',
+  bulb: 'M9 18h6 M10 21h4 M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2V16h5v-.1c0-.8.4-1.5 1-2A6 6 0 0 0 12 3z',
+  syringe: 'M17 3l4 4 M19 5l-11 11-4 1 1-4 11-11 M11 7l2 2 M8 10l2 2 M5 19l-3 3',
+  blade: 'M2 7h20v10H2z M7 10.5h10v3H7z',
+  mask: 'M5 8c3-1 11-1 14 0v6c-2 4-12 4-14 0z M5 9H2v2c0 2 1 3 3 3 M19 9h3v2c0 2-1 3-3 3 M8 11h8 M8 14h8',
+  glove: 'M8 22v-8L5.5 10a1.5 1.5 0 0 1 2.5-1.6L9.5 10V4a1.5 1.5 0 0 1 3 0v5V3a1.5 1.5 0 0 1 3 0v6V5a1.5 1.5 0 0 1 3 0v10c0 4-2 7-5 7z',
+};
 ---
 <Layout title="Clean Mirik | Mirik Municipality">
   <PageHead slug="clean-mirik" title="Cleanliness rules from 1 September 2026" lead="New state rules apply in every municipality and notified area of West Bengal. Violations attract a fine." />
     <section class="clean" id="clean-mirik">
-      <div class="wrap grid-2">
-        <div>
-          <table class="fines" id="fines">
-            <tbody>
-              {fines.map((f) => <tr><td>{f.offence}</td><td>{f.amount}</td></tr>)}
-            </tbody>
-          </table>
-          <p class="motto">Clean city, healthy life: our shared responsibility.</p>
-        </div>
-        <div>
-          <h3 id="segregation">Sort your waste at home</h3>
-          <p class="lead" style="font-size:.95rem">Under the Mirik Solid Waste Management Bye-Laws, 2023, every household must separate waste at source and use the right bin. Never throw waste into drains, the lake or public spaces.</p>
-          <ul class="bins">
-            {bins.map((b) => (
-              <li><span class="sw" style={`background:${b.hex}`}></span><span><b>{b.colour}</b>{b.use}</span></li>
-            ))}
-          </ul>
-        </div>
+      <div class="wrap">
+        <h2 id="fines" class="cm-title">Fines</h2>
+        <ul class="cm-fines">
+          {fines.map((f) => (
+            <li class="cm-fine">
+              <img src={f.image} alt="" width="640" height="640" loading="lazy" decoding="async" />
+              <h3 class="cm-fine-title">{f.title}</h3>
+              <p class="cm-offence">{f.offence}</p>
+              <p class="cm-amount"><span>Fine</span> <b>{f.amount}</b></p>
+            </li>
+          ))}
+        </ul>
+        <p class="motto">Clean city, healthy life: our shared responsibility.</p>
+      </div>
+    </section>
+    <section class="cm-sort">
+      <div class="wrap">
+        <p class="eyebrow">Waste segregation</p>
+        <h2 id="segregation">Sort your waste at home</h2>
+        <p class="lead">Under the Mirik Solid Waste Management Bye-Laws, 2023, every household must separate waste at source and use the right bin. Never throw waste into drains, the lake or public spaces.</p>
+        <ul class="cm-bins">
+          {bins.map((b) => (
+            <li class="cm-bin">
+              <img src={b.image} alt="" width="320" height="300" loading="lazy" decoding="async" />
+              <p class="cm-bin-colour">{b.colour}</p>
+              <p class="cm-bin-use">{b.use}</p>
+              <ul class="cm-bin-items" aria-label="What goes in">
+                {b.items.map((it) => (
+                  <li>
+                    <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d={icons[it.icon]} /></svg>
+                    <span>{it.label}</span>
+                  </li>
+                ))}
+              </ul>
+            </li>
+          ))}
+        </ul>
       </div>
     </section>
 </Layout>
+
+<style>
+  /* Scoped to this page (Astro adds a data-astro-cid attribute), so it cannot clash with global.css. */
+  /* Fines: illustrated cards */
+  .clean .cm-title { font-size: clamp(1.4rem, 2.4vw, 1.8rem); margin-bottom: 20px; }
+  .cm-fines { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; }
+  /* Each card spans 4 rows of the parent grid (subgrid), so titles, dividers and amounts line up across a row */
+  .cm-fine { display: grid; grid-template-rows: subgrid; grid-row: span 4; row-gap: 0; background: var(--card); border-radius: var(--radius); overflow: hidden; box-shadow: 0 8px 24px rgba(0,0,0,.25); }
+  .cm-fine img { display: block; width: 100%; height: auto; aspect-ratio: 1; object-fit: cover; border-bottom: 4px solid var(--alert); }
+  .cm-fine .cm-fine-title { margin: 0; padding: 16px 16px 4px; font-family: inherit; font-size: 1.2rem; font-weight: 700; line-height: 1.25; color: var(--ink); }
+  .cm-offence { margin: 0; padding: 0 16px 14px; font-size: .85rem; line-height: 1.4; color: var(--muted); }
+  .cm-amount { margin: 0 16px; display: flex; align-items: baseline; justify-content: space-between; gap: 8px; padding: 12px 0 18px; border-top: 1px solid var(--line); color: var(--muted); }
+  .cm-amount span { font-size: .75rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; }
+  .cm-amount b { font-size: 1.5rem; font-weight: 800; line-height: 1; color: var(--alert); white-space: nowrap; }
+  @media (max-width: 980px) { .cm-fines { grid-template-columns: repeat(3, 1fr); } }
+  @media (max-width: 640px) { .cm-fines { grid-template-columns: repeat(2, 1fr); gap: 12px; } .cm-fine .cm-fine-title { padding: 12px 12px 4px; font-size: 1.02rem; } .cm-offence { padding: 0 12px 10px; font-size: .8rem; } .cm-amount { margin: 0 12px; padding: 10px 0 14px; } .cm-amount b { font-size: 1.25rem; } }
+
+  /* Waste sorting: light section, separate from the dark fines band */
+  .cm-sort { background: var(--paper); border-top: 4px solid var(--green); }
+  .cm-sort .eyebrow { color: var(--green-deep); }
+  .cm-sort .lead { font-size: 1rem; margin-bottom: 28px; }
+  .cm-bins { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; }
+  .cm-bin { display: grid; grid-template-rows: subgrid; grid-row: span 4; row-gap: 0; background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 20px 16px 18px; text-align: center; }
+  .cm-bin img { display: block; width: 100%; height: 110px; margin: 0 auto 14px; object-fit: contain; object-position: center bottom; }
+  .cm-bin-colour { margin: 0 0 4px; font-weight: 700; color: var(--ink); }
+  .cm-bin-use { margin: 0 0 14px; font-size: .9rem; line-height: 1.4; color: var(--muted); }
+  .cm-bin-items { list-style: none; margin: 0; align-self: start; padding: 12px 0 0; border-top: 1px dashed var(--line); display: grid; gap: 7px; text-align: left; }
+  .cm-bin-items li { display: flex; align-items: center; gap: 8px; font-size: .84rem; line-height: 1.3; color: var(--ink); }
+  .cm-bin-items svg { flex: none; fill: none; stroke: var(--pine); stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+  @media (max-width: 980px) { .cm-bins { grid-template-columns: repeat(3, 1fr); } }
+  @media (max-width: 640px) { .cm-bins { grid-template-columns: repeat(2, 1fr); gap: 12px; } .cm-bin { padding: 16px 12px; } .cm-bin img { height: 90px; } }
+</style>
