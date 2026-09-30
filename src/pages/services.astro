@@ -148,7 +148,7 @@ const statusLabel: Record<string, string> = { critical: 'Critical', progress: 'I
               </div>
               <h3>{s.title}</h3>
               <p>{s.text}</p>
-              <a class="svc-go" href={href} target={ext ? '_blank' : undefined} rel={ext ? 'noopener' : undefined}>
+              <a class={s.title === 'Birth and Death Registration' ? 'svc-go is-long' : 'svc-go'} href={href} target={ext ? '_blank' : undefined} rel={ext ? 'noopener' : undefined}>
                 <span>{s.link ? s.linkLabel : 'Office address and hours'}</span>
                 <svg viewBox="0 0 24 24" aria-hidden="true" set:html={ext ? arrow.out : arrow.in} />
               </a>
@@ -243,11 +243,7 @@ const statusLabel: Record<string, string> = { critical: 'Critical', progress: 'I
                 <svg viewBox="0 0 24 24" aria-hidden="true" set:html={gi.search} />
                 <input type="search" placeholder="Search by keyword, ward or case ID" aria-label="Search by keyword, ward or case ID" data-case-search />
               </label>
-              <div class="grvx-chips" role="group" aria-label="Filter cases">
-                {['all', 'critical', 'progress', 'resolved'].map((k, i) => (
-                  <button type="button" class={i === 0 ? 'on' : undefined} aria-pressed={i === 0 ? 'true' : 'false'} data-filter={k}>{k === 'all' ? 'All' : statusLabel[k]}</button>
-                ))}
-              </div>
+              <p class="grvx-filter-heading">Few Important issues that we are currently working on</p>
             </div>
             <ul class="grvx-case-list">
               {demoCases.map((c) => (
@@ -409,29 +405,22 @@ const statusLabel: Record<string, string> = { critical: 'Critical', progress: 'I
     });
   }
 
-  // Case list: status chips and search work together.
+  // Case list search.
   const cases = document.querySelector<HTMLElement>('.grvx-cases');
   if (cases) {
     const rows = Array.from(cases.querySelectorAll<HTMLElement>('.grvx-case'));
-    const chips = Array.from(cases.querySelectorAll<HTMLButtonElement>('[data-filter]'));
     const search = cases.querySelector<HTMLInputElement>('[data-case-search]');
     const empty = cases.querySelector<HTMLElement>('.grvx-empty');
-    let status = 'all';
     const apply = () => {
       const q = (search?.value ?? '').trim().toLowerCase();
       let shown = 0;
       rows.forEach((r) => {
-        const ok = (status === 'all' || r.dataset.status === status) && (!q || (r.textContent ?? '').toLowerCase().includes(q));
+        const ok = !q || (r.textContent ?? '').toLowerCase().includes(q);
         r.hidden = !ok;
         if (ok) shown++;
       });
       if (empty) empty.hidden = shown > 0;
     };
-    chips.forEach((c) => c.addEventListener('click', () => {
-      status = c.dataset.filter ?? 'all';
-      chips.forEach((x) => { x.classList.toggle('on', x === c); x.setAttribute('aria-pressed', String(x === c)); });
-      apply();
-    }));
     search?.addEventListener('input', apply);
   }
 

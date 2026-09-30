@@ -41,7 +41,7 @@ const toc = [
   ['overview', 'Overview'],
   ['why', 'Why it matters'],
   ['scope', 'What the project covers'],
-  ['progress', 'Progress'],
+  ...(cs.progress.length ? [['progress', 'Progress']] : []),
   ['timeline', 'Timeline'],
   ['you', 'What this means for you'],
   ['sources', 'Sources'],
@@ -125,7 +125,7 @@ const toc = [
             </ul>
           </section>
 
-          <section id="progress" class="cs-block" aria-labelledby="h-progress">
+          {cs.progress.length > 0 && <section id="progress" class="cs-block" aria-labelledby="h-progress">
             <h2 id="h-progress">Progress</h2>
             <div class="cs-progress">
               {cs.progress.map((p) => (
@@ -137,7 +137,7 @@ const toc = [
               ))}
               {hasDemo && <p class="cs-demo-note"><em class="cs-demo">Demo</em><span>Items marked Demo are examples, not published figures. They will be replaced when the office shares real data.</span></p>}
             </div>
-          </section>
+          </section>}
 
           <section id="timeline" class="cs-block" aria-labelledby="h-timeline">
             <h2 id="h-timeline">Timeline</h2>
