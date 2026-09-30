@@ -121,7 +121,7 @@ const wardMap = blockMapRaw
                   <strong>{o.name}</strong>
                   <small>{o.detail}</small>
                   <address>{o.address}</address>
-                  <a class="dir" href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(o.name + ', ' + o.address)}`} target="_blank" rel="noopener">Get directions <span aria-hidden="true">&rarr;</span></a>
+                  <a class="dir" href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(o.name + ', ' + o.address)}`} target="_blank" rel="noopener">Directions <span class="direction-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path class="direction-icon-frame" d="m12 2.6 9.4 9.4-9.4 9.4L2.6 12 12 2.6Z" /><path class="direction-icon-turn" d="M8.6 18v-7h6V7l5 5-5 5v-4h-3.8v5H8.6Z" /></svg></span></a>
                 </div>
               </li>
             ))}

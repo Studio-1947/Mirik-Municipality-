@@ -629,32 +629,25 @@ export const offices: {
     detail: "Near Mirik Police Station",
     address:
       "Near Mirik Police Station, Thana Line, Mirik, Darjeeling, West Bengal 734214",
-    photo: "/images/offices/mirik-sdo.webp",
-  },
-  {
-    name: "SDPO Office, Mirik",
-    detail: "Near Mirik Police Station",
-    address:
-      "Near Mirik Police Station, Thana Line, Mirik, Darjeeling, West Bengal 734214",
-    photo: "/images/offices/mirik-sdo.webp",
+    photo: "/images/sdo.png",
   },
   {
     name: "Mirik Police Station",
     detail: "Thana Line",
     address: "Thana Line, Mirik, Darjeeling, West Bengal 734214",
-    photo: "/images/offices/mirik-police-station-building.webp",
+    photo: "/images/police.png",
   },
   {
     name: "Taluka Court, Mirik",
     detail: "Civil Judge and Judicial Magistrate",
     address: "Mirik, Darjeeling, West Bengal 734214",
-    photo: "/images/offices/mirik-court.webp",
+    photo: "/images/taluka.png",
   },
   {
     name: "Mirik Block (BDO) Office",
     detail: "Rural areas and Gram Panchayats",
     address: "Mirik, Darjeeling, West Bengal 734214",
-    photo: "/images/offices/mirik-bdo-no-person.png",
+    photo: "/images/bdo.png",
   },
 ];
 
@@ -728,14 +721,6 @@ export const body: {
   tel?: string;
   photo?: string;
 }[] = [
-  {
-    role: "Executive Officer",
-    name: administration.officers[0].name,
-    note: "Also Nodal Officer, NULM",
-    tone: "#1f4d3a",
-    tel: administration.officers[0].tel,
-    photo: "/images/people/staff-2.jpg",
-  },
   {
     role: "Administrator",
     name: administration.administrator.name,

@@ -7,20 +7,23 @@
 .admin-body-head > p { max-width: 34rem; margin: 0; color: var(--muted); font-size: .96rem; line-height: 1.55; }
 @media (max-width: 640px) { .admin-body { margin-top: 2.25rem; padding-top: 2rem; } .admin-body-head { display: grid; align-items: start; gap: .75rem; } }
 
-/* Administration offices: landscape media cards on wide screens, stacked only when space is genuinely limited. */
-ul.offices { gap: 1rem; }
-ul.offices li { grid-template-columns: minmax(10.5rem, 31%) minmax(0, 1fr); min-height: 10.5rem; gap: 1.05rem; padding: .8rem; border-left-width: .32rem; border-radius: 1rem; box-shadow: 0 .35rem 1rem rgba(15,50,40,.04); transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease; }
-ul.offices li:hover { transform: translateY(-2px); border-color: rgba(106,76,147,.42); box-shadow: 0 .8rem 1.7rem rgba(15,50,40,.1); }
-ul.offices .thumb { min-height: 0; height: 100%; border-radius: .72rem; }
+/* Administration offices: generous, photo-led feature cards. */
+ul.offices { gap: 1.5rem; }
+ul.offices li { grid-template-columns: 1fr; grid-template-rows: auto 1fr; min-height: 31rem; gap: 0; padding: 0; border-left: 0; border-radius: 1.15rem; overflow: hidden; box-shadow: 0 .45rem 1.25rem rgba(15,50,40,.06); transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease; }
+ul.offices li:hover { transform: translateY(-3px); border-color: rgba(106,76,147,.42); box-shadow: 0 1rem 2rem rgba(15,50,40,.12); }
+ul.offices .thumb { min-height: 0; height: auto; aspect-ratio: 16 / 9; border-radius: 0; }
 ul.offices .thumb img { width: 100%; height: 100%; display: block; object-fit: cover; object-position: center; transition: transform .35s ease; }
 ul.offices li:hover .thumb img { transform: scale(1.045); }
-ul.offices .obody { display: flex; flex-direction: column; align-items: flex-start; min-width: 0; padding: .25rem .35rem .25rem .1rem; }
-ul.offices .obody strong { font-size: clamp(1rem, 1.8vw, 1.17rem); line-height: 1.24; }
-ul.offices .obody small { margin-top: .28rem; font-size: .9rem; }
-ul.offices address { margin: .65rem 0 .9rem; line-height: 1.48; }
-ul.offices .dir { margin-top: auto; min-height: 2.6rem; display: inline-flex; align-items: center; }
-@media (max-width: 860px) { ul.offices li { grid-template-columns: minmax(9rem, 34%) minmax(0, 1fr); } }
-@media (max-width: 600px) { ul.offices li { grid-template-columns: 1fr; min-height: 0; padding: .72rem; } ul.offices .thumb { min-height: 10.5rem; aspect-ratio: 16 / 8; } ul.offices .obody { padding: .85rem .3rem .25rem; } ul.offices .dir { margin-top: .55rem; } }
+ul.offices .obody { display: flex; flex-direction: column; align-items: flex-start; min-width: 0; padding: 1.3rem 1.35rem 1.4rem; }
+ul.offices .obody strong { font-size: clamp(1.2rem, 2vw, 1.45rem); line-height: 1.2; }
+ul.offices .obody small { margin-top: .35rem; font-size: .95rem; }
+ul.offices address { margin: .8rem 0 1.1rem; line-height: 1.5; }
+ul.offices .dir { gap: .25rem; margin-top: auto; min-height: 2.65rem; display: inline-flex; align-items: center; }
+ul.offices .direction-icon { display: grid; place-items: center; width: 1.65rem; height: 1.65rem; margin-right: -.38rem; }
+ul.offices .direction-icon svg { width: 1.5rem; height: 1.5rem; fill: #fff; }
+ul.offices .direction-icon-frame { fill: none; stroke: #fff; stroke-width: 1.9; stroke-linejoin: round; }
+ul.offices .direction-icon-turn { transform: scale(.66); transform-box: fill-box; transform-origin: center; }
+@media (max-width: 600px) { ul.offices li { min-height: 0; } ul.offices .obody { padding: 1.1rem 1.15rem 1.2rem; } }
 @media (prefers-reduced-motion: reduce) { ul.offices li { transition: none; } ul.offices li:hover { transform: none; } }
 
 /* Office directory: a wrapping grid of landscape cards, never a horizontal rail. */
@@ -28,20 +31,12 @@ ul.offices .dir { margin-top: auto; min-height: 2.6rem; display: inline-flex; al
 .office-directory-head { margin-bottom: 1.25rem; }
 .office-directory-head .eyebrow { margin-bottom: .4rem; }
 .office-directory-head h2 { margin: 0; font-size: clamp(1.65rem, 3vw, 2.2rem); }
-ul.offices { display: grid; grid-auto-flow: row; grid-template-columns: repeat(3, minmax(0, 1fr)); overflow: visible; padding: 0; margin: 0; }
+ul.offices { display: grid; grid-auto-flow: row; grid-template-columns: repeat(2, minmax(0, 1fr)); overflow: visible; padding: 0; margin: 0; }
 ul.offices li { min-width: 0; }
-@media (max-width: 1180px) { ul.offices { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 760px) { ul.offices { grid-template-columns: 1fr; } }
 @media (max-width: 600px) {
   .office-directory { margin-top: 2.25rem; padding-top: 2rem; }
-  ul.offices { gap: .8rem; }
-  ul.offices li { grid-template-columns: minmax(7.2rem, 35%) minmax(0, 1fr); min-height: 11rem; }
-  ul.offices .thumb { min-height: 0; height: 100%; aspect-ratio: auto; }
-  ul.offices .obody { padding: .25rem .1rem; }
-  ul.offices .obody strong { font-size: 1rem; }
-  ul.offices .obody small { font-size: .82rem; }
-  ul.offices address { margin: .45rem 0 .7rem; font-size: .82rem; }
-  ul.offices .dir { min-height: 2.35rem; padding: .55rem .85rem; font-size: .8rem; }
+  ul.offices { gap: 1rem; }
 }
 
 /* Jurisdiction: a single tidy card with soft dividers. */
@@ -82,13 +77,6 @@ dl.kv.juris dt:nth-last-of-type(1), dl.kv.juris dd:last-of-type { border-bottom:
 @media (max-width: 920px) { .admin-ward-map .wardmap { grid-template-columns: 1fr; } .admin-ward-map .wm-map { max-width: 560px; margin: 0 auto; } }
 @media (max-width: 640px) { .admin-ward-map { margin-top: 2.5rem; padding: 1.1rem; border-radius: 1.25rem; } .admin-ward-map .wm-card { padding: .2rem .9rem; } .admin-ward-map .demo-grid { grid-template-columns: repeat(2, 1fr); } .admin-ward-map .jurisdiction-summary .kv { grid-template-columns: 1fr; } .admin-ward-map .jurisdiction-summary dt { padding-bottom: 0; border-bottom: 0; } }
 
-/* Office cards: when the last row is short, let its cards share the full width instead of leaving a gap. */
-@media (min-width: 1181px) {
-  ul.offices { grid-template-columns: repeat(6, minmax(0, 1fr)); }
-  ul.offices li { grid-column: span 2; }
-  ul.offices li:last-child:nth-child(3n + 2), ul.offices li:nth-last-child(2):nth-child(3n + 1) { grid-column: span 3; }
-  ul.offices li:last-child:nth-child(3n + 1) { grid-column: 3 / span 2; }
-}
 ul.offices .thumb { position: relative; overflow: hidden; background: var(--line); }
 ul.offices .thumb iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
 ul.offices .obody address { font-style: normal; }
