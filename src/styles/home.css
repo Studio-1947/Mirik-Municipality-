@@ -326,3 +326,35 @@
   .hero-ticket { top: clamp(13rem, 34vh, 18rem); }
 }
 
+/* ---- Home page: FAQ (.faqx-*), moved from the Services page ----
+   Questions in a divided list.
+   Answers collapse only once the page script adds .faqx-js, so they stay readable without JS. */
+.faqx-main .section-head { margin-bottom: 14px; }
+/* Heading stays left with the other home sections; only the question list is centred */
+.faqx-list { max-width: 860px; margin-inline: auto; }
+
+.faqx-item { border-bottom: 1px solid var(--line); }
+.faqx-q { margin: 0; font-size: inherit; }
+.faqx-q button { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 20px 2px; background: none; border: 0; text-align: left; font-size: 1.02rem; line-height: 1.4; color: var(--ink); cursor: pointer; transition: color .2s; }
+.faqx-q button:hover { color: var(--lake); }
+.faqx-q button:focus-visible { outline: 3px solid var(--lake); outline-offset: 2px; border-radius: 8px; }
+.faqx-q svg { flex: none; width: 30px; height: 30px; padding: 6px; border-radius: 50%; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; color: var(--ink); background: transparent; transition: transform .5s ease-in-out, background .3s, color .3s; box-sizing: border-box; }
+.faqx-item.open .faqx-q button { color: var(--pine-deep); }
+.faqx-item.open .faqx-q svg { transform: rotate(180deg); background: var(--lake-soft); color: var(--lake); }
+
+/* Height animates via grid rows 0fr -> 1fr; visibility keeps closed answers out of the tab order and screen readers */
+.faqx-a { display: grid; grid-template-rows: 1fr; }
+.faqx-a > div { overflow: hidden; }
+.faqx-a p { margin: 0; padding: 0 44px 20px 2px; max-width: 62ch; color: var(--muted); line-height: 1.65; }
+.faqx-js .faqx-a { grid-template-rows: 0fr; opacity: 0; visibility: hidden; transition: grid-template-rows .5s ease-in-out, opacity .4s ease-in-out, visibility 0s .5s; }
+.faqx-js .faqx-a p { transform: translateY(-8px); transition: transform .5s ease-in-out; }
+.faqx-js .faqx-item.open .faqx-a { grid-template-rows: 1fr; opacity: 1; visibility: visible; transition: grid-template-rows .5s ease-in-out, opacity .5s ease-in-out, visibility 0s; }
+.faqx-js .faqx-item.open .faqx-a p { transform: none; }
+
+@media (max-width: 400px) {
+  .faqx-q button { font-size: .98rem; padding: 18px 0; }
+  .faqx-a p { padding-right: 8px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .faqx-q svg, .faqx-js .faqx-a, .faqx-js .faqx-a p, .faqx-js .faqx-item.open .faqx-a { transition: none; }
+}

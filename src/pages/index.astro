@@ -122,6 +122,18 @@ const artPaths: Record<string, string> = {
   hills: 'M2 20 8 9l4 6 3-4 7 9zM16 6.5a1.7 1.7 0 1 0 0-3.4 1.7 1.7 0 0 0 0 3.4z',
   cave: 'M3 21c0-8 3-14 9-14s9 6 9 14M8 21c0-4 1.5-7 4-7s4 3 4 7M2 21h20',
 };
+// FAQ. Keep the English text exact: it is the translation key in i18n.ts.
+const faqs = [
+  { q: 'How do I apply for a trade licence?', a: 'Apply online on the state e-District portal. You register first with your mobile number and an OTP. Renewals are done there too.' },
+  { q: 'How do I register a birth or death?', a: 'Use the state Janma-Mrityu Tathya portal. Once the record is registered, you can download the certificate online.' },
+  { q: 'Where do I submit a building plan?', a: 'Building plans are submitted and tracked on the state Online Building Permission System (OBPS).' },
+  { q: 'How do I apply for a mutation?', a: 'Apply at the Municipality Office. Take your holding number and the papers that show who owns the property.' },
+  { q: 'How do I pay holding tax?', a: 'Holding tax is assessed and paid through the Municipality Office. Take your holding number with you.' },
+  { q: 'How do I report a problem in my ward?', a: 'Use the Grievance button at the top of any page, or email or call the office. Give your ward and the exact location so the office can act quickly.' },
+  { q: 'When is the office open?', a: 'Monday to Friday, 10:00 AM to 5:30 PM. The office is closed on government holidays.' },
+  { q: 'Who do I call in an emergency?', a: 'Dial 112 for any emergency. Police is 100, fire is 101 and ambulance is 108. The Emergency page lists more numbers.' },
+];
+const chevron = '<path d="M18 9.00005C18 9.00005 13.5811 15 12 15C10.4188 15 6 9 6 9"/>'; // Hugeicons ArrowDown01Icon
 ---
 <Layout>
   <section class="herox" id="top">
@@ -413,6 +425,33 @@ const artPaths: Record<string, string> = {
     </div>
   </section>
 
+  <section class="alt" id="faq">
+    <div class="wrap faqx">
+      <div class="faqx-main">
+        <div class="section-head">
+          <p class="eyebrow">FAQ</p>
+          <h2>Common questions</h2>
+          <p class="lead">Quick answers about applying, paying and getting help.</p>
+        </div>
+        <div class="faqx-list">
+          {faqs.map((f, i) => (
+            <div class="faqx-item">
+              <h3 class="faqx-q">
+                <button type="button" id={`faq-q-${i}`} aria-expanded="true" aria-controls={`faq-a-${i}`}>
+                  <span>{f.q}</span>
+                  <svg viewBox="0 0 24 24" aria-hidden="true" set:html={chevron} />
+                </button>
+              </h3>
+              <div class="faqx-a" id={`faq-a-${i}`} role="region" aria-labelledby={`faq-q-${i}`}>
+                <div><p>{f.a}</p></div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
   <script>
     // Ward selection (map pins, ward buttons, filter) drives the ward details, the demography figures and the map view.
     const wardInfo: Record<string, { loc: string }> = JSON.parse(document.getElementById('ward-data')?.textContent || '{}');
@@ -669,5 +708,23 @@ const artPaths: Record<string, string> = {
     });
     filter?.addEventListener('change', () => pick(filter.value));
     document.getElementById('ward-select')?.addEventListener('change', (e) => pick((e.target as HTMLSelectElement).value || 'all'));
+
+    // FAQ accordion: one answer open at a time. Without JS every answer stays visible.
+    const faqList = document.querySelector<HTMLElement>('.faqx-list');
+    if (faqList) {
+      const items = Array.from(faqList.querySelectorAll<HTMLElement>('.faqx-item'));
+      const setOpen = (item: HTMLElement, open: boolean) => {
+        item.classList.toggle('open', open);
+        item.querySelector('button')?.setAttribute('aria-expanded', String(open));
+      };
+      items.forEach((item) => setOpen(item, false));
+      faqList.classList.add('faqx-js');
+      items.forEach((item) => {
+        item.querySelector('button')?.addEventListener('click', () => {
+          const open = !item.classList.contains('open');
+          items.forEach((other) => setOpen(other, other === item && open));
+        });
+      });
+    }
   </script>
 </Layout>
