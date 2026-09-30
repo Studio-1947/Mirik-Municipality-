@@ -4,7 +4,7 @@ import '../styles/administration.css';
 import PageHead from '../components/PageHead.astro';
 import Avatar from '../components/Avatar.astro';
 import AppointmentDialog from '../components/AppointmentDialog.astro';
-import { meta, contact, administration, wards, offices, body } from '../data/site';
+import { meta, contact, administration, offices, body } from '../data/site';
 
 ---
 <Layout title="Who runs the municipality | Mirik Municipality">
@@ -68,19 +68,6 @@ import { meta, contact, administration, wards, offices, body } from '../data/sit
 
         <div class="grid-2" style="margin-top:40px">
           <div>
-            <h3 id="wards">Wards</h3>
-            <table>
-              <thead><tr><th>Ward</th><th>Localities</th><th>Councillor</th></tr></thead>
-              <tbody>
-                {wards.map((w) => (
-                  <tr>
-                    <td><strong>Ward {w.no}</strong></td>
-                    <td class={w.localities ? '' : 'muted'}>{w.localities || 'To be listed'}</td>
-                    <td class="muted">Election pending</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
             <aside class="mapcard">
               <h4>Detailed map of Mirik</h4>
               <p>Block map of Mirik, Darjeeling showing tea gardens, forests, rivers and administrative boundaries. It does not mark the nine municipal ward boundaries.</p>
@@ -89,7 +76,7 @@ import { meta, contact, administration, wards, offices, body } from '../data/sit
           </div>
           <div>
             <h3 id="jurisdiction">Jurisdiction</h3>
-            <dl class="kv">
+            <dl class="kv juris">
               <dt>Body</dt><dd>{meta.legalName}</dd>
               <dt>Wards</dt><dd>{administration.wards}</dd>
               <dt>Last election</dt><dd>{administration.lastElection}</dd>

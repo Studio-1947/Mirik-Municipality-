@@ -41,3 +41,11 @@ ul.offices li { min-width: 0; }
   ul.offices address { margin: .45rem 0 .7rem; font-size: .82rem; }
   ul.offices .dir { min-height: 2.35rem; padding: .55rem .85rem; font-size: .8rem; }
 }
+
+/* Jurisdiction: a single tidy card with soft dividers. */
+dl.kv.juris { margin: 0; padding: .35rem 1.15rem; background: var(--card); border: 1px solid var(--line); border-radius: 1rem; box-shadow: 0 .3rem .9rem rgba(15,50,40,.04); grid-template-columns: minmax(7rem, 34%) minmax(0, 1fr); gap: 0 1rem; }
+dl.kv.juris dt, dl.kv.juris dd { margin: 0; padding: .8rem 0; border-bottom: 1px solid var(--line); }
+dl.kv.juris dt { color: var(--muted); font-size: .8rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; align-self: center; }
+dl.kv.juris dd { font-weight: 600; font-size: .98rem; }
+dl.kv.juris dt:nth-last-of-type(1), dl.kv.juris dd:last-of-type { border-bottom: 0; }
+@media (max-width: 520px) { dl.kv.juris { grid-template-columns: 1fr; } dl.kv.juris dt { padding: .75rem 0 0; border: 0; } dl.kv.juris dd { padding-top: .15rem; } }
