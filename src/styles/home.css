@@ -405,8 +405,14 @@
 .faqx-q button:hover { color: var(--lake); }
 .faqx-q button:focus-visible { outline: 3px solid var(--lake); outline-offset: 2px; border-radius: 8px; }
 .faqx-q svg { flex: none; width: 30px; height: 30px; padding: 6px; border-radius: 50%; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; color: var(--ink); background: transparent; transition: transform .5s ease-in-out, background .3s, color .3s; box-sizing: border-box; }
-.faqx-item.open .faqx-q button { color: var(--pine-deep); }
-.faqx-item.open .faqx-q svg { transform: rotate(180deg); background: var(--lake-soft); color: var(--lake); }
+/* Active FAQ uses the Grievance green tone and isolated margins to prevent border line artifacts. */
+.faqx-item.open { background: var(--green-deep); border: 1px solid var(--green-deep); border-radius: 14px; margin: 12px 0; }
+.faqx-item.open:first-child { margin-top: 0; }
+.faqx-item.open:last-child { margin-bottom: 0; }
+.faqx-item:has(+ .faqx-item.open) { border-bottom-color: transparent; }
+.faqx-item.open + .faqx-item { border-top: 0; }
+.faqx-item.open .faqx-q button { padding: 20px 16px 12px; color: #fff; }
+.faqx-item.open .faqx-q svg { transform: rotate(180deg); background: rgba(255,255,255,.2); color: #fff; }
 
 /* Height animates via grid rows 0fr -> 1fr; visibility keeps closed answers out of the tab order and screen readers */
 .faqx-a { display: grid; grid-template-rows: 1fr; }
@@ -416,6 +422,7 @@
 .faqx-js .faqx-a p { transform: translateY(-8px); transition: transform .5s ease-in-out; }
 .faqx-js .faqx-item.open .faqx-a { grid-template-rows: 1fr; opacity: 1; visibility: visible; transition: grid-template-rows .5s ease-in-out, opacity .5s ease-in-out, visibility 0s; }
 .faqx-js .faqx-item.open .faqx-a p { transform: none; }
+.faqx-item.open .faqx-a p { padding: 0 60px 20px 16px; color: rgba(255,255,255,.88); }
 
 @media (max-width: 960px) {
   .faqx-grid {
