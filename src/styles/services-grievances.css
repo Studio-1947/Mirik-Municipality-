@@ -44,10 +44,12 @@
 
 /* Action link; its ::after stretches over the card so the whole card is clickable */
 .svc-go { margin-top: auto; align-self: flex-start; display: inline-flex; align-items: center; gap: 8px; font-weight: 600; font-size: .92rem; color: var(--t-ink); text-decoration: none; }
+.svc-go.is-long { gap: 6px; font-size: .84rem; letter-spacing: -.015em; white-space: nowrap; }
 .svc-go::after { content: ''; position: absolute; inset: 0; z-index: 1; border-radius: 18px; }
 .svc-go:focus-visible { outline: none; }
 .svc-go:focus-visible::after { outline: 3px solid var(--t-ink); outline-offset: -3px; }
 .svc-go svg { box-sizing: border-box; flex: none; width: 28px; height: 28px; padding: 6px; border-radius: 50%; background: var(--t-soft); fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; transition: transform .3s cubic-bezier(.34,1.56,.64,1), background .25s, color .25s; }
+.svc-go.is-long svg { width: 26px; height: 26px; padding: 5px; }
 .svc-card:hover .svc-go svg, .svc-go:focus-visible svg { background: var(--t); color: #fff; transform: translateX(4px); }
 
 /* Scroll-in reveal (the page script adds .svc-anim only when motion is allowed) */
@@ -161,9 +163,9 @@ main > section#grievances { --accent: #a2416b; --accent-soft: #f6e6ee; }
 /* ---- Services page: Grievances demo dashboard (.grvx-*) ----
    Stats, overview (donut, category bars, local conditions), case list, ward ranking, insights.
    All figures are DEMO data (see services.astro); the "Demo data" note must stay visible. */
-.grvx-top { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 20px 32px; margin-bottom: 18px; }
-.grvx-top .section-head { flex: 1 1 420px; margin-bottom: 0; }
-.grvx-stats { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(112px, 1fr)); gap: 12px; }
+.grvx-top { display: flex; flex-direction: column; gap: 22px; margin-bottom: 20px; }
+.grvx-top .section-head { width: 100%; margin-bottom: 0; }
+.grvx-stats { list-style: none; margin: 0; padding: 0; width: 100%; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
 .grvx-stat { --t: var(--lake); background: #fff; border: 1px solid var(--line); border-radius: 16px; padding: 14px 16px; box-shadow: 0 10px 24px -20px rgba(18,48,58,.4); transition: transform .25s; }
 .grvx-stat:hover { transform: translateY(-2px); }
 .grvx-stat.tone-orange { --t: var(--alert); }
@@ -233,18 +235,15 @@ main > section#grievances { --accent: #a2416b; --accent-soft: #f6e6ee; }
 .grvx-anim .grvx-donut::before { opacity: 0; transform: rotate(-90deg) scale(.85); transition: transform 1s cubic-bezier(.2,.8,.2,1), opacity .6s; }
 .grvx-anim.in .grvx-bar i, .grvx-anim.in .grvx-donut::before { opacity: 1; transform: none; }
 
-/* Case list with search and status chips */
+/* Case list with search */
 .grvx-cases { display: grid; gap: 16px; }
 .grvx-filter { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding: 12px; border-radius: 18px; }
 .grvx-search { flex: 1 1 240px; display: flex; align-items: center; gap: 10px; padding: 0 14px; border-radius: 12px; background: var(--paper); border: 1px solid transparent; transition: border-color .2s, background .2s; }
 .grvx-search:focus-within { border-color: var(--accent); background: #fff; }
 .grvx-search svg { flex: none; width: 18px; height: 18px; color: var(--muted); }
 .grvx-search input { flex: 1; min-width: 0; padding: 11px 0; border: 0; background: none; font: inherit; font-size: .9rem; color: var(--ink); outline: none; }
-.grvx-chips { display: flex; flex-wrap: wrap; gap: 6px; }
-.grvx-chips button { padding: 8px 14px; border: 0; border-radius: 999px; background: var(--paper); color: var(--muted); font: inherit; font-size: .72rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; cursor: pointer; transition: background .2s, color .2s, box-shadow .2s; }
-.grvx-chips button:hover { color: var(--ink); }
-.grvx-chips button.on { background: var(--alert); color: #fff; box-shadow: 0 8px 16px -10px rgba(179,71,29,.9); }
-.grvx-chips button:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.grvx-filter-heading { flex: 1 1 310px; display: flex; align-items: center; gap: 8px; min-width: 0; margin: 0; padding: 11px 15px; border: 1px solid color-mix(in srgb, var(--accent) 24%, var(--line)); border-radius: 12px; background: linear-gradient(135deg, var(--accent-soft), #fff); color: var(--ink); font-size: clamp(.68rem, 1.15vw, .8rem); font-weight: 750; line-height: 1; letter-spacing: .01em; white-space: nowrap; box-shadow: inset 0 1px rgba(255,255,255,.8); }
+.grvx-filter-heading::before { content: ""; flex: none; width: 7px; height: 7px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 14%, transparent); }
 
 .grvx-case-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 16px; }
 .grvx-case { --s: var(--alert); --s-soft: var(--alert-soft); padding: 22px; transition: transform .25s, box-shadow .25s; }

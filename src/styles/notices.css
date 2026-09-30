@@ -152,3 +152,69 @@
   .pj-card:hover, .pj-card:focus-within, .pj-card:hover .pj-media img, .pj-card:hover .pj-go svg { transform: none; }
   .pj-status i { animation: none; }
 }
+
+/* ---- Scheme directory ----
+   A calm, information-first programme layout: imagery adds local context but never carries text. */
+.scheme-head { display: flex; justify-content: space-between; align-items: end; gap: 28px; margin: 52px 0 20px; padding-bottom: 18px; border-bottom: 1px solid var(--line); }
+.scheme-head .eyebrow { margin-bottom: 7px; }
+.scheme-head h3 { margin: 0; font-size: clamp(1.45rem, 2.6vw, 2rem); }
+.scheme-head > p { max-width: 43ch; margin: 0; color: var(--muted); font-size: .94rem; line-height: 1.55; }
+.scheme-feature { display: grid; grid-template-columns: minmax(0, 1.12fr) minmax(360px, .88fr); overflow: hidden; border: 1px solid #c9d9e1; border-radius: 22px; background: #fff; box-shadow: 0 24px 54px -42px rgba(18,48,58,.48); }
+.scheme-feature-copy { padding: 34px 36px 30px; }
+.scheme-kicker { margin: 0 0 8px; color: var(--lake); font-size: .69rem; font-weight: 750; letter-spacing: .11em; line-height: 1.2; text-transform: uppercase; }
+.scheme-feature h4 { margin: 0 0 3px; color: var(--ink); font-family: var(--serif); font-size: clamp(1.7rem, 3vw, 2.3rem); font-weight: 600; line-height: 1.05; }
+.scheme-full-name { margin: 0 0 18px; color: var(--lake); font-size: .92rem; font-weight: 650; line-height: 1.4; }
+.scheme-feature-copy > p:not(.scheme-kicker):not(.scheme-full-name) { margin: 0; color: var(--muted); font-size: .96rem; line-height: 1.68; }
+.scheme-facts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1px; margin: 24px 0 20px; overflow: hidden; border: 1px solid var(--line); border-radius: 12px; background: var(--line); }
+.scheme-facts > div { padding: 12px 14px; background: #fbfcfc; }
+.scheme-facts dt { margin-bottom: 3px; color: var(--ink); font-size: 1.05rem; font-weight: 750; line-height: 1.15; }
+.scheme-facts dd { margin: 0; color: var(--muted); font-size: .74rem; line-height: 1.35; }
+.scheme-project-link { display: inline-flex; align-items: center; gap: 8px; color: var(--lake); font-size: .9rem; font-weight: 700; text-decoration: none; }
+.scheme-project-link span { font-size: 1.18rem; transition: transform .2s; }
+.scheme-project-link:hover { color: var(--pine); text-decoration: underline; text-underline-offset: 3px; }
+.scheme-project-link:hover span { transform: translateX(3px); }
+.scheme-project-link:focus-visible { outline: 3px solid var(--lake); outline-offset: 4px; border-radius: 2px; }
+.scheme-feature-image { position: relative; min-height: 100%; margin: 0; overflow: hidden; background: var(--lake-soft); }
+.scheme-feature-image img { display: block; width: 100%; height: 100%; min-height: 330px; object-fit: cover; }
+.scheme-feature-image::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(10,32,39,.28), transparent 45%); pointer-events: none; }
+.scheme-feature-image figcaption { position: absolute; z-index: 1; right: 16px; bottom: 14px; margin: 0; padding: 5px 9px; border-radius: 5px; background: rgba(11,31,38,.76); color: #fff; font-size: .68rem; }
+.scheme-directory { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-top: 18px; }
+.scheme-directory-card { --scheme: var(--lake); display: grid; grid-template-columns: 142px minmax(0, 1fr); overflow: hidden; min-width: 0; border: 1px solid var(--line); border-radius: 16px; background: #fff; box-shadow: 0 1px 2px rgba(20,40,30,.04); transition: transform .25s, box-shadow .25s, border-color .25s; }
+.scheme-directory-card:hover { transform: translateY(-3px); border-color: color-mix(in srgb, var(--scheme) 35%, var(--line)); box-shadow: 0 18px 36px -30px rgba(18,48,58,.5); }
+.scheme-directory-card.scheme-sbm { --scheme: #27865b; }
+.scheme-directory-card.scheme-nulm { --scheme: #9a661c; }
+.scheme-directory-card.scheme-pmay { --scheme: #ad593d; }
+.scheme-directory-card.scheme-cbphcs { --scheme: #913e65; }
+.scheme-directory-card figure { margin: 0; min-height: 100%; overflow: hidden; background: color-mix(in srgb, var(--scheme) 14%, #fff); }
+.scheme-directory-card figure img { display: block; width: 100%; height: 100%; min-height: 188px; object-fit: cover; transition: transform .6s cubic-bezier(.2,.8,.2,1); }
+.scheme-directory-card:hover figure img { transform: scale(1.05); }
+.scheme-directory-card > div { padding: 18px 18px 17px; border-left: 3px solid var(--scheme); }
+.scheme-directory-card .scheme-kicker { color: var(--scheme); }
+.scheme-directory-card h4 { margin: 0 0 8px; color: var(--ink); font-size: 1.05rem; line-height: 1.25; }
+.scheme-directory-card > div > p:not(.scheme-kicker) { margin: 0; color: var(--muted); font-size: .84rem; line-height: 1.55; }
+.scheme-directory-link { display: inline-flex; align-items: center; gap: 6px; margin-top: 12px; color: var(--scheme); font-size: .8rem; font-weight: 700; text-decoration: none; }
+.scheme-directory-link:hover { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
+.scheme-directory-link span { font-size: 1rem; line-height: 1; transition: transform .2s; }
+.scheme-directory-link:hover span { transform: translateX(3px); }
+.scheme-directory-link:focus-visible { outline: 3px solid var(--scheme); outline-offset: 3px; border-radius: 2px; }
+
+@media (max-width: 820px) {
+  .scheme-feature { grid-template-columns: 1fr; }
+  .scheme-feature-image { min-height: 260px; order: -1; }
+  .scheme-feature-image img { min-height: 260px; max-height: 340px; }
+}
+@media (max-width: 640px) {
+  .scheme-head { display: block; margin-top: 38px; }
+  .scheme-head > p { margin-top: 10px; }
+  .scheme-feature { border-radius: 18px; }
+  .scheme-feature-copy { padding: 26px 20px 22px; }
+  .scheme-facts { grid-template-columns: 1fr; }
+  .scheme-directory { grid-template-columns: 1fr; gap: 12px; }
+  .scheme-directory-card { grid-template-columns: 112px minmax(0, 1fr); }
+  .scheme-directory-card figure img { min-height: 100%; }
+  .scheme-directory-card > div { padding: 16px 14px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .scheme-project-link span, .scheme-directory-link span, .scheme-directory-card, .scheme-directory-card figure img { transition: none; }
+  .scheme-project-link:hover span, .scheme-directory-link:hover span, .scheme-directory-card:hover, .scheme-directory-card:hover figure img { transform: none; }
+}
