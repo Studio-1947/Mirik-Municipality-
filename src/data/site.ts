@@ -491,7 +491,6 @@ export const sources = [
 // Cards 2 to 8 currently use two STOCK sample portraits (public/images/people/sample-*.jpg). Replace with the officers' real photos before launch.
 // VERIFY: replace the placeholders (name: '') with real names, photos and designations from the office.
 export const body: { role: string; name: string; note?: string; tone: string; tel?: string; photo?: string }[] = [
-  { role: 'Administrator', name: administration.administrator.name, tone: '#6a4c93', photo: administration.administrator.photo },
   { role: 'Executive Officer', name: administration.officers[0].name, note: 'Also Nodal Officer, NULM', tone: '#1f4d3a', tel: administration.officers[0].tel , photo: '/images/people/staff-2.jpg' },
   { role: 'Finance Officer', name: administration.officers[1].name, tone: '#2f6f8f', tel: administration.officers[1].tel },
   { role: 'Sub Assistant Engineer', name: 'Nimasang Tamang', tone: '#a2416b' , photo: '/images/people/staff-1.jpg' },
