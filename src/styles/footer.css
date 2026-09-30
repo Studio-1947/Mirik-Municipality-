@@ -77,3 +77,11 @@ footer.site.big .f-help .f-sos-list li:last-child { border-bottom: 0; }
 footer.site.big .f-main > .f-col.f-grv, footer.site.big .f-main > .f-col.f-grv:last-child { padding: 0; margin: 0; border: 0; background: none; }
 footer.site.big .f-main > .f-col.f-social-col { margin: 0; }
 footer.site.big .f-main > .f-col { box-sizing: border-box; }
+
+/* Boxy footer: full-width block with large rounded top corners, tighter top spacing. */
+footer.site.big { border-radius: 2.75rem 2.75rem 0 0; padding-top: 64px; margin-top: -1px; box-shadow: 0 -.6rem 2rem rgba(10,30,26,.12); isolation: isolate; }
+@media (max-width: 700px) { footer.site.big { border-radius: 1.75rem 1.75rem 0 0; padding-top: 44px; } }
+
+/* Fully rounded box: same radius on the bottom corners, with a little page showing beneath so the curve is visible. */
+footer.site.big { border-radius: 2.75rem; margin: -1px 0 .75rem; box-shadow: 0 .4rem 2rem rgba(10,30,26,.14); }
+@media (max-width: 700px) { footer.site.big { border-radius: 1.75rem; margin-bottom: .5rem; } }

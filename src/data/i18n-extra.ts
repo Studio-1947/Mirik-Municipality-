@@ -1047,4 +1047,5 @@ export const extra: Record<string, [string, string]> = {
   "Out and about: use the public bins or carry it home — never the drain, the lake or the roadside.": ["बाहिर: सार्वजनिक डस्टबिन प्रयोग गर्नुहोस् वा घर लैजानुहोस् — कहिल्यै नाली, ताल वा सडकछेउमा नफाल्नुहोस्।", "বাইরে: পাবলিক বিন ব্যবহার করুন বা বাড়ি নিয়ে যান — কখনও নর্দমা, লেক বা রাস্তার ধারে ফেলবেন না।"],
   "The lake: report dumping or burning of waste to the office — fines apply under the state rules.": ["ताल: फोहोर फाल्ने वा जलाउने काम कार्यालयमा जानकारी दिनुहोस् — राज्य नियमअनुसार जरिवाना लाग्छ।", "লেক: বর্জ্য ফেলা বা পোড়ানোর খবর অফিসে দিন — রাজ্যের নিয়ম অনুযায়ী জরিমানা হবে।"],
   "How to sort your waste": ["फोहोर कसरी छुट्याउने", "বর্জ্য কীভাবে আলাদা করবেন"],
+  "SAMPLE GRIEVANCE TRACKER": ["नमुना गुनासो ट्रयाकर", "নমুনা অভিযোগ ট্র্যাকার"],
 };
