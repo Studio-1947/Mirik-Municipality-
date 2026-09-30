@@ -1,0 +1,53 @@
+---
+// Grievance pop-up. Rendered once in Layout.astro; any link to /grievance/ opens it (except on the grievance page itself).
+import GrievanceForm from './GrievanceForm.astro';
+---
+<dialog id="grv-dialog" aria-labelledby="grv-title">
+  <div class="dlg-card">
+    <div class="dlg-head">
+      <h2 id="grv-title">Report a problem in your ward</h2>
+      <button type="button" class="dlg-close" aria-label="Close">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" /></svg>
+      </button>
+    </div>
+    <div class="dlg-body">
+      <p class="dlg-lead">Broken drains, missed garbage collection, water supply, street lights or anything else. Give your ward and location so the office can act quickly.</p>
+      <GrievanceForm prefix="m" />
+    </div>
+  </div>
+</dialog>
+
+<script>
+  // Grievance buttons open the form in a pop-up on the current page instead of navigating.
+  const dlg = document.getElementById('grv-dialog') as HTMLDialogElement | null;
+  const onGrievancePage = location.pathname.replace(/\/$/, '') === '/grievance';
+  if (dlg && !onGrievancePage && typeof dlg.showModal === 'function') {
+    const open = () => {
+      dlg.querySelector('.form-msg')?.classList.remove('show');
+      dlg.showModal();
+      document.body.classList.add('dlg-open');
+      document.getElementById('m-name')?.focus();
+    };
+    document.querySelectorAll<HTMLAnchorElement>('a[href="/grievance/"]').forEach((a) =>
+      a.addEventListener('click', (e) => {
+        if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
+        e.preventDefault();
+        a.closest('details')?.removeAttribute('open');
+        open();
+      })
+    );
+    dlg.querySelector('.dlg-close')?.addEventListener('click', () => dlg.close());
+    dlg.addEventListener('click', (e) => { if (e.target === dlg) dlg.close(); });
+    dlg.addEventListener('close', () => document.body.classList.remove('dlg-open'));
+  }
+</script>
+
+<style>
+  /* The card itself must not scroll: its glowing edge (::after, global.css) sits outside it and would add
+     scrollbars on both sides. `clip` trims the glow to the rounded corners; only .dlg-body scrolls, and only
+     when the screen is too short for the whole form. The title and close button stay in view. */
+  #grv-dialog .dlg-card { display: flex; flex-direction: column; overflow: clip; max-height: calc(100dvh - 24px); }
+  .dlg-body { flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; margin-right: -12px; padding-right: 12px; scrollbar-width: thin; scrollbar-color: rgba(255,255,255,.35) transparent; }
+  .dlg-body::-webkit-scrollbar { width: 6px; }
+  .dlg-body::-webkit-scrollbar-thumb { background: rgba(255,255,255,.35); border-radius: 3px; }
+</style>

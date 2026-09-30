@@ -4,8 +4,8 @@ import '../styles/scroll-top.css';
 import '../styles/footer.css';
 import { meta, contact, sources, emergency } from '../data/site';
 import { pages, sections } from '../data/nav';
-import GrievanceForm from '../components/GrievanceForm.astro';
 import EmergencyDialog from '../components/EmergencyDialog.astro';
+import GrievanceDialog from '../components/GrievanceDialog.astro';
 
 interface Props {
   title?: string;
@@ -126,18 +126,7 @@ const year = new Date().getFullYear();
       <slot />
     </main>
 
-    <dialog id="grv-dialog" aria-labelledby="grv-title">
-      <div class="dlg-card">
-        <div class="dlg-head">
-          <h2 id="grv-title">Report a problem in your ward</h2>
-          <button type="button" class="dlg-close" aria-label="Close">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" /></svg>
-          </button>
-        </div>
-        <p class="dlg-lead">Broken drains, missed garbage collection, water supply, street lights or anything else. Give your ward and location so the office can act quickly.</p>
-        <GrievanceForm prefix="m" />
-      </div>
-    </dialog>
+    <GrievanceDialog />
 
     <EmergencyDialog />
 
@@ -399,29 +388,6 @@ const year = new Date().getFullYear();
           msg.classList.add('show');
         });
       });
-
-      // Grievance buttons open the form in a pop-up on the current page instead of navigating.
-      const dlg = document.getElementById('grv-dialog') as HTMLDialogElement | null;
-      const onGrievancePage = location.pathname.replace(/\/$/, '') === '/grievance';
-      if (dlg && !onGrievancePage && typeof dlg.showModal === 'function') {
-        const open = () => {
-          dlg.querySelector('.form-msg')?.classList.remove('show');
-          dlg.showModal();
-          document.body.classList.add('dlg-open');
-          document.getElementById('m-name')?.focus();
-        };
-        document.querySelectorAll<HTMLAnchorElement>('a[href="/grievance/"]').forEach((a) =>
-          a.addEventListener('click', (e) => {
-            if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
-            e.preventDefault();
-            a.closest('details')?.removeAttribute('open');
-            open();
-          })
-        );
-        dlg.querySelector('.dlg-close')?.addEventListener('click', () => dlg.close());
-        dlg.addEventListener('click', (e) => { if (e.target === dlg) dlg.close(); });
-        dlg.addEventListener('close', () => document.body.classList.remove('dlg-open'));
-      }
 
       // Close mobile menu after choosing a link.
       document.querySelectorAll('.menu a').forEach((a) =>
