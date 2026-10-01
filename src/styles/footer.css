@@ -85,3 +85,16 @@ footer.site.big { border-radius: 2.75rem 2.75rem 0 0; padding-top: 64px; margin-
 /* Fully rounded box: same radius on the bottom corners, with a little page showing beneath so the curve is visible. */
 footer.site.big { border-radius: 2.75rem; margin: -1px 0 .75rem; box-shadow: 0 .4rem 2rem rgba(10,30,26,.14); }
 @media (max-width: 700px) { footer.site.big { border-radius: 1.75rem; margin-bottom: .5rem; } }
+
+/* Inset card footer: a wide rounded box floating inside the page margins, roomy padding, content kept inside it. */
+footer.site.big { margin: 2.5rem clamp(.6rem, 2.2vw, 2.25rem) clamp(.6rem, 2.2vw, 2.25rem); border-radius: clamp(1.5rem, 3vw, 2.75rem); padding-top: clamp(2.25rem, 4.5vw, 4.25rem); box-shadow: 0 1rem 3rem rgba(10,30,26,.22); }
+footer.site.big .wrap { max-width: 1320px; padding-left: clamp(1.1rem, 4.5vw, 4.5rem); padding-right: clamp(1.1rem, 4.5vw, 4.5rem); }
+footer.site.big .f-id h2, footer.site.big .foot-brand strong { font-size: clamp(1.7rem, 3.2vw, 2.6rem); line-height: 1.1; letter-spacing: -.02em; color: #fff; }
+footer.site.big .f-brandrow { padding-bottom: 2rem; border-bottom: 1px solid rgba(255,255,255,.14); margin-bottom: .5rem; }
+footer.site.big .f-id p { margin-top: .85rem; font-size: 1.02rem; }
+footer.site.big .f-main { gap: 1.5rem; padding-top: 2rem; padding-bottom: 2.75rem; }
+footer.site.big .f-base .base { border-top: 1px solid rgba(255,255,255,.14); padding-top: 1.5rem; padding-bottom: 2.25rem; }
+@media (max-width: 700px) {
+  footer.site.big { margin-top: 1.5rem; }
+  footer.site.big .f-base .base { padding-bottom: 5.5rem; }
+}
