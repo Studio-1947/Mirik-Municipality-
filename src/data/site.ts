@@ -77,7 +77,7 @@ export const administration = {
     role: "Administrator",
     // Provided by the office in September 2026 (replaces the earlier June 2026 press report).
     name: "Krishna Kanta Ghosh, WBCS",
-    photo: "/images/people/krishna.jpeg",
+    photo: "/images/people/cards/krishna.jpg",
     photoLarge: "/images/people/krishna-kanta-ghosh-large.jpg",
   },
   officers: [
@@ -733,43 +733,43 @@ export const body: {
     note: "Also Nodal Officer, NULM",
     tone: "#1f4d3a",
     tel: administration.officers[0].tel,
-    photo: "/images/people/ajay.jpeg",
+    photo: "/images/people/cards/ajay.jpg",
   },
   {
     role: "Finance Officer",
     name: administration.officers[1].name,
     tone: "#2f6f8f",
     tel: administration.officers[1].tel,
+    photo: "/images/people/cards/dipashree.jpg",
   },
   {
     role: "Sub Assistant Engineer",
     name: "Nimasang Tamang",
     tone: "#a2416b",
-    photo: "/images/people/nimasang.jpeg",
+    photo: "/images/people/cards/nimasang.jpg",
   },
   {
     role: "Sub Assistant Engineer",
     name: "Bhaskar Mothay",
     tone: "#b3471d",
-    photo: "/images/people/bhaskar.jpeg",
+    photo: "/images/people/cards/bhaskar.jpg",
   },
   {
     role: "Chairperson",
     name: "",
     note: "Vacant since 19 May 2026",
     tone: "#b07d12",
-    photo: "/images/people/sample-1.jpg",
   },
   {
     role: "Health Officer (CBPHCS)",
     name: "Mahendra Pradhan",
     tone: "#2b7a5a",
-    photo: "/images/people/mahendra.jpeg",
+    photo: "/images/people/cards/mahendra.jpg",
   }, // VERIFY role
   {
     role: "Head Clerk",
     name: "Mamta Subba",
     tone: "#1f6b47",
-    photo: "/images/people/mamta.jpeg",
+    photo: "/images/people/cards/mamta.jpg",
   },
 ];

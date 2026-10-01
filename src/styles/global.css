@@ -2103,3 +2103,10 @@ header.site.scrolled nav.main li.has-sub > a[aria-current="page"] { padding-righ
 header.site nav.main li.nav-administration > a[aria-current="page"], header.site nav.main li.nav-clean-mirik > a[aria-current="page"],
 header.site.scrolled nav.main li.nav-administration > a[aria-current="page"], header.site.scrolled nav.main li.nav-clean-mirik > a[aria-current="page"] { padding-right: 12px; }
 html { scrollbar-gutter: stable; }
+
+/* Header Emergency Call + Grievance buttons: keep the glass look (translucent fill, blur, light edge), but flat colours, no gradient */
+header.site .sos-btn, header.site .cta-btn { background-image: none; }
+header.site .sos-btn { background-color: color-mix(in srgb, var(--alert) 82%, transparent); }
+header.site .sos-btn:hover { background-color: color-mix(in srgb, var(--alert) 96%, transparent); }
+header.site .cta-btn { background-color: color-mix(in srgb, var(--green-deep) 82%, transparent); }
+header.site .cta-btn:hover { background-color: color-mix(in srgb, var(--green-deep) 96%, transparent); }
